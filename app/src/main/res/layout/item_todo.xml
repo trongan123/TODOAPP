@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="TodoItem"
+            type="com.example.todoapp.model.TodoItem" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+
+                android:layout_toStartOf="@+id/txtDate"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/txttitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{TodoItem.title}"
+                    android:textSize="18sp"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{TodoItem.description}"
+                    android:textSize="10sp"
+                    />
+
+            </LinearLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtDate"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/btndetail"
+                android:layout_centerVertical="true"
+                android:paddingEnd="5dp"
+                android:textSize="12sp"
+                />
+            <ImageButton
+                android:id="@+id/btndetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:transitionName="update_fragment"
+                android:background="@color/white"
+                android:src="@drawable/ellipsis" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
