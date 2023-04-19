@@ -238,7 +238,7 @@ fun CommonSpace() {
 }
 
 @Composable
-fun AddButton(viewModel : AddItemFragmentViewModal, view: View) {
+fun AddButton(viewModel : AddItemFragmentViewModal) {
     var navController : NavController
     Button(
         onClick = {
@@ -253,8 +253,6 @@ fun AddButton(viewModel : AddItemFragmentViewModal, view: View) {
 
             viewModel.addItem(todoItem)
 
-
-            Navigation.findNavController(view).navigate(R.id.mainFragment2)
 
         },
         shape = RoundedCornerShape(20.dp),
@@ -330,7 +328,7 @@ fun LayoutUpdateButton(viewModel : UpdateItemFragmentViewModel, view: View) {
 }
 
 @Composable
-fun LayoutAddButton(viewModel : AddItemFragmentViewModal, view: View) {
+fun LayoutAddButton(viewModel : AddItemFragmentViewModal) {
 
     Row(
         modifier = Modifier
@@ -341,7 +339,7 @@ fun LayoutAddButton(viewModel : AddItemFragmentViewModal, view: View) {
     ) {
 
         ClearButton()
-        AddButton(viewModel,view)
+        AddButton(viewModel)
 
     }
 
