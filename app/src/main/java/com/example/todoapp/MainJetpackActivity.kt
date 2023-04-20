@@ -19,9 +19,11 @@ import com.example.todoapp.model.TodoItem
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import com.example.todoapp.ui.theme.screem.AddItemScreen
 import com.example.todoapp.ui.theme.screem.HomeScreen
+import com.example.todoapp.ui.theme.screem.UpdateItemScreen
 import com.example.todoapp.ui.theme.screem.list
 import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
+import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
 
 class MainJetpackActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,27 +32,27 @@ class MainJetpackActivity : ComponentActivity() {
             ViewModelProvider(this).get(TodoItemViewModel::class.java)
         var addviewModel: AddItemFragmentViewModal =
             ViewModelProvider(this).get(AddItemFragmentViewModal::class.java)
+        var updateviewModel: UpdateItemFragmentViewModel =
+            ViewModelProvider(this).get(UpdateItemFragmentViewModel::class.java)
 
         viewModel.getStringMutableLiveData()
             .observe(this) { s: String ->
                 viewModel.getAllList(viewModel.getStringMutableLiveData().value)
                     .observe(this) { item: List<TodoItem> ->
-                        list = item
-
                         setContent {
-                            MainApp(item, viewModel, addviewModel)
+                            MainApp(item, viewModel, addviewModel,updateviewModel)
                         }
                     }
             }
     }
 }
 
-
 @Composable
 fun MainApp(
     list: List<TodoItem>,
     viewModel: TodoItemViewModel,
-    addviewModel: AddItemFragmentViewModal
+    addviewModel: AddItemFragmentViewModal,
+    updateviewModel: UpdateItemFragmentViewModel
 ) {
     val navController = rememberNavController()
     MaterialTheme() {
@@ -59,6 +61,9 @@ fun MainApp(
                 HomeScreen(
                     openAddItemScreen = {
                         navController.navigate("additem")
+                    },
+                    openUpdateItemScreen={
+                        navController.navigate("updateitem")
                     },
                     list = list,
                     viewModel = viewModel
@@ -75,10 +80,19 @@ fun MainApp(
                     }
                 )
             }
+            composable("updateitem") {
+                UpdateItemScreen(viewModel = updateviewModel,
+                    backHome = {
+                        navController.popBackStack(
+                            route = "home",
+                            inclusive = false,
+                            saveState = true
+                        )
+                    }
+                )
+            }
 
         }
-
     }
 }
-
 

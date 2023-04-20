@@ -24,13 +24,14 @@ public class TodoItemViewModel extends AndroidViewModel {
     public List<Long> idItem = new ArrayList<>();
 
     public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
-
+    public MutableLiveData<List<Integer>> listMutableCheck = new MutableLiveData<>();
     public TodoItemViewModel(Application application) {
         super(application);
         mRepository = new TodoRepository(application);
         stringMutableLiveData.postValue("");
       //  List<Long> item = new ArrayList<>();
         listMutableLiveDataCheck.postValue(new ArrayList<>());
+        listMutableCheck.postValue(new ArrayList<>());
     }
 
     public LiveData<List<TodoItem>> getAllList(String key) {
@@ -41,7 +42,9 @@ public class TodoItemViewModel extends AndroidViewModel {
     public MutableLiveData<String> getStringMutableLiveData() {
         return stringMutableLiveData;
     }
-
+    public MutableLiveData<List<Integer>> getListMutableCheck() {
+        return listMutableCheck;
+    }
     public MutableLiveData<List<Long>> getListMutableLiveDataCheck() {
         return listMutableLiveDataCheck;
     }
@@ -73,7 +76,18 @@ public class TodoItemViewModel extends AndroidViewModel {
             clearItem.removeIf(a -> a == id);
         }
     }
-
+    public void setCheckData(int id, boolean check) {
+        List<Integer> item= listMutableCheck.getValue();
+        if (check == true) {
+            if (item.contains(id)) {
+            } else {
+                item.add(id);
+            }
+        } else {
+            item.removeIf(a -> a == id);
+        }
+        listMutableCheck.postValue(item);
+    }
     public void setCheckItem(long id, boolean check) {
         List<Long> item= listMutableLiveDataCheck.getValue();
         if (check == true) {

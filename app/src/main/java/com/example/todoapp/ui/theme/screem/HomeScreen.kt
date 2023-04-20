@@ -16,25 +16,18 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 @Composable
 fun HomeScreen(
     openAddItemScreen: () -> Unit,
+    openUpdateItemScreen: () -> Unit,
     list: List<TodoItem>,
     viewModel: TodoItemViewModel
 ) {
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-
     Column() {
-        SearchView(state = textState, viewModel)
-        Column() {
-            Button(
-                onClick = {
-                    openAddItemScreen()
-                },
-                shape = RoundedCornerShape(20.dp)
-
-            ) {
-                Text("New")
-            }
-            ListItemTodo(list)
-
-        }
+        TabScreen(openAddItemScreen ={
+            openAddItemScreen()
+        },openUpdateItemScreen ={
+            openUpdateItemScreen()
+        },listAll = list,
+            viewModel=viewModel
+        )
     }
+
 }
