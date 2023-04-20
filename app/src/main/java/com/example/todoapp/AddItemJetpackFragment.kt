@@ -40,7 +40,7 @@ class AddItemJetpackFragment: Fragment() {
                     dropDownMenuStatus()
 
                 }
-                LayoutAddButton(viewModel, requireView())
+              //  LayoutAddButton(viewModel, requireView())
 
             }
 
