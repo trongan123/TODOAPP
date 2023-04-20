@@ -78,7 +78,7 @@ public class AllItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        Navigation.findNavController(getView()).navigate(R.id.updateItemJetpackFragment, bundle);
+        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle);
     }
 
     public void receiveData(String search){

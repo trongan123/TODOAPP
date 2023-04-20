@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
                 FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                         .addSharedElement(fragmentMainBinding.btnAdd, "add_fragment")
                         .build();
-                Navigation.findNavController(view).navigate(R.id.addItemJetpackFragment, null, null, extras);
+                Navigation.findNavController(view).navigate(R.id.addItemFragment, null, null, extras);
             }
         });
 

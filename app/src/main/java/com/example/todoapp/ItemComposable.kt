@@ -4,11 +4,15 @@ import android.util.Log
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,17 +21,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.AddItemFragmentViewModal
+import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
@@ -40,12 +50,80 @@ var createdDateItem: String = ""
 var completedDateItem: String = ""
 var statusItem: String = ""
 var todoItem: TodoItem = TodoItem()
+
+var list : List<TodoItem> = ArrayList<TodoItem>()
+var listPending : List<TodoItem> = ArrayList<TodoItem>()
+var listCompleted : List<TodoItem> = ArrayList<TodoItem>()
+
+var listlive = MutableLiveData<List<TodoItem>>()
+
+@Composable
+fun ListItemTodo(list1 : List<TodoItem>) {
+    LazyColumn() {
+        items(list) { i ->
+            Text(text = i.title)
+        }
+    }
+}
+
+
+@Composable
+fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel) {
+    TextField(
+        value = state.value,
+        onValueChange = { value ->
+            state.value = value
+            viewModel.stringMutableLiveData.postValue(value.toString())
+        },
+        modifier = Modifier.fillMaxWidth(),
+        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (state.value != TextFieldValue("")) {
+                IconButton(
+                    onClick = {
+                        state.value =
+                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.White,
+            cursorColor = Color.White,
+            leadingIconColor = Color.White,
+            trailingIconColor = Color.White,
+            backgroundColor = androidx.compose.material.MaterialTheme.colors.primary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
 @Composable
 fun Texttitle() {
     var title by remember {
         mutableStateOf(titleItem)
     }
-
     OutlinedTextField(
         value = title,
         onValueChange = {
@@ -55,18 +133,14 @@ fun Texttitle() {
         modifier = Modifier.fillMaxWidth(),
         placeholder = { androidx.compose.material.Text("Title") },
         label = { androidx.compose.material.Text("Title") },
-
-
-        )
+    )
 }
 
 @Composable
 fun TextDescription() {
     var description by remember {
         mutableStateOf(descriptionItem)
-
     }
-
     OutlinedTextField(
         value = description,
         onValueChange = {
@@ -76,9 +150,7 @@ fun TextDescription() {
         modifier = Modifier.fillMaxWidth(),
         placeholder = { androidx.compose.material.Text("Description") },
         label = { androidx.compose.material.Text("Description") },
-
-
-        )
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,9 +167,6 @@ fun TextCreatedDate() {
             createdDateItem = createdDate.toString()
         }
     )
-
-
-
     OutlinedTextField(
 
         value = createdDate,
@@ -238,8 +307,8 @@ fun CommonSpace() {
 }
 
 @Composable
-fun AddButton(viewModel : AddItemFragmentViewModal) {
-    var navController : NavController
+fun AddButton(viewModel : AddItemFragmentViewModal,backHome:()->Unit ) {
+
     Button(
         onClick = {
             var todoItem: TodoItem = TodoItem()
@@ -252,8 +321,7 @@ fun AddButton(viewModel : AddItemFragmentViewModal) {
             todoItem.status = statusItem
 
             viewModel.addItem(todoItem)
-
-
+            backHome()
         },
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
@@ -310,6 +378,24 @@ fun ClearButton() {
     }
 }
 
+
+@Composable
+fun AdddoButton(view: View) {
+
+
+    Button(
+        onClick = {
+
+        },
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier
+            .padding(bottom = 100.dp)
+    ) {
+        androidx.compose.material.Text("CLEAR")
+    }
+}
+
+
 @Composable
 fun LayoutUpdateButton(viewModel : UpdateItemFragmentViewModel, view: View) {
 
@@ -339,7 +425,7 @@ fun LayoutAddButton(viewModel : AddItemFragmentViewModal) {
     ) {
 
         ClearButton()
-        AddButton(viewModel)
+        // AddButton(viewModel)
 
     }
 
