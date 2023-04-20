@@ -10,8 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.todoapp.ListItemTodo
-import com.example.todoapp.SearchView
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
@@ -37,9 +35,6 @@ fun HomeScreen(
             }
             ListItemTodo(list)
 
-//            TabScreen(openAddItemScreen ={
-//                openAddItemScreen()
-//            })
         }
     }
 }

@@ -21,28 +21,28 @@ class AddItemJetpackFragment: Fragment() {
         var viewModel: AddItemFragmentViewModal =
             ViewModelProvider(requireActivity()).get(AddItemFragmentViewModal::class.java)
         return ComposeView(requireContext()).apply {
-            titleItem = ""
-            createdDateItem =""
-            completedDateItem =""
-            statusItem =""
-            descriptionItem= ""
-            todoItem = TodoItem()
-            setContent {
-                Column(modifier = Modifier.padding(30.dp)) {
-                    Texttitle()
-                    CommonSpace()
-                    TextDescription()
-                    CommonSpace()
-                    TextCreatedDate()
-                    CommonSpace()
-                    TextCompletedDate()
-                    CommonSpace()
-                    dropDownMenuStatus()
-
-                }
-              //  LayoutAddButton(viewModel, requireView())
-
-            }
+//            titleItem = ""
+//            createdDateItem =""
+//            completedDateItem =""
+//            statusItem =""
+//            descriptionItem= ""
+//            todoItem = TodoItem()
+//            setContent {
+//                Column(modifier = Modifier.padding(30.dp)) {
+//                    Texttitle()
+//                    CommonSpace()
+//                    TextDescription()
+//                    CommonSpace()
+//                    TextCreatedDate()
+//                    CommonSpace()
+//                    TextCompletedDate()
+//                    CommonSpace()
+//                    dropDownMenuStatus()
+//
+//                }
+//              //  LayoutAddButton(viewModel, requireView())
+//
+//            }
 
         }
     }

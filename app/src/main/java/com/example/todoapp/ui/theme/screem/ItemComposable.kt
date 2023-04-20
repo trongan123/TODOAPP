@@ -1,4 +1,4 @@
-package com.example.todoapp
+package com.example.todoapp.ui.theme.screem
 
 import android.util.Log
 import android.view.View
@@ -32,10 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
+import com.example.todoapp.ui.theme.screem.ConfirmDialog
+
 import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
@@ -43,6 +48,7 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.SimpleDateFormat
+
 
 var titleItem: String = ""
 var descriptionItem: String = ""
@@ -58,65 +64,12 @@ var listCompleted : List<TodoItem> = ArrayList<TodoItem>()
 var listlive = MutableLiveData<List<TodoItem>>()
 
 @Composable
-fun ListItemTodo(list1 : List<TodoItem>) {
+fun ListItemTodo(list : List<TodoItem>) {
     LazyColumn() {
         items(list) { i ->
             Text(text = i.title)
         }
     }
-}
-
-
-@Composable
-fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel) {
-    TextField(
-        value = state.value,
-        onValueChange = { value ->
-            state.value = value
-            viewModel.stringMutableLiveData.postValue(value.toString())
-        },
-        modifier = Modifier.fillMaxWidth(),
-        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-        leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(15.dp)
-                    .size(24.dp)
-            )
-        },
-        trailingIcon = {
-            if (state.value != TextFieldValue("")) {
-                IconButton(
-                    onClick = {
-                        state.value =
-                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
-                    }
-                ) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(24.dp)
-                    )
-                }
-            }
-        },
-        singleLine = true,
-        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            cursorColor = Color.White,
-            leadingIconColor = Color.White,
-            trailingIconColor = Color.White,
-            backgroundColor = androidx.compose.material.MaterialTheme.colors.primary,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
 }
 
 @Composable
@@ -311,7 +264,7 @@ fun AddButton(viewModel : AddItemFragmentViewModal,backHome:()->Unit ) {
 
     Button(
         onClick = {
-            var todoItem: TodoItem = TodoItem()
+            todoItem = TodoItem()
             var formatter = SimpleDateFormat("yyyy-MM-dd")
             //update database
             todoItem.title = titleItem
@@ -331,7 +284,34 @@ fun AddButton(viewModel : AddItemFragmentViewModal,backHome:()->Unit ) {
     }
 }
 @Composable
-fun UpdateButton(viewModel : UpdateItemFragmentViewModel, view : View) {
+fun DeleteButton(viewModel : UpdateItemFragmentViewModel,backHome:()->Unit) {
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+    Button(
+        onClick = {
+            showDeleteConfirm = true
+        },
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier
+            .padding(bottom = 100.dp)
+    ) {
+        androidx.compose.material.Text("Delete")
+    }
+    if (showDeleteConfirm) {
+        ConfirmDialog(
+            content = "Confirm Delete?",
+            onDismiss = { showDeleteConfirm = false },
+            onConfirm = {
+                showDeleteConfirm = false
+                viewModel.deleteItem(todoItem)
+                backHome()
+            }
+        )
+    }
+}
+
+
+@Composable
+fun UpdateButton(viewModel : UpdateItemFragmentViewModel,backHome:()->Unit) {
     Button(
         onClick = {
 
@@ -344,7 +324,7 @@ fun UpdateButton(viewModel : UpdateItemFragmentViewModel, view : View) {
             todoItem.status = statusItem
 
             viewModel.updateItem(todoItem)
-            Navigation.findNavController(view).navigate(R.id.mainFragment2)
+            backHome()
         },
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
@@ -379,21 +359,6 @@ fun ClearButton() {
 }
 
 
-@Composable
-fun AdddoButton(view: View) {
-
-
-    Button(
-        onClick = {
-
-        },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .padding(bottom = 100.dp)
-    ) {
-        androidx.compose.material.Text("CLEAR")
-    }
-}
 
 
 @Composable
@@ -407,7 +372,7 @@ fun LayoutUpdateButton(viewModel : UpdateItemFragmentViewModel, view: View) {
         verticalAlignment = Alignment.Bottom
     ) {
         ClearButton()
-        UpdateButton(viewModel,view)
+        //   UpdateButton(viewModel,view)
     }
 
 
@@ -436,10 +401,10 @@ fun LayoutAddButton(viewModel : AddItemFragmentViewModal) {
 fun dropDownMenuStatus() {
 
     var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("pending","completed")
+    val suggestions = listOf("pending", "completed")
     var selectedText by remember { mutableStateOf(statusItem) }
 
-    var textfieldSize by remember { mutableStateOf(Size.Zero)}
+    var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded)
         Icons.Filled.KeyboardArrowUp
@@ -450,7 +415,8 @@ fun dropDownMenuStatus() {
     Column() {
         OutlinedTextField(
             value = selectedText,
-            onValueChange = { selectedText = it
+            onValueChange = {
+                selectedText = it
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -460,7 +426,7 @@ fun dropDownMenuStatus() {
                 },
             label = { androidx.compose.material.Text("Status") },
             trailingIcon = {
-                Icon(icon,"contentDescription",
+                Icon(icon, "contentDescription",
                     Modifier.clickable { expanded = !expanded })
             }
         )
@@ -468,7 +434,7 @@ fun dropDownMenuStatus() {
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current){textfieldSize.width.toDp()})
+                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {
@@ -481,5 +447,56 @@ fun dropDownMenuStatus() {
             }
         }
     }
+}
 
+@Composable
+fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel) {
+    TextField(
+        value = state.value,
+        onValueChange = { value ->
+            state.value = value
+            viewModel.stringMutableLiveData.postValue(value.text.toString().trim())
+        },
+        modifier = Modifier.fillMaxWidth(),
+        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (state.value != TextFieldValue("")) {
+                IconButton(
+                    onClick = {
+                        state.value =
+                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.White,
+            cursorColor = Color.White,
+            leadingIconColor = Color.White,
+            trailingIconColor = Color.White,
+            backgroundColor = androidx.compose.material.MaterialTheme.colors.primary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
 }
