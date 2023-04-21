@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.Observer;
@@ -50,6 +51,8 @@ public class AllItemFragment extends Fragment {
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(),todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
+
+
 
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
             @Override

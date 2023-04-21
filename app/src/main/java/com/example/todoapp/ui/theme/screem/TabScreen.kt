@@ -1,5 +1,7 @@
 package com.example.todoapp.ui.theme.screem
 
+import android.content.Context
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import com.example.todoapp.*
 import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
@@ -31,28 +34,29 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TabScreen(
+    owner: LifecycleOwner,
     openAddItemScreen: () -> Unit,
     openUpdateItemScreen: () -> Unit,
-    listAll: List<TodoItem>,
     viewModel: TodoItemViewModel
 ) {
+
 
     val tabs: MutableList<TabItem> = ArrayList<TabItem>().toMutableList()
     tabs += TabItem("All") {
         AllItemScreen(
-            listAll, openUpdateItemScreen = {
+            owner, openUpdateItemScreen = {
                 openUpdateItemScreen()
             }, viewModel = viewModel
         )
     }
     tabs += TabItem("Pending") {
-        PendingItemScreen(listAll.filter { it.status.equals("pending") }, openUpdateItemScreen = {
+        PendingItemScreen(owner, openUpdateItemScreen = {
             openUpdateItemScreen()
         }, viewModel = viewModel)
     }
     tabs += TabItem("Completed") {
         CompletedItemScreen(
-            listAll.filter { it.status.equals("completed") },
+            owner,
             openUpdateItemScreen = {
                 openUpdateItemScreen()
             }, viewModel = viewModel
@@ -160,19 +164,26 @@ fun TabsContent(tabs: List<TabItem>, pagerState: PagerState) {
 
 @Composable
 fun AllItemScreen(
-    listAll: List<TodoItem>,
+    owner: LifecycleOwner,
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel
 ) {
-
+    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
-        LazyColumn() {
 
-            items(listAll) { i ->
+        LazyColumn() {
+            viewModel.getStringMutableLiveData()
+                .observe(owner) { s: String ->
+                    viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                        .observe(owner) { item: List<TodoItem> ->
+                            items = item as ArrayList<TodoItem>
+                        }
+                }
+            items(items) { i ->
                 ItemList(
                     i,
                     openUpdateItemScreen = {
@@ -187,18 +198,26 @@ fun AllItemScreen(
 
 @Composable
 fun PendingItemScreen(
-    listP: List<TodoItem>,
+    owner: LifecycleOwner,
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel
 ) {
-//    var listPend by remember { mutableStateOf(listPending) }
+    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
+
         LazyColumn() {
-            items(listP) { i ->
+            viewModel.getStringMutableLiveData()
+                .observe(owner) { s: String ->
+                    viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                        .observe(owner) { item: List<TodoItem> ->
+                            items = item as ArrayList<TodoItem>
+                        }
+                }
+            items(items) { i ->
                 ItemList(
                     i,
                     openUpdateItemScreen = {
@@ -213,16 +232,26 @@ fun PendingItemScreen(
 
 @Composable
 fun CompletedItemScreen(
-    listC: List<TodoItem>,
+    owner: LifecycleOwner,
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel
 ) {
+    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier
             .fillMaxSize()
+
     ) {
+
         LazyColumn() {
-            items(listC) { i ->
+            viewModel.getStringMutableLiveData()
+                .observe(owner) { s: String ->
+                    viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                        .observe(owner) { item: List<TodoItem> ->
+                            items = item as ArrayList<TodoItem>
+                        }
+                }
+            items(items) { i ->
                 ItemList(
                     i,
                     openUpdateItemScreen = {

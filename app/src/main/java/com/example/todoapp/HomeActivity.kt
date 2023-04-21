@@ -28,7 +28,7 @@ class HomeActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            ){
                 androidx.compose.material.Text(text = "Home Screen")
                 Spacer(modifier = Modifier.height(24.dp))
                 Button(onClick = {

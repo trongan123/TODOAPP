@@ -16,7 +16,7 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     private final TodoRepository mRepository;
     private LiveData<List<TodoItem>> mTodoItems;
-
+    private TodoItem todoItem;
     public MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
 
     public List<Integer> clearItem = new ArrayList<>();
@@ -25,11 +25,12 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
     public MutableLiveData<List<Integer>> listMutableCheck = new MutableLiveData<>();
+
     public TodoItemViewModel(Application application) {
         super(application);
         mRepository = new TodoRepository(application);
         stringMutableLiveData.postValue("");
-      //  List<Long> item = new ArrayList<>();
+        //  List<Long> item = new ArrayList<>();
         listMutableLiveDataCheck.postValue(new ArrayList<>());
         listMutableCheck.postValue(new ArrayList<>());
     }
@@ -39,28 +40,50 @@ public class TodoItemViewModel extends AndroidViewModel {
         return mTodoItems;
     }
 
+
     public MutableLiveData<String> getStringMutableLiveData() {
         return stringMutableLiveData;
     }
+
     public MutableLiveData<List<Integer>> getListMutableCheck() {
         return listMutableCheck;
     }
+
     public MutableLiveData<List<Long>> getListMutableLiveDataCheck() {
         return listMutableLiveDataCheck;
     }
 
     public LiveData<List<TodoItem>> getPendingList() {
-        mTodoItems = mRepository.getlistTodoItemByStatus("pending",stringMutableLiveData.getValue());
+        mTodoItems = mRepository.getlistTodoItemByStatus("pending", stringMutableLiveData.getValue());
 
         return mTodoItems;
     }
 
-
+    public void addItem(TodoItem todoItem) {
+        mRepository.insert(todoItem);
+    }
 
     public LiveData<List<TodoItem>> getCompletedList() {
-        mTodoItems = mRepository.getlistTodoItemByStatus("completed",stringMutableLiveData.getValue());
+        mTodoItems = mRepository.getlistTodoItemByStatus("completed", stringMutableLiveData.getValue());
         return mTodoItems;
     }
+
+    public TodoItem getTodoItem() {
+        return todoItem;
+    }
+
+    public void setTodoItem(TodoItem todoItem) {
+        this.todoItem = todoItem;
+    }
+
+    public void updateItem(TodoItem todoItem) {
+        mRepository.update(todoItem);
+    }
+
+    public void deleteItem(TodoItem todoItem) {
+        mRepository.delete(todoItem);
+    }
+
 
     public List<Long> getIdItem() {
         return idItem;
@@ -76,8 +99,9 @@ public class TodoItemViewModel extends AndroidViewModel {
             clearItem.removeIf(a -> a == id);
         }
     }
+
     public void setCheckData(int id, boolean check) {
-        List<Integer> item= listMutableCheck.getValue();
+        List<Integer> item = listMutableCheck.getValue();
         if (check == true) {
             if (item.contains(id)) {
             } else {
@@ -88,8 +112,9 @@ public class TodoItemViewModel extends AndroidViewModel {
         }
         listMutableCheck.postValue(item);
     }
+
     public void setCheckItem(long id, boolean check) {
-        List<Long> item= listMutableLiveDataCheck.getValue();
+        List<Long> item = listMutableLiveDataCheck.getValue();
         if (check == true) {
             if (item.contains(id)) {
             } else {
@@ -100,6 +125,7 @@ public class TodoItemViewModel extends AndroidViewModel {
         }
         listMutableLiveDataCheck.postValue(item);
     }
+
     public void setitem(long id, boolean check) {
         if (check == true) {
             if (idItem.contains(id)) {

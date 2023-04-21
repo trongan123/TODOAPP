@@ -57,7 +57,7 @@ var completedDateItem: String = ""
 var statusItem: String = ""
 var todoItem: TodoItem = TodoItem()
 
-var list : List<TodoItem> = ArrayList<TodoItem>()
+
 var listPending : List<TodoItem> = ArrayList<TodoItem>()
 var listCompleted : List<TodoItem> = ArrayList<TodoItem>()
 
@@ -260,7 +260,7 @@ fun CommonSpace() {
 }
 
 @Composable
-fun AddButton(viewModel : AddItemFragmentViewModal,backHome:()->Unit ) {
+fun AddButton(viewModel : TodoItemViewModel,backHome:()->Unit ) {
 
     Button(
         onClick = {
@@ -284,7 +284,7 @@ fun AddButton(viewModel : AddItemFragmentViewModal,backHome:()->Unit ) {
     }
 }
 @Composable
-fun DeleteButton(viewModel : UpdateItemFragmentViewModel,backHome:()->Unit) {
+fun DeleteButton(viewModel : TodoItemViewModel,backHome:()->Unit) {
     var showDeleteConfirm by remember { mutableStateOf(false) }
     Button(
         onClick = {
@@ -311,7 +311,7 @@ fun DeleteButton(viewModel : UpdateItemFragmentViewModel,backHome:()->Unit) {
 
 
 @Composable
-fun UpdateButton(viewModel : UpdateItemFragmentViewModel,backHome:()->Unit) {
+fun UpdateButton(viewModel : TodoItemViewModel,backHome:()->Unit) {
     Button(
         onClick = {
 
@@ -455,7 +455,7 @@ fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel
         value = state.value,
         onValueChange = { value ->
             state.value = value
-            viewModel.stringMutableLiveData.postValue(value.text.toString().trim())
+            viewModel.stringMutableLiveData.postValue(value.text.trim())
         },
         modifier = Modifier.fillMaxWidth(),
         textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
