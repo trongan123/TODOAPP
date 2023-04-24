@@ -8,12 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.ui.theme.screem.AddItemScreen
 import com.example.todoapp.ui.theme.screem.HomeScreen
 import com.example.todoapp.ui.theme.screem.UpdateItemScreen
+import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
 
@@ -22,8 +24,9 @@ class MainJetpackActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         var viewModel: TodoItemViewModel =
             ViewModelProvider(this).get(TodoItemViewModel::class.java)
+        var viewModelLoad : MainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         setContent {
-            MainApp(this, viewModel)
+            MainApp(this, viewModel,viewModelLoad)
         }
 
 
@@ -33,7 +36,8 @@ class MainJetpackActivity : ComponentActivity() {
 @Composable
 fun MainApp(
     owner: LifecycleOwner,
-    viewModel: TodoItemViewModel
+    viewModel: TodoItemViewModel,
+    viewModelLoad : MainViewModel
 ) {
     val navController = rememberNavController()
 
@@ -49,7 +53,8 @@ fun MainApp(
                     },
 
                     viewModel = viewModel,
-                    owner = owner
+                    owner = owner,
+                    viewModelLoad=viewModelLoad
                 )
             }
             composable("additem") {

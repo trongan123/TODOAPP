@@ -12,7 +12,7 @@ class MainLoadMostJetpackActivity : ComponentActivity() {
         var viewModel: TodoItemViewModel =
             ViewModelProvider(this).get(TodoItemViewModel::class.java)
         setContent {
-            MainApp(this, viewModel)
+
         }
     }
 }

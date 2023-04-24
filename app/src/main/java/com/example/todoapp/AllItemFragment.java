@@ -34,7 +34,6 @@ public class AllItemFragment extends Fragment {
     private TodoItemAdapter todoItemAdapter;
 
     private List<TodoItem> todoItemList;
-    private List<TodoItem> todoItemList1;
     private List<TodoItem> todoItemload;
 
     private boolean isLoading;
@@ -73,8 +72,13 @@ public class AllItemFragment extends Fragment {
                 todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(getActivity(), items -> {
                     // Update item to fragment
                     todoItemList = items;
-
-                    totalPage = (items.size() / 20)+1;
+                    currentPage = 0;
+                    isLastPage = false;
+                    if (items.size() % 20 == 0) {
+                        totalPage = (items.size() / 20);
+                    } else {
+                        totalPage = (items.size() / 20) + 1;
+                    }
                     setFirstData();
                 });
             }
@@ -103,7 +107,11 @@ public class AllItemFragment extends Fragment {
                 todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(getActivity(), items -> {
                     // Update item to fragment
                     todoItemList = items;
-                    totalPage = (items.size() / 20)+1;
+                    if (items.size() % 20 == 0) {
+                        totalPage = (items.size() / 20);
+                    } else {
+                        totalPage = (items.size() / 20) + 1;
+                    }
                 });
                 loadNextPage();
             }
@@ -127,9 +135,6 @@ public class AllItemFragment extends Fragment {
         Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle);
     }
 
-    public void receiveData(String search) {
-
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -147,11 +152,11 @@ public class AllItemFragment extends Fragment {
             @Override
             public void run() {
 
-                Toast.makeText(getActivity(), "Size:"+todoItemList.size(), Toast.LENGTH_SHORT).show();
                 List<TodoItem> list = new ArrayList<>();
                 if (todoItemList.size() > 20) {
                     list = todoItemList.subList(startitem, enditem);
-                    startitem += 20;
+
+                    startitem = enditem;
                     if ((enditem + 20) < todoItemList.size()) {
                         enditem += 20;
                     } else {
@@ -172,11 +177,11 @@ public class AllItemFragment extends Fragment {
     }
 
     private void setFirstData() {
-        startitem =0;
-        enditem =20;
+        startitem = 0;
+        enditem = 20;
         if (todoItemList.size() > 20) {
             todoItemload = todoItemList.subList(startitem, enditem);
-            startitem += 20;
+            startitem = enditem;
             if ((enditem + 20) < todoItemList.size()) {
                 enditem += 20;
             }

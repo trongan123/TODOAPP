@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.example.todoapp.model.TodoItem
+import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
 @Composable
@@ -21,8 +22,8 @@ fun HomeScreen(
     owner: LifecycleOwner,
     openAddItemScreen: () -> Unit,
     openUpdateItemScreen: () -> Unit,
-
-    viewModel: TodoItemViewModel
+    viewModel: TodoItemViewModel,
+    viewModelLoad : MainViewModel
 ) {
     Column() {
         TabScreen(openAddItemScreen ={
@@ -31,8 +32,8 @@ fun HomeScreen(
             openUpdateItemScreen()
         },
             viewModel=viewModel,
-
-            owner =owner
+            owner =owner,
+            viewModelLoad=viewModelLoad
 
         )
     }
