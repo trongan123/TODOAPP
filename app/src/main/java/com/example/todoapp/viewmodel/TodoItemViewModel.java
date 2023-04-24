@@ -21,8 +21,6 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public List<Integer> clearItem = new ArrayList<>();
 
-    public List<Long> idItem = new ArrayList<>();
-
     public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
     public MutableLiveData<List<Integer>> listMutableCheck = new MutableLiveData<>();
 
@@ -30,7 +28,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         super(application);
         mRepository = new TodoRepository(application);
         stringMutableLiveData.postValue("");
-        //  List<Long> item = new ArrayList<>();
         listMutableLiveDataCheck.postValue(new ArrayList<>());
         listMutableCheck.postValue(new ArrayList<>());
     }
@@ -39,7 +36,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         mTodoItems = mRepository.getAllList(key);
         return mTodoItems;
     }
-
 
     public MutableLiveData<String> getStringMutableLiveData() {
         return stringMutableLiveData;
@@ -85,12 +81,8 @@ public class TodoItemViewModel extends AndroidViewModel {
     }
 
 
-    public List<Long> getIdItem() {
-        return idItem;
-    }
-
     public void setClearAll(int id, boolean check) {
-        if (check == true) {
+        if (check) {
             if (clearItem.contains(id)) {
             } else {
                 clearItem.add(id);
@@ -102,12 +94,14 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public void setCheckData(int id, boolean check) {
         List<Integer> item = listMutableCheck.getValue();
-        if (check == true) {
+        if (check) {
+            assert item != null;
             if (item.contains(id)) {
             } else {
                 item.add(id);
             }
         } else {
+            assert item != null;
             item.removeIf(a -> a == id);
         }
         listMutableCheck.postValue(item);
@@ -115,28 +109,20 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public void setCheckItem(long id, boolean check) {
         List<Long> item = listMutableLiveDataCheck.getValue();
-        if (check == true) {
+        if (check) {
+            assert item != null;
             if (item.contains(id)) {
             } else {
                 item.add(id);
             }
         } else {
+            assert item != null;
             item.removeIf(a -> a == id);
         }
         listMutableLiveDataCheck.postValue(item);
     }
 
-    public void setitem(long id, boolean check) {
-        if (check == true) {
-            if (idItem.contains(id)) {
-            } else {
-                idItem.add(id);
-            }
-        } else {
-            idItem.removeIf(a -> a == id);
-        }
 
-    }
 
     public void clearItem() {
         mRepository.clear(clearItem);

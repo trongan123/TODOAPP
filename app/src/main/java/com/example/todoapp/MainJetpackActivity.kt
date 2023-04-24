@@ -1,31 +1,20 @@
 package com.example.todoapp
 
-import android.content.Context
 import android.os.Bundle
-import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.todoapp.model.TodoItem
-import com.example.todoapp.ui.theme.ToDoAppTheme
 import com.example.todoapp.ui.theme.screem.AddItemScreen
 import com.example.todoapp.ui.theme.screem.HomeScreen
 import com.example.todoapp.ui.theme.screem.UpdateItemScreen
-
-import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
-import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
 
 
 class MainJetpackActivity : ComponentActivity() {

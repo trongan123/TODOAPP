@@ -7,6 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.repository.TodoRepository;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 public class AddItemFragmentViewModal extends AndroidViewModel {
     private final TodoRepository mRepository;
@@ -24,6 +28,10 @@ public class AddItemFragmentViewModal extends AndroidViewModel {
     }
 
     public void addItem(TodoItem todoItem){
+//        for (TodoItem i :getlist()
+//             ) {
+//            mRepository.insert(i);
+//        }
             mRepository.insert(todoItem);
     }
 

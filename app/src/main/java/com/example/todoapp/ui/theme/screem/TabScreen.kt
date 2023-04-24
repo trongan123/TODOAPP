@@ -183,14 +183,19 @@ fun AllItemScreen(
                             items = item as ArrayList<TodoItem>
                         }
                 }
-            items(items) { i ->
-                ItemList(
-                    i,
-                    openUpdateItemScreen = {
-                        openUpdateItemScreen()
-                    }, viewModel
-                )
-            }
+            items(count = items.size,
+                key = {
+                    items[it].id
+                },
+                itemContent = { index ->
+                    val cartItemData = items[index]
+                    ItemList(
+                        cartItemData,
+                        openUpdateItemScreen = {
+                            openUpdateItemScreen()
+                        }, viewModel
+                    )
+                })
         }
     }
 }
@@ -212,20 +217,26 @@ fun PendingItemScreen(
         LazyColumn() {
             viewModel.getStringMutableLiveData()
                 .observe(owner) { s: String ->
-                    viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                    viewModel.getPendingList()
                         .observe(owner) { item: List<TodoItem> ->
                             items = item as ArrayList<TodoItem>
                         }
                 }
-            items(items) { i ->
-                ItemList(
-                    i,
-                    openUpdateItemScreen = {
-                        openUpdateItemScreen()
-                    }, viewModel
-                )
+            items(count = items.size,
+                key = {
+                    items[it].id
+                },
+                itemContent = { index ->
+                    val cartItemData = items[index]
+                    ItemList(
+                        cartItemData,
+                        openUpdateItemScreen = {
+                            openUpdateItemScreen()
+                        }, viewModel
+                    )
+                })
             }
-        }
+
     }
 }
 
@@ -246,19 +257,26 @@ fun CompletedItemScreen(
         LazyColumn() {
             viewModel.getStringMutableLiveData()
                 .observe(owner) { s: String ->
-                    viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                    viewModel.getCompletedList()
                         .observe(owner) { item: List<TodoItem> ->
                             items = item as ArrayList<TodoItem>
                         }
                 }
-            items(items) { i ->
-                ItemList(
-                    i,
-                    openUpdateItemScreen = {
-                        openUpdateItemScreen()
-                    }, viewModel
-                )
-            }
+            items(count = items.size,
+                key = {
+                    items[it].id
+                },
+                itemContent = { index ->
+                    val cartItemData = items[index]
+                    ItemList(
+                        cartItemData,
+                        openUpdateItemScreen = {
+                            openUpdateItemScreen()
+                        }, viewModel
+                    )
+                })
+
+
         }
     }
 }
