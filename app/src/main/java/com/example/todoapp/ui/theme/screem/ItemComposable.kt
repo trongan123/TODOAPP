@@ -58,11 +58,6 @@ var statusItem: String = ""
 var todoItem: TodoItem = TodoItem()
 
 
-var listPending : List<TodoItem> = ArrayList<TodoItem>()
-var listCompleted : List<TodoItem> = ArrayList<TodoItem>()
-
-var listlive = MutableLiveData<List<TodoItem>>()
-
 @Composable
 fun ListItemTodo(list : List<TodoItem>) {
     LazyColumn() {

@@ -22,7 +22,7 @@ public interface TodoItemDAO {
     @Query("SELECT * FROM todoItem WHERE title LIKE '%' || :key || '%'")
     LiveData<List<TodoItem>> getlistTodoItem(String key);
 
-    @Query("SELECT * FROM todoItem WHERE title ORDER BY id DESC")
+    @Query("SELECT * FROM todoItem ")
     List<TodoItem> getResultlistTodoItem();
 
     @Query("SELECT * FROM todoItem WHERE status=:status AND title LIKE '%' || :key || '%'")
