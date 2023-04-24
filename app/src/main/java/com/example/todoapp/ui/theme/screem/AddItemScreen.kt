@@ -7,10 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.*
 import com.example.todoapp.viewmodel.AddItemFragmentViewModal
+import com.example.todoapp.viewmodel.TodoItemViewModel
 
 @Composable
-fun AddItemScreen(viewModel: AddItemFragmentViewModal, backHome: () -> Unit) {
-
+fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
+    titleItem = ""
+    descriptionItem =""
+    statusItem =""
+    completedDateItem =""
+    createdDateItem =""
     Column(modifier = Modifier.padding(30.dp)) {
         Texttitle()
         CommonSpace()

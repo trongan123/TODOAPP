@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.todoapp.Adapter.TabItemAdapter;
 import com.example.todoapp.databinding.FragmentMainBinding;
+import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -35,7 +36,7 @@ public class MainFragment extends Fragment {
     private View mView;
     private TodoItemViewModel todoItemViewModel;
 
-    public List<Integer> clearItem = new ArrayList<>();
+
 
     public MainFragment() {
         // Required empty public constructor

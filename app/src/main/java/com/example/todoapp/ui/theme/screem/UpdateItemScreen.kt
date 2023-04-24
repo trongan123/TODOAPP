@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.*
+import com.example.todoapp.viewmodel.TodoItemViewModel
 
 import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
@@ -19,7 +20,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 @Composable
-fun UpdateItemScreen(viewModel: UpdateItemFragmentViewModel, backHome: () -> Unit){
+fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
     val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     titleItem = todoItem.title
     descriptionItem = todoItem.description

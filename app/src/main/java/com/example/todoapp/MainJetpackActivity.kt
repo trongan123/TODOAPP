@@ -1,60 +1,42 @@
 package com.example.todoapp
 
 import android.os.Bundle
-import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.todoapp.model.TodoItem
-import com.example.todoapp.ui.theme.ToDoAppTheme
 import com.example.todoapp.ui.theme.screem.AddItemScreen
 import com.example.todoapp.ui.theme.screem.HomeScreen
 import com.example.todoapp.ui.theme.screem.UpdateItemScreen
-import com.example.todoapp.ui.theme.screem.list
-import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
-import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
+
 
 class MainJetpackActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var viewModel: TodoItemViewModel =
             ViewModelProvider(this).get(TodoItemViewModel::class.java)
-        var addviewModel: AddItemFragmentViewModal =
-            ViewModelProvider(this).get(AddItemFragmentViewModal::class.java)
-        var updateviewModel: UpdateItemFragmentViewModel =
-            ViewModelProvider(this).get(UpdateItemFragmentViewModel::class.java)
+        setContent {
+            MainApp(this, viewModel)
+        }
 
-        viewModel.getStringMutableLiveData()
-            .observe(this) { s: String ->
-                viewModel.getAllList(viewModel.getStringMutableLiveData().value)
-                    .observe(this) { item: List<TodoItem> ->
-                        setContent {
-                            MainApp(item, viewModel, addviewModel,updateviewModel)
-                        }
-                    }
-            }
+
     }
 }
 
 @Composable
 fun MainApp(
-    list: List<TodoItem>,
-    viewModel: TodoItemViewModel,
-    addviewModel: AddItemFragmentViewModal,
-    updateviewModel: UpdateItemFragmentViewModel
+    owner: LifecycleOwner,
+    viewModel: TodoItemViewModel
 ) {
     val navController = rememberNavController()
+
     MaterialTheme() {
         NavHost(navController = navController, startDestination = "home") {
             composable("home") {
@@ -62,15 +44,16 @@ fun MainApp(
                     openAddItemScreen = {
                         navController.navigate("additem")
                     },
-                    openUpdateItemScreen={
+                    openUpdateItemScreen = {
                         navController.navigate("updateitem")
                     },
-                    list = list,
-                    viewModel = viewModel
+
+                    viewModel = viewModel,
+                    owner = owner
                 )
             }
             composable("additem") {
-                AddItemScreen(viewModel = addviewModel,
+                AddItemScreen(viewModel = viewModel,
                     backHome = {
                         navController.popBackStack(
                             route = "home",
@@ -81,7 +64,7 @@ fun MainApp(
                 )
             }
             composable("updateitem") {
-                UpdateItemScreen(viewModel = updateviewModel,
+                UpdateItemScreen(viewModel = viewModel,
                     backHome = {
                         navController.popBackStack(
                             route = "home",
