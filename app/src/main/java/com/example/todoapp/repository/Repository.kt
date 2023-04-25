@@ -1,6 +1,7 @@
 package com.example.todoapp.repository
 
 import android.app.Application
+import android.util.Log
 import com.example.todoapp.Database.TodoItemDAO
 import com.example.todoapp.Database.TodoItemDatabase
 import com.example.todoapp.model.TodoItem
@@ -17,10 +18,10 @@ class Repository(private val application: Application) {
 
 
     val db = TodoItemDatabase.getInstance(application)
-    private var mTodoItemDAO: TodoItemDAO = db.todoItemDAO()
+    private final var mTodoItemDAO: TodoItemDAO = db.todoItemDAO()
 
-    private var list = mTodoItemDAO.resultlistTodoItem
-    private var list2 = list
+
+
 
     private fun getlist(): List<TodoItem> {
         val item: MutableList<TodoItem> = ArrayList()
@@ -35,13 +36,20 @@ class Repository(private val application: Application) {
     }
     suspend fun getItems(page: Int, pageSize: Int): Result<List<TodoItem>> {
         delay(2000L)
+       // Log.e("Log", "page: "+page+"|pageSize:"+ pageSize )
+        var list = mTodoItemDAO.resultlistTodoItem
         val startingIndex = page * pageSize
-        return if (startingIndex + pageSize <= list.size) {
+        Log.e("Log", "page: "+page+"|pageSize:"+ pageSize+" |list.size:"+ list.size+ "|startingIndex:"+startingIndex )
+
+        return if (startingIndex + pageSize <= mTodoItemDAO.resultlistTodoItem.size) {
             Result.success(
                 list.slice(startingIndex until startingIndex + pageSize)
             )
         } else {
-            Result.success(emptyList())
+            Result.success(
+                //emptyList()
+                list.slice(startingIndex until list.size)
+            )
         }
     }
 }

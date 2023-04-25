@@ -79,6 +79,16 @@ public class AddItemFragment extends Fragment {
                 }
             }
         });
+        fragmentAddItemBinding.btnclear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentAddItemBinding.edttitle.setText("");
+                fragmentAddItemBinding.edtdescription.setText("");
+                fragmentAddItemBinding.edtcreatedDate.setText("");
+                fragmentAddItemBinding.edtcompletedDate.setText("");
+                fragmentAddItemBinding.dropdownstatus.setText("", false);
+            }
+        });
 
         fragmentAddItemBinding.edtcreatedDate.setOnClickListener(new View.OnClickListener() {
             @Override
