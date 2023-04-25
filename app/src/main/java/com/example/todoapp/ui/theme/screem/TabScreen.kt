@@ -157,9 +157,12 @@ fun AllItemScreen(
     viewModel: TodoItemViewModel,
     viewModelLoad: MainViewModel
 ) {
+    var state = remember(viewModelLoad.state) {
+        viewModelLoad.state
+    }
 
-    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
-    val state = viewModelLoad.state
+
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -168,7 +171,10 @@ fun AllItemScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(state.items.size) { i ->
+            items(state.items.size,
+            key= {state.items[it].id
+                
+            }) { i ->
                 val item = state.items[i]
                 if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
                     viewModelLoad.loadNextItems()

@@ -45,11 +45,17 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
 
     init {
         loadNextItems()
+
     }
 
     fun loadNextItems() {
         viewModelScope.launch {
             paginator.loadNextItems()
+        }
+    }
+    fun reset() {
+        viewModelScope.launch {
+            paginator.reset()
         }
     }
 }
