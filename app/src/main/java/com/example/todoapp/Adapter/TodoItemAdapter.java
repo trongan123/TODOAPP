@@ -77,7 +77,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             TodoItem todoItem = getItem(position);
             TodoItemViewHoldel todoItemViewHolder = (TodoItemViewHoldel) holder;
             long id = getItemId(position);
-            Log.e("position", "id :"+id+" position: "+position+" idItem: "+todoItem.getId() );
+
             // holder.setIsRecyclable(false);
             List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
             if (checkItem != null) {
@@ -131,7 +131,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         todoItems = getCurrentList();
-        Log.e("ViewType", "position:" + position + "|size:" + todoItems.size() + "|isLoadingAdd:" + isLoadingAdd);
         if (todoItems != null && position == todoItems.size() - 1 && isLoadingAdd) {
             return TYPE_LOADING;
         }

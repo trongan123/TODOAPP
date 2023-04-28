@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.todoapp.*
-import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
 @Composable
@@ -25,7 +23,7 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         CommonSpace()
         TextCompletedDate()
         CommonSpace()
-        dropDownMenuStatus()
+        DropDownMenuStatus()
 
     }
     Row(

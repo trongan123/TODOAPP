@@ -1,19 +1,15 @@
 package com.example.todoapp.ui.theme.screem
 
-import android.content.Context
-import androidx.activity.compose.setContent
+import android.os.Bundle
+import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,15 +18,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.Navigation.findNavController
 import com.example.todoapp.*
 import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.accompanist.pager.*
-
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -161,19 +156,15 @@ fun AllItemScreen(
         viewModelLoad.state
     }
 
-
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-
-
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
             items(state.items.size,
             key= {state.items[it].id
-                
+
             }) { i ->
                 val item = state.items[i]
                 if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
@@ -243,17 +234,18 @@ fun CompletedItemScreen(
     owner: LifecycleOwner, openUpdateItemScreen: () -> Unit, viewModel: TodoItemViewModel
 ) {
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
+    items = localListTodo.current.todolist as ArrayList<TodoItem>
     Column(
         modifier = Modifier.fillMaxSize()
 
     ) {
 
         LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
-                    items = item as ArrayList<TodoItem>
-                }
-            }
+//            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+//                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
+//                    items = item as ArrayList<TodoItem>
+//                }
+//            }
             items(count = items.size, key = {
                 items[it].id
             }, itemContent = { index ->
@@ -329,7 +321,80 @@ fun ItemList(
                     modifier = Modifier
                         .clickable {
                             todoItem = i
-                            openUpdateItemScreen()
+                           openUpdateItemScreen()
+
+                        }
+                        .size(30.dp))
+                Spacer(modifier = Modifier.size(10.dp))
+            }
+
+        }
+    }
+}
+
+@Composable
+fun ItemListRecycle(
+    i: TodoItem, view: View?, viewModel: TodoItemViewModel
+) {
+    val isChecked = remember { mutableStateOf(false) }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .clickable {
+                if (isChecked.value == true) {
+                    isChecked.value = false
+                    viewModel.setClearAll(i.id, false)
+                    viewModel.setCheckItem(i.id.toLong(), false)
+                } else {
+                    isChecked.value = true
+                    viewModel.setClearAll(i.id, true)
+                    viewModel.setCheckItem(i.id.toLong(), true)
+                }
+            }, elevation = 5.dp
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
+        ) {
+            Spacer(modifier = Modifier.size(16.dp))
+            Row {
+                val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
+                if (check != null) {
+                    isChecked.value = check.contains(i.id.toLong())
+                }
+                androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
+                    isChecked.value = it
+                    viewModel.setClearAll(i.id, it)
+                    viewModel.setCheckItem(i.id.toLong(),it)
+                })
+                Spacer(modifier = Modifier.size(16.dp))
+                if (!isChecked.value) {
+                    androidx.compose.material3.Text(
+                        i.title, modifier = Modifier.padding(top = 10.dp)
+
+                    )
+                } else {
+                    androidx.compose.material3.Text(
+                        i.title,
+                        modifier = Modifier.padding(top = 10.dp),
+                        style = TextStyle(textDecoration = TextDecoration.LineThrough)
+                    )
+                }
+                Spacer(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                )
+                Image(painter = painterResource(id = R.drawable.ellipsis),
+                    contentDescription = null,
+
+                    modifier = Modifier
+                        .clickable {
+                            todoItem = i
+//                            openUpdateItemScreen()
+                            val bundle = Bundle()
+                            bundle.putSerializable("object_TodoItem", todoItem)
+                            findNavController(view!!).navigate(R.id.updateItemKotlinFragment, bundle)
                         }
                         .size(30.dp))
                 Spacer(modifier = Modifier.size(10.dp))

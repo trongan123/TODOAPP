@@ -3,12 +3,11 @@ package com.example.todoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,26 +21,26 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 class MainJetpackActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var viewModel: TodoItemViewModel =
-            ViewModelProvider(this).get(TodoItemViewModel::class.java)
-        var viewModelLoad : MainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        setContent {
-            MainApp(this, viewModel,viewModelLoad)
+        val viewModel: TodoItemViewModel =
+            ViewModelProvider(this)[TodoItemViewModel::class.java]
+        val viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+            setContent {
+                MainApp(this, viewModel, viewModelLoad)
+            }
         }
 
-
-    }
 }
 
 @Composable
 fun MainApp(
     owner: LifecycleOwner,
     viewModel: TodoItemViewModel,
-    viewModelLoad : MainViewModel
+    viewModelLoad: MainViewModel
 ) {
     val navController = rememberNavController()
 
-    MaterialTheme() {
+    MaterialTheme {
         NavHost(navController = navController, startDestination = "home") {
             composable("home") {
                 HomeScreen(
@@ -54,7 +53,7 @@ fun MainApp(
 
                     viewModel = viewModel,
                     owner = owner,
-                    viewModelLoad=viewModelLoad
+                    viewModelLoad = viewModelLoad
                 )
             }
             composable("additem") {

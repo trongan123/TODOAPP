@@ -3,15 +3,7 @@ package com.example.todoapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-
 import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import com.example.todoapp.databinding.FragmentUpdateItemBinding;
 import com.example.todoapp.model.TodoItem;
-
-import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel;
+import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -31,14 +28,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 
 public class UpdateItemFragment extends Fragment {
 
-
     private FragmentUpdateItemBinding fragmentUpdateItemBinding;
-    private UpdateItemFragmentViewModel updateItemFragmentViewModel;
+    private TodoItemViewModel todoItemViewModel;
     private MaterialDatePicker datePickerCompleted;
     private MaterialDatePicker datePickerCreated;
     private TodoItem todoItem = new TodoItem();
@@ -95,8 +92,8 @@ public class UpdateItemFragment extends Fragment {
         fragmentUpdateItemBinding = FragmentUpdateItemBinding.inflate(inflater, container, false);
         mView = fragmentUpdateItemBinding.getRoot();
 
-        updateItemFragmentViewModel = new ViewModelProvider(this).get(UpdateItemFragmentViewModel.class);
-        fragmentUpdateItemBinding.setUpdateItemFragmentViewModel(updateItemFragmentViewModel);
+        todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
+        fragmentUpdateItemBinding.setTodoItemViewModel(todoItemViewModel);
 
         datePickerCreated = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -110,8 +107,8 @@ public class UpdateItemFragment extends Fragment {
 
     private void updateItem() throws ParseException {
         if(validation()){
-        String strtitle = fragmentUpdateItemBinding.edttitle.getText().toString().trim();
-        String strDes = fragmentUpdateItemBinding.edtdescription.getText().toString().trim();
+        String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim();
+        String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim();
         Date credate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
         Date comdate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
         String strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
@@ -123,7 +120,7 @@ public class UpdateItemFragment extends Fragment {
         todoItem.setCompletedDate(comdate);
         todoItem.setStatus(strStt);
 
-        updateItemFragmentViewModel.updateItem(todoItem);
+        todoItemViewModel.updateItem(todoItem);
         Toast.makeText(getActivity(), "Update success", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.mainFragment);
         }
@@ -150,7 +147,7 @@ public class UpdateItemFragment extends Fragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        updateItemFragmentViewModel.deleteItem(todoItem);
+                        todoItemViewModel.deleteItem(todoItem);
                         Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
                         Navigation.findNavController(getView()).navigate(R.id.mainFragment);
 
@@ -177,15 +174,12 @@ public class UpdateItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
-                datePickerCreated.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                    @Override
-                    public void onPositiveButtonClick(Object selection) {
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                        calendar.setTimeInMillis((Long) selection);
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        String formattedDate = format.format(calendar.getTime());
-                        fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
-                    }
+                datePickerCreated.addOnPositiveButtonClickListener(selection -> {
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    calendar.setTimeInMillis((Long) selection);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    String formattedDate = format.format(calendar.getTime());
+                    fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
                 });
             }
         });

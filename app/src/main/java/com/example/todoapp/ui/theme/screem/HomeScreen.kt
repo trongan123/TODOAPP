@@ -1,17 +1,8 @@
 package com.example.todoapp.ui.theme.screem
 
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
+import androidx.compose.runtime.*
 import androidx.lifecycle.LifecycleOwner
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.MainViewModel
@@ -23,19 +14,29 @@ fun HomeScreen(
     openAddItemScreen: () -> Unit,
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel,
-    viewModelLoad : MainViewModel
+    viewModelLoad: MainViewModel
 ) {
-    Column() {
-        TabScreen(openAddItemScreen ={
-            openAddItemScreen()
-        },openUpdateItemScreen ={
-            openUpdateItemScreen()
-        },
-            viewModel=viewModel,
-            owner =owner,
-            viewModelLoad=viewModelLoad
 
-        )
+    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
+    viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+        viewModel.getAllList(viewModel.stringMutableLiveData.value)
+            .observe(owner) { item: List<TodoItem> ->
+                items = item as ArrayList<TodoItem>
+            }
     }
+    CompositionLocalProvider(localListTodo provides appListTodo(todolist =items)) {
+        Column() {
+            TabScreen(openAddItemScreen = {
+                openAddItemScreen()
+            }, openUpdateItemScreen = {
+                openUpdateItemScreen()
+            },
+                viewModel = viewModel,
+                owner = owner,
+                viewModelLoad = viewModelLoad
 
+            )
+        }
+
+    }
 }

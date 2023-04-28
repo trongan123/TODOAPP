@@ -38,6 +38,13 @@ class HomeActivity : ComponentActivity() {
                 }) {
                     androidx.compose.material.Text(text = "Jetpack")
                 }
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(onClick = {
+                    val intent = Intent(this@HomeActivity, MainKotlinActivity::class.java)
+                    startActivity(intent)
+                }) {
+                    androidx.compose.material.Text(text = "Kotlin")
+                }
 
 
             }
