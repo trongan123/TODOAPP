@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_navkotlin"
+    app:startDestination="@id/mainKotlinFragment">
+
+    <fragment
+        android:id="@+id/addItemKotlinFragment"
+        android:name="com.example.todoapp.kotlin.AddItemKotlinFragment"
+        android:label="fragment_add_item_kotlin"
+        tools:layout="@layout/fragment_add_item_kotlin" >
+        <action
+            android:id="@+id/action_addItemKotlinFragment_to_mainKotlinFragment"
+            app:destination="@id/mainKotlinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateItemKotlinFragment"
+        android:name="com.example.todoapp.kotlin.UpdateItemKotlinFragment"
+        android:label="fragment_update_item_kotlin"
+        tools:layout="@layout/fragment_update_item_kotlin" >
+        <action
+            android:id="@+id/action_updateItemKotlinFragment_to_mainKotlinFragment"
+            app:destination="@id/mainKotlinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainKotlinFragment"
+        android:name="com.example.todoapp.kotlin.MainKotlinFragment"
+        android:label="MainKotlinFragment" >
+        <action
+            android:id="@+id/action_mainKotlinFragment_to_addItemKotlinFragment"
+            app:destination="@id/addItemKotlinFragment" />
+        <action
+            android:id="@+id/action_mainKotlinFragment_to_updateItemKotlinFragment"
+            app:destination="@id/updateItemKotlinFragment" />
+    </fragment>
+</navigation>

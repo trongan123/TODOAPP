@@ -1,21 +1,12 @@
 package com.example.todoapp.ui.theme.screem
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.todoapp.*
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
-import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
-import com.maxkeppeker.sheets.core.models.base.rememberSheetState
-import com.maxkeppeler.sheets.calendar.CalendarDialog
-import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -36,7 +27,7 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
         CommonSpace()
         TextCompletedDate()
         CommonSpace()
-        dropDownMenuStatus()
+        DropDownMenuStatus()
     }
     Row(
         modifier = Modifier

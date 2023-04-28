@@ -1,11 +1,8 @@
 package com.example.todoapp.ui.theme.screem
 
 import android.util.Log
-import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,35 +12,20 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.PopupProperties
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
-import com.example.todoapp.ui.theme.screem.ConfirmDialog
-
-import com.example.todoapp.viewmodel.AddItemFragmentViewModal
 import com.example.todoapp.viewmodel.TodoItemViewModel
-import com.example.todoapp.viewmodel.UpdateItemFragmentViewModel
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
@@ -57,15 +39,10 @@ var completedDateItem: String = ""
 var statusItem: String = ""
 var todoItem: TodoItem = TodoItem()
 
+data class appListTodo(val todolist : List<TodoItem>)
 
-@Composable
-fun ListItemTodo(list : List<TodoItem>) {
-    LazyColumn() {
-        items(list) { i ->
-            Text(text = i.title)
-        }
-    }
-}
+val localListTodo = compositionLocalOf { appListTodo(todolist = ArrayList()) }
+
 
 @Composable
 fun Texttitle() {
@@ -76,11 +53,11 @@ fun Texttitle() {
         value = title,
         onValueChange = {
             title = it
-            titleItem = title.toString()
+            titleItem = title
         },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { androidx.compose.material.Text("Title") },
-        label = { androidx.compose.material.Text("Title") },
+        placeholder = { Text("Title") },
+        label = { Text("Title") },
     )
 }
 
@@ -93,11 +70,11 @@ fun TextDescription() {
         value = description,
         onValueChange = {
             description = it
-            descriptionItem = description.toString()
+            descriptionItem = description
         },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { androidx.compose.material.Text("Description") },
-        label = { androidx.compose.material.Text("Description") },
+        placeholder = { Text("Description") },
+        label = { Text("Description") },
     )
 }
 
@@ -112,7 +89,7 @@ fun TextCreatedDate() {
         state = calendarState,
         selection = CalendarSelection.Date { date ->
             createdDate = date.toString()
-            createdDateItem = createdDate.toString()
+            createdDateItem = createdDate
         }
     )
     OutlinedTextField(
@@ -127,8 +104,8 @@ fun TextCreatedDate() {
 
             .clickable(
                 onClick = { calendarState.show() }),
-        placeholder = { androidx.compose.material.Text("CreatedDate") },
-        label = { androidx.compose.material.Text("CreatedDate") },
+        placeholder = { Text("CreatedDate") },
+        label = { Text("CreatedDate") },
         colors = TextFieldDefaults.textFieldColors(
             disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
             disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium)
@@ -163,8 +140,8 @@ fun TextCompletedDate() {
             .clickable(
                 onClick = { calendarState.show() }),
 
-        placeholder = { androidx.compose.material.Text("CompletedDate") },
-        label = { androidx.compose.material.Text("CompletedDate") },
+        placeholder = { Text("CompletedDate") },
+        label = { Text("CompletedDate") },
         colors = TextFieldDefaults.textFieldColors(
             disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
             disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium)
@@ -173,81 +150,10 @@ fun TextCompletedDate() {
     )
 }
 
-@Composable
-fun TextFieldWithDropdown(
-    modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    setValue: (TextFieldValue) -> Unit,
-    onDismissRequest: () -> Unit,
-    dropDownExpanded: Boolean,
-    list: List<String>,
-    label: String = ""
-) {
-    Box(modifier) {
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { focusState ->
-                    if (!focusState.isFocused)
-                        onDismissRequest()
-                },
-            value = value,
-            onValueChange = setValue,
-            label = { Text(label) },
-            colors = TextFieldDefaults.outlinedTextFieldColors()
-        )
-        DropdownMenu(
-            expanded = dropDownExpanded,
-            properties = PopupProperties(
-                focusable = false,
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true
-            ),
-            onDismissRequest = onDismissRequest
-        ) {
-            list.forEach { text ->
-                DropdownMenuItem(onClick = {
-                    setValue(
-                        TextFieldValue(
-                            text,
-                            TextRange(text.length)
-                        )
-                    )
-                }) {
-                    Text(text = text)
-                }
-            }
-        }
-    }
-}
 
-val all = listOf("pending", "completed")
 
-val dropDownOptions = mutableStateOf(listOf<String>())
-val textFieldValue = mutableStateOf(TextFieldValue())
-val dropDownExpanded = mutableStateOf(false)
-fun onDropdownDismissRequest() {
-    dropDownExpanded.value = false
-}
 
-fun onValueChanged(value: TextFieldValue) {
-    dropDownExpanded.value = true
-    textFieldValue.value = value
-    dropDownOptions.value = all.filter { it.startsWith(value.text) && it != value.text }.take(3)
-}
 
-@Composable
-fun TextFieldWithDropdownUsage() {
-    TextFieldWithDropdown(
-        modifier = Modifier.fillMaxWidth(),
-        value = textFieldValue.value,
-        setValue = ::onValueChanged,
-        onDismissRequest = ::onDropdownDismissRequest,
-        dropDownExpanded = dropDownExpanded.value,
-        list = dropDownOptions.value,
-        label = "Status"
-    )
-}
 
 @Composable
 fun CommonSpace() {
@@ -260,7 +166,7 @@ fun AddButton(viewModel : TodoItemViewModel,backHome:()->Unit ) {
     Button(
         onClick = {
             todoItem = TodoItem()
-            var formatter = SimpleDateFormat("yyyy-MM-dd")
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
             //update database
             todoItem.title = titleItem
             todoItem.description = descriptionItem
@@ -275,7 +181,7 @@ fun AddButton(viewModel : TodoItemViewModel,backHome:()->Unit ) {
         modifier = Modifier
             .padding(bottom = 100.dp)
     ) {
-        androidx.compose.material.Text("ADD")
+        Text("ADD")
     }
 }
 @Composable
@@ -289,7 +195,7 @@ fun DeleteButton(viewModel : TodoItemViewModel,backHome:()->Unit) {
         modifier = Modifier
             .padding(bottom = 100.dp)
     ) {
-        androidx.compose.material.Text("Delete")
+        Text("Delete")
     }
     if (showDeleteConfirm) {
         ConfirmDialog(
@@ -310,7 +216,7 @@ fun UpdateButton(viewModel : TodoItemViewModel,backHome:()->Unit) {
     Button(
         onClick = {
 
-            var formatter = SimpleDateFormat("yyyy-MM-dd")
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
             //update database
             todoItem.title = titleItem
             todoItem.description = descriptionItem
@@ -325,7 +231,7 @@ fun UpdateButton(viewModel : TodoItemViewModel,backHome:()->Unit) {
         modifier = Modifier
             .padding(bottom = 100.dp)
     ) {
-        androidx.compose.material.Text("Update")
+        Text("Update")
     }
 }
 
@@ -349,51 +255,17 @@ fun ClearButton() {
         modifier = Modifier
             .padding(bottom = 100.dp)
     ) {
-        androidx.compose.material.Text("CLEAR")
+        Text("CLEAR")
     }
 }
 
 
 
 
-@Composable
-fun LayoutUpdateButton(viewModel : UpdateItemFragmentViewModel, view: View) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.Bottom
-    ) {
-        ClearButton()
-        //   UpdateButton(viewModel,view)
-    }
-
-
-}
 
 @Composable
-fun LayoutAddButton(viewModel : AddItemFragmentViewModal) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.Bottom
-    ) {
-
-        ClearButton()
-        // AddButton(viewModel)
-
-    }
-
-
-}
-
-@Composable
-fun dropDownMenuStatus() {
+fun DropDownMenuStatus() {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("pending", "completed")
@@ -407,7 +279,7 @@ fun dropDownMenuStatus() {
         Icons.Filled.KeyboardArrowDown
 
 
-    Column() {
+    Column {
         OutlinedTextField(
             value = selectedText,
             onValueChange = {
@@ -419,7 +291,7 @@ fun dropDownMenuStatus() {
                     //This value is used to assign to the DropDown the same width
                     textfieldSize = coordinates.size.toSize()
                 },
-            label = { androidx.compose.material.Text("Status") },
+            label = { Text("Status") },
             trailingIcon = {
                 Icon(icon, "contentDescription",
                     Modifier.clickable { expanded = !expanded })
@@ -437,7 +309,7 @@ fun dropDownMenuStatus() {
                     statusItem = label
                     expanded = false
                 }) {
-                    androidx.compose.material.Text(text = label)
+                    Text(text = label)
                 }
             }
         }

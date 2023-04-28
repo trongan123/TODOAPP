@@ -5,16 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todoapp.Database.TodoItemDatabase
+
 import com.example.todoapp.DefaultPaginator
 import com.example.todoapp.model.TodoItem
-import com.example.todoapp.repository.ListItem
+
 import com.example.todoapp.repository.Repository
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: Repository =  Repository(application)
 
@@ -53,11 +52,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
             paginator.loadNextItems()
         }
     }
-    fun reset() {
-        viewModelScope.launch {
-            paginator.reset()
-        }
-    }
+
 }
 
 data class ScreenState(
