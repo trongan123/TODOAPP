@@ -1,8 +1,8 @@
 package com.example.todoapp.kotlin
 
+import android.accessibilityservice.GestureDescription
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +10,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.viewpager2.widget.ViewPager2
-import com.example.todoapp.Adapter.TabItemAdapter
 import com.example.todoapp.Adapter.TabItemKotlinAdapter
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentMainKotlinBinding
@@ -31,10 +32,11 @@ class MainKotlinFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener { view ->
-
-            findNavController(view).navigate(R.id.addItemKotlinFragment)
+            val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
+                .addSharedElement(fragmentMainBinding!!.btnAdd, "add_fragment")
+                .build()
+            findNavController(view).navigate(R.id.addItemKotlinFragment, null, null, extras)
         }
-
         val viewPager2 = requireView().findViewById<ViewPager2>(R.id.vpg)
 
         fragmentMainBinding!!.vpg.adapter =
@@ -69,11 +71,7 @@ class MainKotlinFragment : Fragment() {
             .observe(requireActivity(), object : Observer<List<Long?>?> {
 
                 override fun onChanged(value: List<Long?>?) {
-                    if (value!!.size <= 0) {
-                        fragmentMainBinding!!.btnclearall.isEnabled = false
-                    } else {
-                        fragmentMainBinding!!.btnclearall.isEnabled = true
-                    }
+                    fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0
                 }
             })
 

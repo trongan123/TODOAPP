@@ -7,7 +7,6 @@ class TabItem{
 
     var title: String =""
     var screen: ComposableFun
-
     constructor(title: String, screen: ComposableFun) {
         this.title = title
         this.screen = screen

@@ -15,10 +15,10 @@ class Repository(application: Application) {
     private var mTodoItemDAO: TodoItemDAO = db.todoItemDAO()
 
     suspend fun getItems(page: Int, pageSize: Int): Result<List<TodoItem>> {
-      //  delay(2000L)
+        delay(2000L)
         var list = mTodoItemDAO.resultlistTodoItem
         val startingIndex = page * pageSize
-        delay(2000L)
+
 //        Log.e("Log", "page: "+page+"|pageSize:"+ pageSize+" |list.size:"+ list.size+ "|startingIndex:"+startingIndex )
 
         return if (startingIndex + pageSize <= list.size) {

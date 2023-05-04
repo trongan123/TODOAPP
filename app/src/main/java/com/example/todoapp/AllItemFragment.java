@@ -132,7 +132,7 @@ public class AllItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle);
+        Navigation.findNavController(getView()).navigate(R.id.action_mainFragment_to_updateItemFragment, bundle);
     }
 
 

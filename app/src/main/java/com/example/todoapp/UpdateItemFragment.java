@@ -22,6 +22,7 @@ import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,7 +40,7 @@ public class UpdateItemFragment extends Fragment {
     private MaterialDatePicker datePickerCompleted;
     private MaterialDatePicker datePickerCreated;
     private TodoItem todoItem = new TodoItem();
-    ;
+
     private View mView;
 
 
@@ -106,23 +107,23 @@ public class UpdateItemFragment extends Fragment {
     }
 
     private void updateItem() throws ParseException {
-        if(validation()){
-        String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim();
-        String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim();
-        Date credate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
-        String strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
+        if (validation()) {
+            String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim();
+            String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim();
+            Date credate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
+            Date comdate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
+            String strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
 
-        //update database
-        todoItem.setTitle(strtitle);
-        todoItem.setDescription(strDes);
-        todoItem.setCreatedDate(credate);
-        todoItem.setCompletedDate(comdate);
-        todoItem.setStatus(strStt);
+            //update database
+            todoItem.setTitle(strtitle);
+            todoItem.setDescription(strDes);
+            todoItem.setCreatedDate(credate);
+            todoItem.setCompletedDate(comdate);
+            todoItem.setStatus(strStt);
 
-        todoItemViewModel.updateItem(todoItem);
-        Toast.makeText(getActivity(), "Update success", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getView()).navigate(R.id.mainFragment);
+            todoItemViewModel.updateItem(todoItem);
+            Toast.makeText(getActivity(), "Update success", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(getView()).navigate(R.id.action_updateItemFragment_to_mainFragment);
         }
     }
 
@@ -141,17 +142,29 @@ public class UpdateItemFragment extends Fragment {
         todoItem.setCompletedDate(comdate);
         todoItem.setStatus(strStt);
 
-        new AlertDialog.Builder(getContext())
+//        new AlertDialog.Builder(getContext())
+//                .setTitle("Confirm delete")
+//                .setMessage("Are you sure?")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        todoItemViewModel.deleteItem(todoItem);
+//                        Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
+//                        Navigation.findNavController(getView()).navigate(R.id.action_updateItemFragment_to_mainFragment);
+//
+//                    }
+//                })
+//                .setNegativeButton("No", null)
+//                .show();
+
+
+        new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Confirm delete")
                 .setMessage("Are you sure?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        todoItemViewModel.deleteItem(todoItem);
-                        Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(getView()).navigate(R.id.mainFragment);
-
-                    }
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    todoItemViewModel.deleteItem(todoItem);
+                    Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(getView()).navigate(R.id.action_updateItemFragment_to_mainFragment);
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -170,18 +183,15 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.edtcompletedDate.setText(dateFormat.format(todoItem.getCompletedDate()));
             fragmentUpdateItemBinding.dropdownstatus.setText(todoItem.getStatus(), false);
         }
-        fragmentUpdateItemBinding.edtcreatedDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
-                datePickerCreated.addOnPositiveButtonClickListener(selection -> {
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    calendar.setTimeInMillis((Long) selection);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    String formattedDate = format.format(calendar.getTime());
-                    fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
-                });
-            }
+        fragmentUpdateItemBinding.edtcreatedDate.setOnClickListener(view -> {
+            datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
+            datePickerCreated.addOnPositiveButtonClickListener(selection -> {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long) selection);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = format.format(calendar.getTime());
+                fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
+            });
         });
 
         //create datePicker
@@ -202,6 +212,7 @@ public class UpdateItemFragment extends Fragment {
             }
         });
     }
+
     private boolean validation() throws ParseException {
         boolean check = true;
 
@@ -225,7 +236,7 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.tilstatus.setError("Please choice a status");
             check = false;
         }
-        if(!check){
+        if (!check) {
             return check;
         }
 
@@ -233,7 +244,7 @@ public class UpdateItemFragment extends Fragment {
                 .parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
         Date comdate = new SimpleDateFormat("yyyy-MM-dd")
                 .parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
-        if (credate.compareTo(comdate)>0) {
+        if (credate.compareTo(comdate) > 0) {
             fragmentUpdateItemBinding.tilcompletedDate.setError("Completed date must be after created date");
             check = false;
         }

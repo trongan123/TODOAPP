@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
@@ -29,9 +28,7 @@ class MainJetpackActivity : ComponentActivity() {
                 MainApp(this, viewModel, viewModelLoad)
             }
         }
-
 }
-
 @Composable
 fun MainApp(
     owner: LifecycleOwner,
@@ -39,7 +36,6 @@ fun MainApp(
     viewModelLoad: MainViewModel
 ) {
     val navController = rememberNavController()
-
     MaterialTheme {
         NavHost(navController = navController, startDestination = "home") {
             composable("home") {
@@ -50,7 +46,6 @@ fun MainApp(
                     openUpdateItemScreen = {
                         navController.navigate("updateitem")
                     },
-
                     viewModel = viewModel,
                     owner = owner,
                     viewModelLoad = viewModelLoad

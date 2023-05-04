@@ -1,84 +1,63 @@
 package com.example.todoapp;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.FragmentNavigator;
-
-import androidx.viewpager2.widget.ViewPager2;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.example.todoapp.Adapter.TabItemAdapter;
 import com.example.todoapp.databinding.FragmentMainBinding;
-import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class MainFragment extends Fragment {
     private FragmentMainBinding fragmentMainBinding;
-    private View mView;
     private TodoItemViewModel todoItemViewModel;
-
-
-
     public MainFragment() {
-        // Required empty public constructor
     }
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
-        fragmentMainBinding.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                        .addSharedElement(fragmentMainBinding.btnAdd, "add_fragment")
-                        .build();
-                Navigation.findNavController(view).navigate(R.id.addItemFragment, null, null, extras);
-            }
+        fragmentMainBinding.btnAdd.setOnClickListener(view1 -> {
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(fragmentMainBinding.btnAdd, "add_fragment")
+                    .build();
+            Navigation.findNavController(view1).navigate(R.id.addItemFragment, null, null, extras);
         });
 
-        ViewPager2 viewPager2 = getView().findViewById(R.id.vpg);
-        fragmentMainBinding.vpg.setAdapter(new TabItemAdapter(getActivity(), todoItemViewModel));
+        ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
+        fragmentMainBinding.vpg.setAdapter(new TabItemAdapter(requireActivity(), todoItemViewModel));
         TabLayout tabLayout = getView().findViewById(R.id.tlomenu);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
-                tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position) {
-                    case 0:
-                        tab.setText("All");
-                        break;
-                    case 1:
-                        tab.setText("Pending");
-                        break;
-                    case 2:
-                        tab.setText("Completed");
-                        break;
+                tabLayout, viewPager2, (tab, position) -> {
+                    switch (position) {
+                        case 0:
+                            tab.setText("All");
+                            break;
+                        case 1:
+                            tab.setText("Pending");
+                            break;
+                        case 2:
+                            tab.setText("Completed");
+                            break;
+                    }
                 }
-            }
-        }
         );
         tabLayoutMediator.attach();
         fragmentMainBinding.svSearch
@@ -91,51 +70,54 @@ public class MainFragment extends Fragment {
                             return false;
                         });
 
-        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), new Observer<List<Long>>() {
-            @Override
-            public void onChanged(List<Long> longs) {
-                if (longs.size() <=0 ) {
-                    fragmentMainBinding.btnclearall.setEnabled(false);
-                } else {
-                    fragmentMainBinding.btnclearall.setEnabled(true);
-                }
-
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> {
+            if (longs.size() <=0 ) {
+                fragmentMainBinding.btnclearall.setEnabled(false);
+            } else {
+                fragmentMainBinding.btnclearall.setEnabled(true);
             }
-        });
 
-
-        fragmentMainBinding.btnclearall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearItem();
-            }
         });
+        fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
     }
 
 
     private void clearItem() {
-        new AlertDialog.Builder(getContext())
+        new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Confirm Clear All")
                 .setMessage("Are you sure?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        todoItemViewModel.clearItem();
-                        Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(getView()).navigate(R.id.mainFragment);
-                    }
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    todoItemViewModel.clearItem();
+                    Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("No", null)
                 .show();
+//        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+//                .setTitleText("Are you sure?")
+//                .setContentText("Won't be able to recover this file!")
+//                .setConfirmText("Yes,delete it!")
+//                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                    @Override
+//                    public void onClick(SweetAlertDialog sDialog) {
+//                        todoItemViewModel.clearItem();
+//                        sDialog
+//                                .setTitleText("Deleted!")
+//                                .setContentText("Your imaginary file has been deleted!")
+//                                .setConfirmText("OK")
+//                                .setConfirmClickListener(null)
+//                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+//                    }
+//                })
+//                .show();
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
-        mView = fragmentMainBinding.getRoot();
+        View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
 
         fragmentMainBinding.setMainFragViewModel(todoItemViewModel);

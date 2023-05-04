@@ -78,7 +78,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             TodoItemViewHoldel todoItemViewHolder = (TodoItemViewHoldel) holder;
             long id = getItemId(position);
 
-            // holder.setIsRecyclable(false);
             List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
             if (checkItem != null) {
                 if (checkItem.contains(id)) {
@@ -99,35 +98,24 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
             todoItemViewHolder.itemTodoBinding.btndetail.setTransitionName("update_" + position);
             todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
-            todoItemViewHolder.itemTodoBinding.btndetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    iClickItem.DetaiItem(todoItem);
-                }
-            });
-
-
-            todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
-                        todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                                todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-                        );
-                        iClickItem.clearItem(todoItem, id, true);
-
-                    } else {
-                        todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                                todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-                        );
-                        iClickItem.clearItem(todoItem, id, false);
-                    }
-                }
-            });
+            todoItemViewHolder.itemTodoBinding.btndetail.setOnClickListener(view -> iClickItem.DetaiItem(todoItem));
+            todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder,todoItem,id));
         }
     }
+     private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id){
+         if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
+             todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
+                     todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+             );
+             iClickItem.clearItem(todoItem, id, true);
 
+         } else {
+             todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
+                     todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
+             );
+             iClickItem.clearItem(todoItem, id, false);
+         }
+     }
     @Override
     public int getItemViewType(int position) {
         todoItems = getCurrentList();
