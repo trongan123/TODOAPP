@@ -1,23 +1,33 @@
 package com.example.todoapp.ui.theme.screem
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation.findNavController
 import com.example.todoapp.*
@@ -81,26 +91,33 @@ fun TabScreen(
 }
 
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Tabs(
-    tabs: List<TabItem>, pagerState: PagerState, viewModel: TodoItemViewModel
+    tabs: List<TabItem>, pagerState: PagerState, viewModel: TodoItemViewModel,
+    negativeButtonColor: Color = Color(0xFF35898F),
+    positiveButtonColor: Color = Color(0xFFFF0000),
+    spaceBetweenElements: Dp = 18.dp,
+    context: Context = LocalContext.current.applicationContext
 ) {
+    var dialogOpen by remember {
+        mutableStateOf(false)
+    }
     val scope = rememberCoroutineScope()
-    // OR ScrollableTabRow()
+
     Row {
         ScrollableTabRow(modifier = Modifier.weight(1f), edgePadding = 0.dp,
-            // Our selected tab is our current page
+
             selectedTabIndex = pagerState.currentPage,
-            // Override the indicator, using the provided pagerTabIndicatorOffset modifier
+
             backgroundColor = Color.White, contentColor = Color.Black, indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                 )
             }) {
-            // Add tabs for all of our pages
+
             tabs.forEachIndexed { index, tab ->
-                // OR Tab()
+
                 LeadingIconTab(
                     icon = { },
                     text = { Text(tab.title) },
@@ -114,27 +131,100 @@ fun Tabs(
             }
 
         }
-        var showDeleteConfirm by remember { mutableStateOf(false) }
-        Button(
-            onClick = {
-                showDeleteConfirm = true
-            }, shape = RoundedCornerShape(20.dp)
 
-        ) {
-            androidx.compose.material.Text("ClearAll")
+        if (dialogOpen) {
+            Dialog(onDismissRequest = {
+                dialogOpen = false
+            }
+            ) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(0.92f),
+                    color = Color.Transparent
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        // text and buttons
+                        Column(
+                            modifier = Modifier
+                                .padding(top = 30.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color.White,
+                                    shape = RoundedCornerShape(percent = 10)
+                                ),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(modifier = Modifier.height(height = 36.dp))
+
+                            Text(
+                                text = "Delete?",
+                                fontSize = 24.sp
+                            )
+
+                            Spacer(modifier = Modifier.height(height = spaceBetweenElements))
+                            Text(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                text = "Are you sure, you want to delete the item?",
+                                fontSize = 18.sp
+                            )
+
+                            Spacer(modifier = Modifier.height(height = spaceBetweenElements))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                DialogButton(buttonColor = negativeButtonColor, buttonText = "No") {
+                                    dialogOpen = false
+                                }
+                                DialogButton(
+                                    buttonColor = positiveButtonColor,
+                                    buttonText = "Yes"
+                                ) {
+                                    dialogOpen = false
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Clear all successfull",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    viewModel.clearItem()
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(height = spaceBetweenElements * 2))
+                        }
+                        Icon(
+                            painter = painterResource(id = R.drawable.trast),
+                            contentDescription = "Delete Icon",
+                            tint = positiveButtonColor,
+                            modifier = Modifier
+                                .background(color = Color.White, shape = CircleShape)
+                                .border(
+                                    width = 2.dp,
+                                    shape = CircleShape,
+                                    color = positiveButtonColor
+                                )
+                                .padding(all = 16.dp)
+                                .align(alignment = Alignment.TopCenter)
+                        )
+                    }
+                }
+            }
         }
 
-        if (showDeleteConfirm) {
-            ConfirmDialog(content = "Confirm Clear All?",
-                onDismiss = { showDeleteConfirm = false },
-                onConfirm = {
-                    showDeleteConfirm = false
-                    viewModel.clearItem()
-                })
+        Button(
+            onClick = {
+                dialogOpen = true
+            }, shape = RoundedCornerShape(20.dp)
+        ) {
+            Text("ClearAll")
         }
     }
 }
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -144,7 +234,6 @@ fun TabsContent(tabs: List<TabItem>, pagerState: PagerState) {
     }
 }
 
-
 @Composable
 fun AllItemScreen(
     owner: LifecycleOwner,
@@ -152,48 +241,88 @@ fun AllItemScreen(
     viewModel: TodoItemViewModel,
     viewModelLoad: MainViewModel
 ) {
-    var state = remember(viewModelLoad.state) {
-        viewModelLoad.state
-    }
+//    var state = remember(viewModelLoad.state) {
+//        viewModelLoad.state
+//    }
 
+    var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(state.items.size,
-            key= {state.items[it].id
 
-            }) { i ->
-                val item = state.items[i]
-                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-                    viewModelLoad.loadNextItems()
-                }
+    ) {
+
+        LazyColumn() {
+            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+                viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                    .observe(owner) { item: List<TodoItem> ->
+                        items = item as ArrayList<TodoItem>
+                    }
+            }
+            items(count = items.size, key = {
+                items[it].id
+            }, itemContent = { index ->
+                val cartItemData = items[index]
                 ItemList(
-                    item,
+                    cartItemData,
                     openUpdateItemScreen = {
                         openUpdateItemScreen()
                     },
                     viewModel
                 )
-            }
-            item {
-                if (state.isLoading) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
+            })
         }
+
     }
 }
 
+//@Composable
+//fun AllItemScreen(
+//    owner: LifecycleOwner,
+//    openUpdateItemScreen: () -> Unit,
+//    viewModel: TodoItemViewModel,
+//    viewModelLoad: MainViewModel
+//) {
+//    var state = remember(viewModelLoad.state) {
+//        viewModelLoad.state
+//    }
+//
+//    Column(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        LazyColumn(
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            items(state.items.size,
+//                key= {state.items[it].id
+//
+//                }) { i ->
+//                val item = state.items[i]
+//                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+//                    viewModelLoad.loadNextItems()
+//                }
+//                ItemList(
+//                    item,
+//                    openUpdateItemScreen = {
+//                        openUpdateItemScreen()
+//                    },
+//                    viewModel
+//                )
+//            }
+//            item {
+//                if (state.isLoading) {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(8.dp),
+//                        horizontalArrangement = Arrangement.Center
+//                    ) {
+//                        CircularProgressIndicator()
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun PendingItemScreen(
@@ -234,18 +363,18 @@ fun CompletedItemScreen(
     owner: LifecycleOwner, openUpdateItemScreen: () -> Unit, viewModel: TodoItemViewModel
 ) {
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
-    items = localListTodo.current.todolist as ArrayList<TodoItem>
+    //   items = localListTodo.current.todolist as ArrayList<TodoItem>
     Column(
         modifier = Modifier.fillMaxSize()
 
     ) {
 
         LazyColumn() {
-//            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-//                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
-//                    items = item as ArrayList<TodoItem>
-//                }
-//            }
+            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
+                    items = item as ArrayList<TodoItem>
+                }
+            }
             items(count = items.size, key = {
                 items[it].id
             }, itemContent = { index ->
@@ -275,11 +404,11 @@ fun ItemList(
                 if (isChecked.value == true) {
                     isChecked.value = false
                     viewModel.setClearAll(i.id, false)
-                    viewModel.setCheckData(i.id, false)
+                    viewModel.setCheckItem(i.id.toLong(), false)
                 } else {
                     isChecked.value = true
                     viewModel.setClearAll(i.id, true)
-                    viewModel.setCheckData(i.id, true)
+                    viewModel.setCheckItem(i.id.toLong(), true)
                 }
             }, elevation = 5.dp
     ) {
@@ -288,14 +417,12 @@ fun ItemList(
         ) {
             Spacer(modifier = Modifier.size(16.dp))
             Row {
-                val check: List<Int> = viewModel.getListMutableCheck().value as List<Int>
-                if (check != null) {
-                    isChecked.value = check.contains(i.id)
-                }
+                val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
+                isChecked.value = check.contains(i.id.toLong())
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
                     viewModel.setClearAll(i.id, it)
-                    viewModel.setCheckData(i.id, it)
+                    viewModel.setCheckItem(i.id.toLong(), it)
                 })
                 Spacer(modifier = Modifier.size(16.dp))
                 if (!isChecked.value) {
@@ -321,7 +448,7 @@ fun ItemList(
                     modifier = Modifier
                         .clickable {
                             todoItem = i
-                           openUpdateItemScreen()
+                            openUpdateItemScreen()
 
                         }
                         .size(30.dp))
@@ -365,7 +492,7 @@ fun ItemListRecycle(
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
                     viewModel.setClearAll(i.id, it)
-                    viewModel.setCheckItem(i.id.toLong(),it)
+                    viewModel.setCheckItem(i.id.toLong(), it)
                 })
                 Spacer(modifier = Modifier.size(16.dp))
                 if (!isChecked.value) {
@@ -391,10 +518,13 @@ fun ItemListRecycle(
                     modifier = Modifier
                         .clickable {
                             todoItem = i
-//                            openUpdateItemScreen()
+//                          openUpdateItemScreen()
                             val bundle = Bundle()
                             bundle.putSerializable("object_TodoItem", todoItem)
-                            findNavController(view!!).navigate(R.id.updateItemKotlinFragment, bundle)
+                            findNavController(view!!).navigate(
+                                R.id.updateItemKotlinFragment,
+                                bundle
+                            )
                         }
                         .size(30.dp))
                 Spacer(modifier = Modifier.size(10.dp))

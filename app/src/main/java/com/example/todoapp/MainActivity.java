@@ -8,15 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
-    private MainFragment mainFragment;
-    private ActionBar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,24 +30,21 @@ public class MainActivity extends AppCompatActivity  {
             getWindow().setEnterTransition(fade);
             getWindow().setExitTransition(fade);
         }
-            toolbar = getSupportActionBar();
-            toolbar.setTitle("asasdd");
+
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
 
         setupActionBarWithNavController(this, navController);
     }
 
-    public void setActionBar(){
-        ActionBar actionBar =  this.getSupportActionBar();
-        actionBar.setTitle("List To Do Item");
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         return navController.navigateUp() || super.onSupportNavigateUp();
     }

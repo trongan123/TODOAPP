@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Alignment
@@ -24,22 +25,22 @@ class HomeActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 androidx.compose.material.Text(text = "Home Screen")
-                Spacer(modifier = Modifier.height(24.dp))
-                Button(onClick = {
+                Spacer(modifier = Modifier.height(40.dp))
+                Button(modifier = Modifier.width(130.dp), shape = RoundedCornerShape(20.dp),onClick = {
                     val intent = Intent(this@HomeActivity, MainActivity::class.java)
                     startActivity(intent)
                 }) {
                     androidx.compose.material.Text("Material")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(onClick = {
+                Button(modifier = Modifier.width(130.dp), shape = RoundedCornerShape(20.dp),onClick = {
                     val intent = Intent(this@HomeActivity, MainJetpackActivity::class.java)
                     startActivity(intent)
                 }) {
                     androidx.compose.material.Text(text = "Jetpack")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(onClick = {
+                Button(modifier = Modifier.width(130.dp), shape = RoundedCornerShape(20.dp),onClick = {
                     val intent = Intent(this@HomeActivity, MainKotlinActivity::class.java)
                     startActivity(intent)
                 }) {
