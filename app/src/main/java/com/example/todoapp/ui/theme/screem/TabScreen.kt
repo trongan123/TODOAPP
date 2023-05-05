@@ -37,6 +37,7 @@ import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -451,10 +452,16 @@ fun ItemList(
                             openUpdateItemScreen()
 
                         }
-                        .size(30.dp))
+                        .size(50.dp))
                 Spacer(modifier = Modifier.size(10.dp))
             }
-
+            androidx.compose.material3.Text(
+                i.description, modifier = Modifier.padding(top = 10.dp, start = 16.dp)
+            )
+            Spacer(modifier = Modifier.size(10.dp))
+            androidx.compose.material3.Text(
+                SimpleDateFormat("yyyy-MM-dd").format(i.completedDate), modifier = Modifier.padding(top = 10.dp,start = 16.dp)
+            )
         }
     }
 }
@@ -498,7 +505,6 @@ fun ItemListRecycle(
                 if (!isChecked.value) {
                     androidx.compose.material3.Text(
                         i.title, modifier = Modifier.padding(top = 10.dp)
-
                     )
                 } else {
                     androidx.compose.material3.Text(
@@ -518,7 +524,6 @@ fun ItemListRecycle(
                     modifier = Modifier
                         .clickable {
                             todoItem = i
-//                          openUpdateItemScreen()
                             val bundle = Bundle()
                             bundle.putSerializable("object_TodoItem", todoItem)
                             findNavController(view!!).navigate(

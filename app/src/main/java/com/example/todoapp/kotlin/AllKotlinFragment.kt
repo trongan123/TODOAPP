@@ -34,8 +34,6 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
         // Inflate the layout for this fragment
         fragmentAllItemBinding =  FragmentAllKotlinBinding.inflate(inflater,container,false)
         var mView = fragmentAllItemBinding!!.root
-
-
         return mView
     }
 
@@ -83,8 +81,6 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
         bundle.putSerializable("object_TodoItem", todoItem)
-        findNavController(requireView()!!).navigate(R.id.updateItemKotlinFragment, bundle)
+        findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
-
-
 }
