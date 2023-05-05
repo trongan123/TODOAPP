@@ -5,4 +5,15 @@
     <string name="title_activity_main_jetpack">MainJetpackActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_main_load_most_jetpack">MainLoadMostJetpackActivity</string>
+    <string name="add">Add</string>
+    <string name="clear">Clear</string>
+    <string name="status">Status</string>
+    <string name="completeddate">Enter CompletedDate</string>
+    <string name="createddate">Enter createdDate</string>
+    <string name="description">Enter Description</string>
+    <string name="title">Enter Title</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="search">Add a new task</string>
+    <string name="clear_all">Clear ALL</string>
 </resources>
