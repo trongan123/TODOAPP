@@ -27,19 +27,15 @@ import java.util.List;
 public class PendingItemFragment extends Fragment {
 
     private TodoItemViewModel todoItemViewModel;
-
     private FragmentPendingItemBinding fragmentPendingItemBinding;
     private View mView;
-
     private RecyclerView rcvItem;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItemList;
     private List<TodoItem> todoItemload;
-
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
-
     private int startitem;
     private int enditem;
     private int currentPage = 1;
@@ -48,15 +44,14 @@ public class PendingItemFragment extends Fragment {
         this.todoItemViewModel = todoItemViewModel;
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-           displayListTodo();
+        displayListTodo();
     }
 
     public void displayListTodo() {
-         rcvItem = fragmentPendingItemBinding.rcvTodoitem;
+        rcvItem = fragmentPendingItemBinding.rcvTodoitem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
 
@@ -64,10 +59,8 @@ public class PendingItemFragment extends Fragment {
         rcvItem.addItemDecoration(dividerItemDecoration);
 
 
-        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(),todoItemViewModel);
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 todoItemViewModel.getPendingList().observe(getActivity(), items -> {
                     // Update item to fragment
                     todoItemList = items;
@@ -79,9 +72,7 @@ public class PendingItemFragment extends Fragment {
                         totalPage = (items.size() / 20) + 1;
                     }
                     setFirstData();
-                });
-            }
-        });
+                }));
 
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
@@ -89,10 +80,11 @@ public class PendingItemFragment extends Fragment {
             public void DetaiItem(TodoItem todoItem) {
                 clickDetailItem(todoItem);
             }
+
             @Override
-            public void clearItem(TodoItem todoItem,long id, boolean check) {
-                todoItemViewModel.setClearAll(todoItem.getId(),check);
-                todoItemViewModel.setCheckItem(id,check);
+            public void clearItem(TodoItem todoItem, long id, boolean check) {
+                todoItemViewModel.setClearAll(todoItem.getId(), check);
+                todoItemViewModel.setCheckItem(id, check);
             }
         });
         rcvItem.setAdapter(todoItemAdapter);
@@ -124,6 +116,7 @@ public class PendingItemFragment extends Fragment {
             }
         });
     }
+
     private void loadNextPage() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -152,6 +145,7 @@ public class PendingItemFragment extends Fragment {
             }
         }, 2000);
     }
+
     private void clickDetailItem(TodoItem todoItem) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
@@ -162,13 +156,14 @@ public class PendingItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentPendingItemBinding = FragmentPendingItemBinding.inflate(inflater,container,false);
+        fragmentPendingItemBinding = FragmentPendingItemBinding.inflate(inflater, container, false);
         mView = fragmentPendingItemBinding.getRoot();
 
         fragmentPendingItemBinding.setAllItemViewModel(todoItemViewModel);
 
         return mView;
     }
+
     private void setFirstData() {
         startitem = 0;
         enditem = 20;

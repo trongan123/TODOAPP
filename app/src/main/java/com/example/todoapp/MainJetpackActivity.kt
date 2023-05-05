@@ -22,8 +22,7 @@ class MainJetpackActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val viewModel: TodoItemViewModel =
             ViewModelProvider(this)[TodoItemViewModel::class.java]
-        val viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
+        var viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
             setContent {
                 MainApp(this, viewModel, viewModelLoad)
             }
