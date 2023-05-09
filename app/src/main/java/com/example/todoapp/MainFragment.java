@@ -71,11 +71,7 @@ public class MainFragment extends Fragment {
                         });
 
         todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> {
-            if (longs.size() <=0 ) {
-                fragmentMainBinding.btnclearall.setEnabled(false);
-            } else {
-                fragmentMainBinding.btnclearall.setEnabled(true);
-            }
+            fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0);
 
         });
         fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
@@ -92,23 +88,6 @@ public class MainFragment extends Fragment {
                 })
                 .setNegativeButton("No", null)
                 .show();
-//        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-//                .setTitleText("Are you sure?")
-//                .setContentText("Won't be able to recover this file!")
-//                .setConfirmText("Yes,delete it!")
-//                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                    @Override
-//                    public void onClick(SweetAlertDialog sDialog) {
-//                        todoItemViewModel.clearItem();
-//                        sDialog
-//                                .setTitleText("Deleted!")
-//                                .setContentText("Your imaginary file has been deleted!")
-//                                .setConfirmText("OK")
-//                                .setConfirmClickListener(null)
-//                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-//                    }
-//                })
-//                .show();
     }
 
 

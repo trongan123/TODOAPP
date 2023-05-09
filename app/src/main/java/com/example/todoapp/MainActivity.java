@@ -15,7 +15,8 @@ import android.transition.Fade;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public static int currentPosition;
+    private static final String KEY_CURRENT_POSITION = "com.google.samples.gridtopager.key.currentPosition";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setEnterTransition(fade);
             getWindow().setExitTransition(fade);
         }
-
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(KEY_CURRENT_POSITION, 0);
+            // Return here to prevent adding additional GridFragments when changing orientation.
+            return;
+        }
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         assert navHostFragment != null;

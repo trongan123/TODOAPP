@@ -8,11 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.todoapp.model.TodoItem;
-
-import java.sql.ResultSet;
 import java.util.List;
-
-import kotlin.Result;
 
 @Dao
 public interface TodoItemDAO {

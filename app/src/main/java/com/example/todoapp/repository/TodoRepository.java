@@ -1,7 +1,5 @@
 package com.example.todoapp.repository;
 
-import static java.util.Collections.emptyList;
-
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
@@ -11,8 +9,6 @@ import com.example.todoapp.Database.TodoItemDatabase;
 import com.example.todoapp.model.TodoItem;
 
 import java.util.List;
-
-import javax.xml.transform.Result;
 
 public class TodoRepository {
 

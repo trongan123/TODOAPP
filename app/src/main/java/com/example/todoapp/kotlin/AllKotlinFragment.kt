@@ -63,7 +63,7 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
                 }
             })
         todoItemAdapter!!.setClickListenner(object : TodoItemAdapterKotlin.IClickItemToDo {
-            override fun DetaiItem(todoItem: TodoItem?) {
+            override fun detaiItem(todoItem: TodoItem?) {
                 if (todoItem != null) {
                     clickDetailItem(todoItem)
                 }

@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PendingItemFragment extends Fragment {
 
@@ -77,8 +80,8 @@ public class PendingItemFragment extends Fragment {
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
-            public void DetaiItem(TodoItem todoItem) {
-                clickDetailItem(todoItem);
+            public void DetaiItem(TodoItem todoItem, CardView cardView) {
+                clickDetailItem(todoItem,cardView);
             }
 
             @Override
@@ -146,11 +149,18 @@ public class PendingItemFragment extends Fragment {
         }, 2000);
     }
 
-    private void clickDetailItem(TodoItem todoItem) {
+    private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        Navigation.findNavController(getView()).navigate(R.id.action_mainFragment_to_updateItemFragment, bundle);
 
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(cardView, "update_edttitle")
+                .addSharedElement(cardView,"update_fragment")
+                .build();
+
+        postponeEnterTransition(2500, TimeUnit.MILLISECONDS);
+
+        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
 
     @Override

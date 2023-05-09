@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ class MainJetpackActivity : ComponentActivity() {
 
         val viewModel: TodoItemViewModel =
             ViewModelProvider(this)[TodoItemViewModel::class.java]
-        var viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        val viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
             val navController = rememberAnimatedNavController()
             MainApp(navController, this, viewModel, viewModelLoad)
@@ -44,8 +45,7 @@ fun MainApp(
     owner: LifecycleOwner,
     viewModel: TodoItemViewModel,
     viewModelLoad: MainViewModel
-) {
-
+){
     MaterialTheme {
         AnimatedNavHost(navController = navController, startDestination = "home") {
             composable("home",
@@ -101,7 +101,47 @@ fun MainApp(
                     viewModelLoad = viewModelLoad
                 )
             }
-            composable("additem") {
+            composable("additem",
+                enterTransition = {
+                    when (initialState.destination.route) {
+                        "home" ->
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                exitTransition = {
+                    when (targetState.destination.route) {
+                        "home" ->
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                popEnterTransition = {
+                    when (initialState.destination.route) {
+                        "home" ->
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                popExitTransition = {
+                    when (targetState.destination.route) {
+                        "home" ->
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                }) {
                 AddItemScreen(viewModel = viewModel,
                     backHome = {
                         navController.popBackStack(
@@ -112,7 +152,47 @@ fun MainApp(
                     }
                 )
             }
-            composable("updateitem") {
+            composable("updateitem",
+                enterTransition = {
+                    when (initialState.destination.route) {
+                        "home" ->
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                exitTransition = {
+                    when (targetState.destination.route) {
+                        "home" ->
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                popEnterTransition = {
+                    when (initialState.destination.route) {
+                        "home" ->
+                            slideIntoContainer(
+                                AnimatedContentScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                },
+                popExitTransition = {
+                    when (targetState.destination.route) {
+                        "home" ->
+                            slideOutOfContainer(
+                                AnimatedContentScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        else -> null
+                    }
+                }) {
                 UpdateItemScreen(viewModel = viewModel,
                     backHome = {
                         navController.popBackStack(

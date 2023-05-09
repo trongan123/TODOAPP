@@ -30,11 +30,11 @@ class CompletedKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         // Inflate the layout for this fragment
         fragmentCompletedKotlinBinding =  FragmentCompletedKotlinBinding.inflate(inflater,container,false)
-        var mView = fragmentCompletedKotlinBinding!!.root
-        todoItemViewModel = ViewModelProvider(this).get(TodoItemViewModel::class.java)
+        val mView = fragmentCompletedKotlinBinding!!.root
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
 
         return mView
     }
@@ -44,7 +44,7 @@ class CompletedKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment(
         displayListTodo()
     }
 
-    fun displayListTodo() {
+    private fun displayListTodo() {
         val rcvItem = fragmentCompletedKotlinBinding!!.rcvTodoitem
         val linearLayoutManager = LinearLayoutManager(context)
         rcvItem.layoutManager = linearLayoutManager
@@ -53,19 +53,17 @@ class CompletedKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment(
         todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it,requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
         todoItemViewModel!!.getStringMutableLiveData()
-            .observe(requireActivity(), object : Observer<String?> {
-                override fun onChanged(value: String?) {
-                    todoItemViewModel!!.completedList
-                        .observe(
-                            activity!!
-                        ) { items ->
-                            // Update item to fragment
-                            todoItemAdapter!!.submitList(items)
-                        }
-                }
-            })
+            .observe(requireActivity()) {
+                todoItemViewModel!!.completedList
+                    .observe(
+                        requireActivity()
+                    ) { items ->
+                        // Update item to fragment
+                        todoItemAdapter!!.submitList(items)
+                    }
+            }
         todoItemAdapter!!.setClickListenner(object : TodoItemAdapterKotlin.IClickItemToDo {
-            override fun DetaiItem(todoItem: TodoItem?) {
+            override fun detaiItem(todoItem: TodoItem?) {
                 if (todoItem != null) {
                     clickDetailItem(todoItem)
                 }
@@ -83,7 +81,7 @@ class CompletedKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment(
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
         bundle.putSerializable("object_TodoItem", todoItem)
-        Navigation.findNavController(requireView()!!).navigate(R.id.updateItemKotlinFragment, bundle)
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
 
 

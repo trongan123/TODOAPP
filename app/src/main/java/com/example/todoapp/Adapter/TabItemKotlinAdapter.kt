@@ -3,8 +3,6 @@ package com.example.todoapp.Adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.todoapp.CompletedItemFragment
-import com.example.todoapp.PendingItemFragment
 import com.example.todoapp.kotlin.AllKotlinFragment
 import com.example.todoapp.kotlin.CompletedKotlinFragment
 import com.example.todoapp.kotlin.PendingKotlinFragment

@@ -65,9 +65,7 @@ class UpdateItemKotlinFragment : Fragment() {
         fragmentUpdateItemBinding =
             inflater.let { FragmentUpdateItemKotlinBinding.inflate(it, container, false) }
         mView = fragmentUpdateItemBinding!!.root
-        todoItemViewModel = ViewModelProvider(this).get(
-            TodoItemViewModel::class.java
-        )
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         fragmentUpdateItemBinding!!.todoItemViewModel =todoItemViewModel
         datePickerCreated = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -159,7 +157,7 @@ class UpdateItemKotlinFragment : Fragment() {
         })
 
         //create datePicker
-        fragmentUpdateItemBinding!!.edtcompletedDate.setOnClickListener({
+        fragmentUpdateItemBinding!!.edtcompletedDate.setOnClickListener {
             datePickerCompleted!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCompleted!!.addOnPositiveButtonClickListener { selection ->
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -168,7 +166,7 @@ class UpdateItemKotlinFragment : Fragment() {
                 val formattedDate = format.format(calendar.time)
                 fragmentUpdateItemBinding!!.edtcompletedDate.setText(formattedDate)
             }
-        })
+        }
     }
 
     @Throws(ParseException::class)
@@ -201,9 +199,11 @@ class UpdateItemKotlinFragment : Fragment() {
             .parse(fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim())
         val comdate = SimpleDateFormat("yyyy-MM-dd")
             .parse(fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim())
-        if (credate > comdate) {
-            fragmentUpdateItemBinding!!.tilcompletedDate.error = "Completed date must be after created date"
-            check = false
+        if (credate != null) {
+            if (credate > comdate) {
+                fragmentUpdateItemBinding!!.tilcompletedDate.error = "Completed date must be after created date"
+                check = false
+            }
         }
         return check
     }

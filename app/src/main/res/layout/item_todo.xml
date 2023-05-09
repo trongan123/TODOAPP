@@ -55,20 +55,11 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/btndetail"
+                android:layout_alignParentEnd="true"
                 android:paddingEnd="5dp"
                 android:textSize="12sp" />
 
-            <ImageButton
-                android:id="@+id/btndetail"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@color/white"
-                android:scaleType="fitXY"
-                android:src="@drawable/icone"
-                android:transitionName="update_fragment" />
+
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

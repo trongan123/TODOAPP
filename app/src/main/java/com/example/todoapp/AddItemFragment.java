@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -38,7 +39,7 @@ public class AddItemFragment extends Fragment {
     private FragmentAddItemBinding fragmentAddItemBinding;
     private TodoItemViewModel todoItemViewModel;
     private MaterialDatePicker<Long> datePickerCompleted;
-    private MaterialDatePicker datePickerCreated;
+    private MaterialDatePicker<Long> datePickerCreated;
     private final TodoItem todoItem = new TodoItem();
 
     public AddItemFragment() {
@@ -82,7 +83,7 @@ public class AddItemFragment extends Fragment {
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.setTimeInMillis((Long) selection);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = format.format(calendar.getTime());
                 fragmentAddItemBinding.edtcreatedDate.setText(formattedDate);
             });
@@ -99,7 +100,7 @@ public class AddItemFragment extends Fragment {
                 public void onPositiveButtonClick(Object selection) {
                     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     calendar.setTimeInMillis((Long) selection);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     String formattedDate = format.format(calendar.getTime());
                     fragmentAddItemBinding.edtcompletedDate.setText(formattedDate);
                 }
@@ -132,9 +133,9 @@ public class AddItemFragment extends Fragment {
         if (validation()) {
             String strtitle = Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim();
             String strDes = Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd")
+            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     .parse(Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd")
+            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     .parse(Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim());
             String strStt = fragmentAddItemBinding.dropdownstatus.getText().toString().trim();
 
@@ -178,9 +179,9 @@ public class AddItemFragment extends Fragment {
             return check;
         }
 
-        Date credate = new SimpleDateFormat("yyyy-MM-dd")
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd")
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {

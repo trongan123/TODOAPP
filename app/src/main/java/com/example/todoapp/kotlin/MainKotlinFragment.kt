@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
@@ -30,18 +29,18 @@ class MainKotlinFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentMainBinding!!.btnAdd.setOnClickListener { view ->
+        fragmentMainBinding!!.btnAdd.setOnClickListener {
             val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
                 .addSharedElement(fragmentMainBinding!!.btnAdd, "add_fragment")
                 .build()
-            findNavController(view).navigate(R.id.addItemKotlinFragment, null, null, extras)
+            findNavController(it).navigate(R.id.addItemKotlinFragment, null, null, extras)
         }
         val viewPager2 = requireView().findViewById<ViewPager2>(R.id.vpg)
 
         fragmentMainBinding!!.vpg.adapter =
             todoItemViewModel?.let { TabItemKotlinAdapter(requireActivity(), it) }
 
-        val tabLayout = requireView()!!.findViewById<TabLayout>(R.id.tlomenu)
+        val tabLayout = requireView().findViewById<TabLayout>(R.id.tlomenu)
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         val tabLayoutMediator = TabLayoutMediator(
             tabLayout, viewPager2
@@ -57,22 +56,18 @@ class MainKotlinFragment : Fragment() {
 
         fragmentMainBinding!!.svSearch
             .editText
-            .setOnEditorActionListener { v, actionId, event ->
+            .setOnEditorActionListener { _, _, _ ->
                 fragmentMainBinding!!.searchBar.text = fragmentMainBinding!!.svSearch.text
                 fragmentMainBinding!!.svSearch.hide()
                 todoItemViewModel!!.stringMutableLiveData
                     .postValue(fragmentMainBinding!!.svSearch.text.toString())
-                var a= todoItemViewModel!!.stringMutableLiveData.value
+
                 false
             }
 
         todoItemViewModel!!.getListMutableLiveDataCheck()
-            .observe(requireActivity(), object : Observer<List<Long?>?> {
-
-                override fun onChanged(value: List<Long?>?) {
-                    fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0
-                }
-            })
+            .observe(requireActivity()
+            ) { value -> fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0 }
 
 
         fragmentMainBinding!!.btnclearall.setOnClickListener { clearItem() }
@@ -81,7 +76,7 @@ class MainKotlinFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
             .setTitle("Confirm Clear All")
             .setMessage("Are you sure?")
-            .setPositiveButton("Yes") { dialogInterface: DialogInterface?, i: Int ->
+            .setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                 todoItemViewModel!!.clearItem()
                 Toast.makeText(activity, "Clear successfully", Toast.LENGTH_SHORT).show()
             }
@@ -94,10 +89,9 @@ class MainKotlinFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         fragmentMainBinding =  FragmentMainKotlinBinding.inflate(inflater,container,false)
         mView = fragmentMainBinding!!.root
-        todoItemViewModel = ViewModelProvider(this).get(TodoItemViewModel::class.java)
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
 
         return mView
     }

@@ -19,14 +19,14 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
     createdDateItem = dateFormat.format(todoItem.createdDate)
     completedDateItem = dateFormat.format(todoItem.completedDate)
     Column(modifier = Modifier.padding(30.dp)) {
-        Texttitle()
-        CommonSpace()
+        Texttitle("SDf")
+
         TextDescription()
-        CommonSpace()
+
         TextCreatedDate()
-        CommonSpace()
+
         TextCompletedDate()
-        CommonSpace()
+
         DropDownMenuStatus()
     }
     Row(
