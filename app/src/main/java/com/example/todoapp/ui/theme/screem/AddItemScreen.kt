@@ -15,14 +15,15 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     completedDateItem =""
     createdDateItem =""
     Column(modifier = Modifier.padding(30.dp)) {
-        Texttitle()
-        CommonSpace()
+
+        Texttitle("As")
+
         TextDescription()
-        CommonSpace()
+
         TextCreatedDate()
-        CommonSpace()
+
         TextCompletedDate()
-        CommonSpace()
+
         DropDownMenuStatus()
 
     }

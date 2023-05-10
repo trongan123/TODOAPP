@@ -6,14 +6,17 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,17 +28,15 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AllItemFragment extends Fragment {
 
     private FragmentAllItemBinding fragmentAllItemBinding;
-    private TodoItemViewModel todoItemViewModel;
-    private RecyclerView rcvItem;
+    private final TodoItemViewModel todoItemViewModel;
     private TodoItemAdapter todoItemAdapter;
-
     private List<TodoItem> todoItemList;
     private List<TodoItem> todoItemload;
-
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
@@ -46,18 +47,20 @@ public class AllItemFragment extends Fragment {
 
     public AllItemFragment(TodoItemViewModel todoItemViewModel) {
         this.todoItemViewModel = todoItemViewModel;
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         displayListTodo();
+        postponeEnterTransition();
+
     }
 
     public void displayListTodo() {
 
-        rcvItem = fragmentAllItemBinding.rcvTodoitem;
+        RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoitem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -66,6 +69,8 @@ public class AllItemFragment extends Fragment {
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
 
+
+        //set data to recyclerview
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -86,8 +91,8 @@ public class AllItemFragment extends Fragment {
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
-            public void DetaiItem(TodoItem todoItem) {
-                clickDetailItem(todoItem);
+            public void DetaiItem(TodoItem todoItem, CardView cardView) {
+                clickDetailItem(todoItem,cardView);
             }
 
             @Override
@@ -129,10 +134,17 @@ public class AllItemFragment extends Fragment {
 
     }
 
-    private void clickDetailItem(TodoItem todoItem) {
+    private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        Navigation.findNavController(getView()).navigate(R.id.action_mainFragment_to_updateItemFragment, bundle);
+        bundle.putString("transition",cardView.getTransitionName() );
+
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(cardView,cardView.getTransitionName())
+                .build();
+
+
+        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
 
 

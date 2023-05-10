@@ -181,9 +181,7 @@ class AddItemKotlinFragment : Fragment() {
         sharedElementEnterTransition = ChangeBounds()
         fragmentAddItemBinding = FragmentAddItemKotlinBinding.inflate(inflater, container, false)
         val mView: View = fragmentAddItemBinding!!.root
-        todoItemViewModel = ViewModelProvider(this).get(
-            TodoItemViewModel::class.java
-        )
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         fragmentAddItemBinding!!.todoItemViewModel = todoItemViewModel
 
         datePickerCreated = MaterialDatePicker.Builder.datePicker()

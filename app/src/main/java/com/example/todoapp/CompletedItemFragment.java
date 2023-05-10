@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,17 +25,17 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class CompletedItemFragment extends Fragment {
 
 
-
+    private static final String EXTRA_ANIMAL_ITEM = "animal_item";
+    private static final String EXTRA_TRANSITION_NAME = "transition_name";
     private FragmentCompletedItemBinding fragmentCompletedItemBinding;
 
-    private TodoItemViewModel todoItemViewModel;
-    private View mView;
-    private RecyclerView rcvItem;
+    private final TodoItemViewModel todoItemViewModel;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItemList;
     private List<TodoItem> todoItemload;
@@ -41,7 +43,6 @@ public class CompletedItemFragment extends Fragment {
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
-
     private int startitem;
     private int enditem;
     private int currentPage = 1;
@@ -60,7 +61,7 @@ public class CompletedItemFragment extends Fragment {
     }
 
     public void displayListTodo(){
-        rcvItem = fragmentCompletedItemBinding.rcvTodoitem;
+        RecyclerView rcvItem = fragmentCompletedItemBinding.rcvTodoitem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
 
@@ -89,8 +90,8 @@ public class CompletedItemFragment extends Fragment {
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
-            public void DetaiItem(TodoItem todoItem) {
-                clickDetailItem(todoItem);
+            public void DetaiItem(TodoItem todoItem, CardView cardView) {
+                clickDetailItem(todoItem,cardView);
             }
             @Override
             public void clearItem(TodoItem todoItem,long id, boolean check) {
@@ -157,19 +158,25 @@ public class CompletedItemFragment extends Fragment {
         }, 2000);
     }
 
-    private void clickDetailItem(TodoItem todoItem) {
-
+    private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        Navigation.findNavController(getView()).navigate(R.id.action_mainFragment_to_updateItemFragment, bundle);
+        bundle.putString("transition",cardView.getTransitionName() );
 
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(cardView,cardView.getTransitionName())
+                .build();
+
+
+        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater,container,false);
-        mView = fragmentCompletedItemBinding.getRoot();
+        View mView = fragmentCompletedItemBinding.getRoot();
 
 
         fragmentCompletedItemBinding.setAllItemViewModel(todoItemViewModel);

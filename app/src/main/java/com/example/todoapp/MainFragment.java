@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,17 @@ public class MainFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        postponeEnterTransition();
+        final ViewGroup parentView = (ViewGroup) view.getParent();
+        parentView.getViewTreeObserver()
+                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        parentView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                });
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -59,6 +71,7 @@ public class MainFragment extends Fragment {
                     }
                 }
         );
+
         tabLayoutMediator.attach();
         fragmentMainBinding.svSearch
                 .getEditText()
@@ -71,11 +84,7 @@ public class MainFragment extends Fragment {
                         });
 
         todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> {
-            if (longs.size() <=0 ) {
-                fragmentMainBinding.btnclearall.setEnabled(false);
-            } else {
-                fragmentMainBinding.btnclearall.setEnabled(true);
-            }
+            fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0);
 
         });
         fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
@@ -92,23 +101,6 @@ public class MainFragment extends Fragment {
                 })
                 .setNegativeButton("No", null)
                 .show();
-//        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-//                .setTitleText("Are you sure?")
-//                .setContentText("Won't be able to recover this file!")
-//                .setConfirmText("Yes,delete it!")
-//                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                    @Override
-//                    public void onClick(SweetAlertDialog sDialog) {
-//                        todoItemViewModel.clearItem();
-//                        sDialog
-//                                .setTitleText("Deleted!")
-//                                .setContentText("Your imaginary file has been deleted!")
-//                                .setConfirmText("OK")
-//                                .setConfirmClickListener(null)
-//                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-//                    }
-//                })
-//                .show();
     }
 
 

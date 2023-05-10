@@ -11,7 +11,7 @@ import com.example.todoapp.PendingItemFragment;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 public class TabItemAdapter extends FragmentStateAdapter {
-    private TodoItemViewModel todoItemViewModel;
+    private final TodoItemViewModel todoItemViewModel;
     @NonNull
     @Override
     public Fragment createFragment(int position) {

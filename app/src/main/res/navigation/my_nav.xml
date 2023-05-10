@@ -15,8 +15,7 @@
             app:destination="@id/addItemFragment" />
         <action
             android:id="@+id/action_mainFragment_to_updateItemFragment"
-            app:destination="@id/updateItemFragment"
-            app:enterAnim="@anim/enter_animation" />
+            app:destination="@id/updateItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -34,9 +33,7 @@
         tools:layout="@layout/fragment_update_item" >
         <action
             android:id="@+id/action_updateItemFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/exit_animation"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:destination="@id/mainFragment" />
     </fragment>
 
 </navigation>

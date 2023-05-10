@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todoapp.Adapter.TodoItemAdapter.IClickItemToDo
 import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.ui.theme.screem.MyComposeView
@@ -16,10 +15,8 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
     ListAdapter<TodoItem, TodoItemAdapterKotlin.TodoItemViewHoldel>(DiffCallback()) {
 
-
     private var iClickItem: IClickItemToDo? = null
     private var todoItemViewModel: TodoItemViewModel? = null
-    private var todoItems = currentList
     private var view: View?=null
 
     init {
@@ -28,7 +25,7 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
     }
 
     interface IClickItemToDo {
-        fun DetaiItem(todoItem: TodoItem?)
+        fun detaiItem(todoItem: TodoItem?)
         fun clearItem(todoItem: TodoItem?, id: Long, check: Boolean)
     }
 

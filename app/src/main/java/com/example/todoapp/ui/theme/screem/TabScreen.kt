@@ -38,6 +38,8 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -460,7 +462,13 @@ fun ItemList(
             )
             Spacer(modifier = Modifier.size(10.dp))
             androidx.compose.material3.Text(
-                SimpleDateFormat("yyyy-MM-dd").format(i.completedDate), modifier = Modifier.padding(top = 10.dp,start = 16.dp)
+                "Created Date:     " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                modifier = Modifier.padding(top = 10.dp, start = 16.dp)
+            )
+            Spacer(modifier = Modifier.size(10.dp))
+            androidx.compose.material3.Text(
+                "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
+                modifier = Modifier.padding(top = 10.dp, start = 16.dp)
             )
         }
     }

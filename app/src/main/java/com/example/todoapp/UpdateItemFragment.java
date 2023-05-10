@@ -3,11 +3,15 @@ package com.example.todoapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
+import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -51,6 +56,7 @@ public class UpdateItemFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
         String[] type = new String[]{"pending", "completed"};
@@ -85,11 +91,19 @@ public class UpdateItemFragment extends Fragment {
 
 
     }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setSharedElementEnterTransition(new ChangeBounds());
+
         fragmentUpdateItemBinding = FragmentUpdateItemBinding.inflate(inflater, container, false);
         mView = fragmentUpdateItemBinding.getRoot();
 
@@ -110,8 +124,8 @@ public class UpdateItemFragment extends Fragment {
         if (validation()) {
             String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim();
             String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
+            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
+            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
             String strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
 
             //update database
@@ -130,8 +144,10 @@ public class UpdateItemFragment extends Fragment {
     private void deleteItem() throws ParseException {
         String strtitle = fragmentUpdateItemBinding.edttitle.getText().toString().trim();
         String strDes = fragmentUpdateItemBinding.edtdescription.getText().toString().trim();
-        Date credate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd").parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
         String strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
 
 
@@ -164,7 +180,7 @@ public class UpdateItemFragment extends Fragment {
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     todoItemViewModel.deleteItem(todoItem);
                     Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
-                    Navigation.findNavController(getView()).navigate(R.id.action_updateItemFragment_to_mainFragment);
+                    Navigation.findNavController(getView()).navigate(R.id.mainFragment);
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -175,7 +191,11 @@ public class UpdateItemFragment extends Fragment {
 
     private void initUi() {
         todoItem = (TodoItem) getArguments().getSerializable("object_TodoItem");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String transition =  getArguments().getString("transition");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        fragmentUpdateItemBinding.constraint.setTransitionName(transition);
+        Log.e("TAG", "initUi: "+transition );
         if (todoItem != null) {
             fragmentUpdateItemBinding.edttitle.setText(todoItem.getTitle());
             fragmentUpdateItemBinding.edtdescription.setText(todoItem.getDescription());
@@ -188,8 +208,8 @@ public class UpdateItemFragment extends Fragment {
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.setTimeInMillis((Long) selection);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String formattedDate = format.format(calendar.getTime());
+
+                String formattedDate = dateFormat.format(calendar.getTime());
                 fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
             });
         });
@@ -199,15 +219,12 @@ public class UpdateItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 datePickerCompleted.show(getParentFragmentManager(), "Material_Date_Picker");
-                datePickerCompleted.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                    @Override
-                    public void onPositiveButtonClick(Object selection) {
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                        calendar.setTimeInMillis((Long) selection);
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        String formattedDate = format.format(calendar.getTime());
-                        fragmentUpdateItemBinding.edtcompletedDate.setText(formattedDate);
-                    }
+                datePickerCompleted.addOnPositiveButtonClickListener(selection -> {
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    calendar.setTimeInMillis((Long) selection);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    String formattedDate = format.format(calendar.getTime());
+                    fragmentUpdateItemBinding.edtcompletedDate.setText(formattedDate);
                 });
             }
         });
@@ -239,11 +256,11 @@ public class UpdateItemFragment extends Fragment {
         if (!check) {
             return check;
         }
-
-        Date credate = new SimpleDateFormat("yyyy-MM-dd")
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd")
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
+        assert credate != null;
         if (credate.compareTo(comdate) > 0) {
             fragmentUpdateItemBinding.tilcompletedDate.setError("Completed date must be after created date");
             check = false;

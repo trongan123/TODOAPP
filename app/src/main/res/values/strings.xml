@@ -16,4 +16,10 @@
     <string name="update">Update</string>
     <string name="search">Add a new task</string>
     <string name="clear_all">Clear ALL</string>
+    <string name="errortitle">Field title can\'t empty</string>
+    <string name="errordescription">Field description can\'t empty</string>
+    <string name="errorcreateddate">Field created date can\'t empty</string>
+    <string name="errorcompleteddate">Field completed date can\'t empty</string>
+    <string name="errorstatus">Please choice a status</string>
+
 </resources>
