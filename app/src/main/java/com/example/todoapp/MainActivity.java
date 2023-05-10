@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-        assert navHostFragment != null;
+
         NavController navController = navHostFragment.getNavController();
 
         setupActionBarWithNavController(this, navController);

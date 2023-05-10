@@ -77,7 +77,6 @@ public class PendingItemFragment extends Fragment {
                     setFirstData();
                 }));
 
-
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void DetaiItem(TodoItem todoItem, CardView cardView) {
@@ -152,16 +151,15 @@ public class PendingItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
+        bundle.putString("transition",cardView.getTransitionName() );
 
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView, "update_edttitle")
-                .addSharedElement(cardView,"update_fragment")
+                .addSharedElement(cardView,cardView.getTransitionName())
                 .build();
-
-        postponeEnterTransition(2500, TimeUnit.MILLISECONDS);
 
         Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

@@ -15,9 +15,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:background="@drawable/bg_round"
-        android:transitionName="update_fragment"
+        android:transitionName="update_1"
         android:layout_height="match_parent">
 
         <LinearLayout

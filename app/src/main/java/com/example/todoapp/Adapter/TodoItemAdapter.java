@@ -88,10 +88,14 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             // set date to item
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
+
+
             todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
             todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
 
+
             todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
+
 //            todoItemViewHolder.itemTodoBinding.btndetail.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
             todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder,todoItem,id));
         }

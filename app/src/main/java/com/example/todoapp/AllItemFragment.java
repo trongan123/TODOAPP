@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,8 +51,11 @@ public class AllItemFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         displayListTodo();
+        postponeEnterTransition();
+
     }
 
     public void displayListTodo() {
@@ -65,6 +69,8 @@ public class AllItemFragment extends Fragment {
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
 
+
+        //set data to recyclerview
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -131,13 +137,12 @@ public class AllItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
+        bundle.putString("transition",cardView.getTransitionName() );
 
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView, "update_edttitle")
-                .addSharedElement(cardView,"update_fragment")
+                .addSharedElement(cardView,cardView.getTransitionName())
                 .build();
 
-        postponeEnterTransition(2500, TimeUnit.MILLISECONDS);
 
         Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }

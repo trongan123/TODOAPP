@@ -3,11 +3,15 @@ package com.example.todoapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
+import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -52,6 +56,7 @@ public class UpdateItemFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
         String[] type = new String[]{"pending", "completed"};
@@ -85,6 +90,13 @@ public class UpdateItemFragment extends Fragment {
         });
 
 
+    }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }
     }
 
     @Override
@@ -179,7 +191,11 @@ public class UpdateItemFragment extends Fragment {
 
     private void initUi() {
         todoItem = (TodoItem) getArguments().getSerializable("object_TodoItem");
+
+        String transition =  getArguments().getString("transition");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        fragmentUpdateItemBinding.constraint.setTransitionName(transition);
+        Log.e("TAG", "initUi: "+transition );
         if (todoItem != null) {
             fragmentUpdateItemBinding.edttitle.setText(todoItem.getTitle());
             fragmentUpdateItemBinding.edtdescription.setText(todoItem.getDescription());

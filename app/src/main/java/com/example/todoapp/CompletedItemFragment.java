@@ -31,7 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class CompletedItemFragment extends Fragment {
 
 
-
+    private static final String EXTRA_ANIMAL_ITEM = "animal_item";
+    private static final String EXTRA_TRANSITION_NAME = "transition_name";
     private FragmentCompletedItemBinding fragmentCompletedItemBinding;
 
     private final TodoItemViewModel todoItemViewModel;
@@ -160,16 +161,16 @@ public class CompletedItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
+        bundle.putString("transition",cardView.getTransitionName() );
 
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView, "update_edttitle")
-                .addSharedElement(cardView,"update_fragment")
+                .addSharedElement(cardView,cardView.getTransitionName())
                 .build();
 
-        postponeEnterTransition(2500, TimeUnit.MILLISECONDS);
 
         Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,17 @@ public class MainFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        postponeEnterTransition();
+        final ViewGroup parentView = (ViewGroup) view.getParent();
+        parentView.getViewTreeObserver()
+                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        parentView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                });
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -59,6 +71,7 @@ public class MainFragment extends Fragment {
                     }
                 }
         );
+
         tabLayoutMediator.attach();
         fragmentMainBinding.svSearch
                 .getEditText()
