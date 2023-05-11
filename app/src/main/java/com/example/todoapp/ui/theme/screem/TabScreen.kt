@@ -254,8 +254,8 @@ fun AllItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
                 viewModel.getAllList(viewModel.stringMutableLiveData.value)
                     .observe(owner) { item: List<TodoItem> ->
                         items = item as ArrayList<TodoItem>
@@ -337,9 +337,9 @@ fun PendingItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-                viewModel.getPendingList().observe(owner) { item: List<TodoItem> ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
+                viewModel.pendingList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
             }
@@ -372,9 +372,9 @@ fun CompletedItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
+                viewModel.completedList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
             }
@@ -404,7 +404,7 @@ fun ItemList(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                if (isChecked.value == true) {
+                if (isChecked.value) {
                     isChecked.value = false
                     viewModel.setClearAll(i.id, false)
                     viewModel.setCheckItem(i.id.toLong(), false)
@@ -484,7 +484,7 @@ fun ItemListRecycle(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                if (isChecked.value == true) {
+                if (isChecked.value) {
                     isChecked.value = false
                     viewModel.setClearAll(i.id, false)
                     viewModel.setCheckItem(i.id.toLong(), false)
@@ -501,9 +501,7 @@ fun ItemListRecycle(
             Spacer(modifier = Modifier.size(16.dp))
             Row {
                 val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
-                if (check != null) {
-                    isChecked.value = check.contains(i.id.toLong())
-                }
+                isChecked.value = check.contains(i.id.toLong())
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
                     viewModel.setClearAll(i.id, it)

@@ -24,5 +24,4 @@ public abstract class TodoItemDatabase extends RoomDatabase {
 
     public abstract TodoItemDAO todoItemDAO();
 
-
 }

@@ -3,16 +3,13 @@ package com.example.todoapp;
 
 import static androidx.navigation.ui.NavigationUI.setupActionBarWithNavController;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class MainActivity extends AppCompatActivity {
     public static int currentPosition;
@@ -39,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
 
         setupActionBarWithNavController(this, navController);
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -53,6 +50,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
-
 
 }

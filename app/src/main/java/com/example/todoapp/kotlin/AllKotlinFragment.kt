@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.Adapter.TodoItemAdapterKotlin
+import com.example.todoapp.adapter.TodoItemAdapterKotlin
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentAllKotlinBinding
 import com.example.todoapp.model.TodoItem
@@ -30,11 +28,10 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        fragmentAllItemBinding =  FragmentAllKotlinBinding.inflate(inflater,container,false)
-        var mView = fragmentAllItemBinding!!.root
-        return mView
+        fragmentAllItemBinding = FragmentAllKotlinBinding.inflate(inflater, container, false)
+        return fragmentAllItemBinding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +39,7 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
         displayListTodo()
     }
 
-    fun displayListTodo() {
+    private fun displayListTodo() {
         val rcvItem = fragmentAllItemBinding!!.rcvTodoitem
         val linearLayoutManager = LinearLayoutManager(context)
         rcvItem.layoutManager = linearLayoutManager
@@ -51,17 +48,15 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
         todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it,requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
         todoItemViewModel!!.getStringMutableLiveData()
-            .observe(requireActivity(), object : Observer<String?> {
-                override fun onChanged(value: String?) {
-                    todoItemViewModel!!.getAllList(todoItemViewModel!!.getStringMutableLiveData().value)
-                        .observe(
-                            requireActivity()
-                        ) { items ->
-                            // Update item to fragment
-                            todoItemAdapter!!.submitList(items)
-                        }
-                }
-            })
+            .observe(requireActivity()) {
+                todoItemViewModel!!.getAllList(todoItemViewModel!!.getStringMutableLiveData().value)
+                    .observe(
+                        requireActivity()
+                    ) { items ->
+                        // Update item to fragment
+                        todoItemAdapter!!.submitList(items)
+                    }
+            }
         todoItemAdapter!!.setClickListenner(object : TodoItemAdapterKotlin.IClickItemToDo {
             override fun detaiItem(todoItem: TodoItem?) {
                 if (todoItem != null) {

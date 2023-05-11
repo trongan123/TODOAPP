@@ -16,7 +16,7 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     createdDateItem =""
     Column(modifier = Modifier.padding(30.dp)) {
 
-        Texttitle("As")
+        Texttitle()
 
         TextDescription()
 

@@ -1,34 +1,28 @@
 package com.example.todoapp;
 
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todoapp.Adapter.TodoItemAdapter;
+import com.example.todoapp.adapter.TodoItemAdapter;
 import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class AllItemFragment extends Fragment {
 
@@ -51,7 +45,6 @@ public class AllItemFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         displayListTodo();
         postponeEnterTransition();
@@ -63,7 +56,7 @@ public class AllItemFragment extends Fragment {
         RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoitem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
@@ -71,23 +64,19 @@ public class AllItemFragment extends Fragment {
 
 
         //set data to recyclerview
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(getActivity(), items -> {
-                    // Update item to fragment
-                    todoItemList = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                });
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(), items -> {
+            // Update item to fragment
+            todoItemList = items;
+            currentPage = 0;
+            isLastPage = false;
+            if (items.size() % 20 == 0) {
+                totalPage = (items.size() / 20);
+            } else {
+                totalPage = (items.size() / 20) + 1;
             }
-        });
+            setFirstData();
+        }));
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -109,7 +98,7 @@ public class AllItemFragment extends Fragment {
             public void loadMoreItems() {
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(getActivity(), items -> {
+                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(), items -> {
                     // Update item to fragment
                     todoItemList = items;
                     if (items.size() % 20 == 0) {
@@ -134,6 +123,7 @@ public class AllItemFragment extends Fragment {
 
     }
 
+    // navigation form AllItemfragment to Updatefragment
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
@@ -143,10 +133,8 @@ public class AllItemFragment extends Fragment {
                 .addSharedElement(cardView,cardView.getTransitionName())
                 .build();
 
-
-        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -156,34 +144,29 @@ public class AllItemFragment extends Fragment {
         fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
         // Inflate the layout for this fragment
         return mView;
-
     }
 
     private void loadNextPage() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        new Handler().postDelayed(() -> {
+            List<TodoItem> list = new ArrayList<>();
+            if (todoItemList.size() > 20) {
+                list = todoItemList.subList(startitem, enditem);
 
-                List<TodoItem> list = new ArrayList<>();
-                if (todoItemList.size() > 20) {
-                    list = todoItemList.subList(startitem, enditem);
-
-                    startitem = enditem;
-                    if ((enditem + 20) < todoItemList.size()) {
-                        enditem += 20;
-                    } else {
-                        enditem = todoItemList.size();
-                    }
-                }
-                todoItemAdapter.removeFooterLoading();
-                todoItemload.addAll(list);
-                todoItemAdapter.notifyDataSetChanged();
-                isLoading = false;
-                if (currentPage < totalPage) {
-                    todoItemAdapter.addFooterLoading();
+                startitem = enditem;
+                if ((enditem + 20) < todoItemList.size()) {
+                    enditem += 20;
                 } else {
-                    isLastPage = true;
+                    enditem = todoItemList.size();
                 }
+            }
+            todoItemAdapter.removeFooterLoading();
+            todoItemload.addAll(list);
+            todoItemAdapter.notifyDataSetChanged();
+            isLoading = false;
+            if (currentPage < totalPage) {
+                todoItemAdapter.addFooterLoading();
+            } else {
+                isLastPage = true;
             }
         }, 2000);
     }

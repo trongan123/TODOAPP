@@ -35,7 +35,6 @@ import java.util.TimeZone;
 
 public class AddItemFragment extends Fragment {
 
-
     private FragmentAddItemBinding fragmentAddItemBinding;
     private TodoItemViewModel todoItemViewModel;
     private MaterialDatePicker<Long> datePickerCompleted;
@@ -67,6 +66,7 @@ public class AddItemFragment extends Fragment {
                 throw new RuntimeException(e);
             }
         });
+        //and action for button clear
         fragmentAddItemBinding.btnclear.setOnClickListener(view12 -> {
             fragmentAddItemBinding.edttitle.setText("");
             fragmentAddItemBinding.edtdescription.setText("");
@@ -82,7 +82,7 @@ public class AddItemFragment extends Fragment {
             datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long) selection);
+                calendar.setTimeInMillis(selection);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = format.format(calendar.getTime());
                 fragmentAddItemBinding.edtcreatedDate.setText(formattedDate);
@@ -128,7 +128,7 @@ public class AddItemFragment extends Fragment {
             }
         });
     }
-
+    //method add new todoitem
     private void addItem() throws ParseException {
         if (validation()) {
             String strtitle = Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim();
@@ -152,31 +152,32 @@ public class AddItemFragment extends Fragment {
         }
     }
 
+    //method validate value to add new item
     private boolean validation() throws ParseException {
         boolean check = true;
 
-        if (fragmentAddItemBinding.edttitle.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tiltitle.setError("Field title can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtdescription.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tildescription.setError("Field description can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtcreatedDate.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tilcreatedDate.setError("Field created date can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtcompletedDate.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tilcompletedDate.setError("Field completed date can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tilstatus.setError("Please choice a status");
             check = false;
         }
         if (!check) {
-            return check;
+            return false;
         }
 
         Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -194,10 +195,14 @@ public class AddItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //set navigation share element for add fragment
         setSharedElementEnterTransition(new ChangeBounds());
+
+        //set data binding
         fragmentAddItemBinding = FragmentAddItemBinding.inflate(inflater, container, false);
         View mView = fragmentAddItemBinding.getRoot();
 
+        //set view model
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
         fragmentAddItemBinding.setTodoItemViewModel(todoItemViewModel);
 

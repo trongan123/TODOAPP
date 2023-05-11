@@ -1,7 +1,6 @@
 package com.example.todoapp.repository
 
 import android.app.Application
-import android.util.Log
 import com.example.todoapp.Database.TodoItemDAO
 import com.example.todoapp.Database.TodoItemDatabase
 import com.example.todoapp.model.TodoItem

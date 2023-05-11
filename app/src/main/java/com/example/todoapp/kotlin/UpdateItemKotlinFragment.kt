@@ -2,6 +2,8 @@ package com.example.todoapp.kotlin
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,12 +58,18 @@ class UpdateItemKotlinFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        sharedElementEnterTransition = ChangeBounds()
         fragmentUpdateItemBinding =
             inflater.let { FragmentUpdateItemKotlinBinding.inflate(it, container, false) }
         mView = fragmentUpdateItemBinding!!.root
@@ -82,10 +90,10 @@ class UpdateItemKotlinFragment : Fragment() {
             val strtitle: String = fragmentUpdateItemBinding!!.edttitle.text.toString().trim()
             val strDes: String =
                 fragmentUpdateItemBinding!!.edtdescription.text.toString().trim()
-            val credate = SimpleDateFormat("yyyy-MM-dd").parse(
+            val credate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(
                 fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim()
             )
-            val comdate = SimpleDateFormat("yyyy-MM-dd").parse(
+            val comdate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(
                 fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim()
             )
             val strStt: String =
@@ -107,10 +115,10 @@ class UpdateItemKotlinFragment : Fragment() {
     private fun deleteItem() {
         val strtitle: String = fragmentUpdateItemBinding!!.edttitle.text.toString().trim()
         val strDes: String = fragmentUpdateItemBinding!!.edtdescription.text.toString().trim()
-        val credate = SimpleDateFormat("yyyy-MM-dd").parse(
+        val credate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(
             fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim()
         )
-        val comdate = SimpleDateFormat("yyyy-MM-dd").parse(
+        val comdate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(
             fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim()
         )
         val strStt: String = fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim()
@@ -125,7 +133,7 @@ class UpdateItemKotlinFragment : Fragment() {
         AlertDialog.Builder(context)
             .setTitle("Confirm delete")
             .setMessage("Are you sure?")
-            .setPositiveButton("Yes") { dialogInterface, i ->
+            .setPositiveButton("Yes") { _, _ ->
                 todoItemViewModel!!.deleteItem(todoItem)
                 Toast.makeText(activity, "Delete successfully", Toast.LENGTH_SHORT).show()
                 findNavController(requireView()).navigate(R.id.mainKotlinFragment)
@@ -137,7 +145,7 @@ class UpdateItemKotlinFragment : Fragment() {
 
     private fun initUi() {
         todoItem = requireArguments().getSerializable("object_TodoItem") as TodoItem?
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
         if (todoItem != null) {
             fragmentUpdateItemBinding!!.edttitle.setText(todoItem!!.title)
             fragmentUpdateItemBinding!!.edtdescription.setText(todoItem!!.description)
@@ -145,16 +153,16 @@ class UpdateItemKotlinFragment : Fragment() {
             fragmentUpdateItemBinding!!.edtcompletedDate.setText(dateFormat.format(todoItem!!.completedDate))
             fragmentUpdateItemBinding!!.dropdownstatus.setText(todoItem!!.status, false)
         }
-        fragmentUpdateItemBinding!!.edtcreatedDate.setOnClickListener(View.OnClickListener {
+        fragmentUpdateItemBinding!!.edtcreatedDate.setOnClickListener {
             datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCreated!!.addOnPositiveButtonClickListener { selection ->
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat("yyyy-MM-dd")
+                val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
                 fragmentUpdateItemBinding!!.edtcreatedDate.setText(formattedDate)
             }
-        })
+        }
 
         //create datePicker
         fragmentUpdateItemBinding!!.edtcompletedDate.setOnClickListener {
@@ -162,7 +170,7 @@ class UpdateItemKotlinFragment : Fragment() {
             datePickerCompleted!!.addOnPositiveButtonClickListener { selection ->
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat("yyyy-MM-dd")
+                val format = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
                 fragmentUpdateItemBinding!!.edtcompletedDate.setText(formattedDate)
             }
@@ -193,11 +201,11 @@ class UpdateItemKotlinFragment : Fragment() {
             check = false
         }
         if (!check) {
-            return check
+            return false
         }
-        val credate = SimpleDateFormat("yyyy-MM-dd")
+        val credate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
             .parse(fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim())
-        val comdate = SimpleDateFormat("yyyy-MM-dd")
+        val comdate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
             .parse(fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim())
         if (credate != null) {
             if (credate > comdate) {

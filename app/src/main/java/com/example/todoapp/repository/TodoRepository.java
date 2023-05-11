@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TodoRepository {
 
-    private TodoItemDAO mTodoItemDAO;
+    private final TodoItemDAO mTodoItemDAO;
     private LiveData<List<TodoItem>> mTodoItems;
 
     public TodoRepository(Application application) {

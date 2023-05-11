@@ -47,7 +47,6 @@ class HomeActivity : ComponentActivity() {
                     androidx.compose.material.Text(text = "Kotlin")
                 }
 
-
             }
         }
     }

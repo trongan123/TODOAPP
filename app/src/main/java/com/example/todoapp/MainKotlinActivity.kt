@@ -10,13 +10,14 @@ class MainKotlinActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_kotlin)
-
+        //set fragment main
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment?
         val navController = navHostFragment!!.navController
 
         setupActionBarWithNavController(this, navController)
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment?

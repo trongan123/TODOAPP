@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.viewpager2.widget.ViewPager2
-import com.example.todoapp.Adapter.TabItemKotlinAdapter
+import com.example.todoapp.adapter.TabItemKotlinAdapter
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentMainKotlinBinding
 import com.example.todoapp.viewmodel.TodoItemViewModel

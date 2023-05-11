@@ -11,7 +11,6 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 
 class MyComposeView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     AbstractComposeView(context, attrs) {
-
     var i : TodoItem = TodoItem()
     var todoViewModel :TodoItemViewModel? = null
     var view :View? = null
