@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Entity(tableName = "todoItem")
 public class TodoItem implements Serializable {
-
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;

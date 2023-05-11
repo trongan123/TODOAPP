@@ -1,7 +1,6 @@
 package com.example.todoapp.ui.theme.screem
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,11 +25,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -45,6 +42,7 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 var titleItem: String = ""
@@ -68,7 +66,7 @@ val localListTodo = compositionLocalOf { appListTodo(todolist = ArrayList()) }
 var checkValidate = false
 
 @Composable
-fun Texttitle(errortitleItem : String) {
+fun Texttitle() {
     var title by remember {
         mutableStateOf(titleItem)
     }
@@ -222,7 +220,7 @@ fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
             checkValidate()
             if (checkValidate) {
                 todoItem = TodoItem()
-                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem

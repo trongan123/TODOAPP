@@ -11,6 +11,7 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
         this.linearLayoutManager = linearLayoutManager;
     }
 
+
     @Override
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -24,7 +25,6 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
             loadMoreItems();
         }
     }
-
     public abstract void loadMoreItems();
 
     public abstract boolean isLoading();

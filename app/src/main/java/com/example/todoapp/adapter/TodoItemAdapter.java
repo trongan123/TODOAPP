@@ -1,4 +1,4 @@
-package com.example.todoapp.Adapter;
+package com.example.todoapp.adapter;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -89,14 +89,11 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
 
-
             todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
             todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
 
-
             todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
 
-//            todoItemViewHolder.itemTodoBinding.btndetail.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
             todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder,todoItem,id));
         }
     }

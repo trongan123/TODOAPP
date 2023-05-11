@@ -44,7 +44,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         loadNextItems()
-
     }
 
     fun loadNextItems() {

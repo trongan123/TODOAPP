@@ -21,7 +21,6 @@ public class TodoItemViewModel extends AndroidViewModel {
     public List<Integer> clearItem = new ArrayList<>();
     public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
 
-
     public TodoItemViewModel(Application application) {
         super(application);
         mRepository = new TodoRepository(application);

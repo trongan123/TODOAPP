@@ -19,7 +19,7 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
     createdDateItem = dateFormat.format(todoItem.createdDate)
     completedDateItem = dateFormat.format(todoItem.completedDate)
     Column(modifier = Modifier.padding(30.dp)) {
-        Texttitle("SDf")
+        Texttitle()
 
         TextDescription()
 

@@ -18,7 +18,7 @@
         android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:background="@drawable/bg_round"
-        android:transitionName="update_1"
+        android:transitionName="update_fragment"
         android:layout_height="match_parent">
 
         <LinearLayout

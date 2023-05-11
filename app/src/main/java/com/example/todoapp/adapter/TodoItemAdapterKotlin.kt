@@ -1,4 +1,4 @@
-package com.example.todoapp.Adapter
+package com.example.todoapp.adapter
 
 
 import android.view.LayoutInflater
@@ -42,15 +42,12 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
     }
     override fun onBindViewHolder(holder: TodoItemViewHoldel, position: Int) {
         val todoItem = getItem(position)
-        val id = getItemId(position)
       //  val checkItem = todoItemViewModel!!.getListMutableLiveDataCheck().value
 
         holder.myitem.i=todoItem
         holder.myitem.todoViewModel = todoItemViewModel
         holder.myitem.view =view
         holder.myitem.disposeComposition()
-
-
     }
 
     override fun getItemViewType(position: Int): Int {
