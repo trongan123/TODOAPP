@@ -42,7 +42,6 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
     }
     override fun onBindViewHolder(holder: TodoItemViewHoldel, position: Int) {
         val todoItem = getItem(position)
-        val id = getItemId(position)
       //  val checkItem = todoItemViewModel!!.getListMutableLiveDataCheck().value
 
         holder.myitem.i=todoItem

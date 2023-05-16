@@ -1,22 +1,20 @@
 package com.example.todoapp;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.todoapp.Adapter.TodoItemAdapter;
 import com.example.todoapp.databinding.FragmentCompletedItemBinding;
@@ -25,14 +23,10 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class CompletedItemFragment extends Fragment {
 
-
-    private static final String EXTRA_ANIMAL_ITEM = "animal_item";
-    private static final String EXTRA_TRANSITION_NAME = "transition_name";
     private FragmentCompletedItemBinding fragmentCompletedItemBinding;
 
     private final TodoItemViewModel todoItemViewModel;
@@ -62,31 +56,27 @@ public class CompletedItemFragment extends Fragment {
 
     public void displayListTodo(){
         RecyclerView rcvItem = fragmentCompletedItemBinding.rcvTodoitem;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         rcvItem.setLayoutManager(linearLayoutManager);
 
         //set rach chan field
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(),todoItemViewModel);
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                todoItemViewModel.getCompletedList().observe(getActivity(), items -> {
-                    // Update item to fragment
-                    todoItemList = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                });
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
+            // Update item to fragment
+            todoItemList = items;
+            currentPage = 0;
+            isLastPage = false;
+            if (items.size() % 20 == 0) {
+                totalPage = (items.size() / 20);
+            } else {
+                totalPage = (items.size() / 20) + 1;
             }
-        });
+            setFirstData();
+        }));
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -106,7 +96,7 @@ public class CompletedItemFragment extends Fragment {
             public void loadMoreItems() {
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getCompletedList().observe(getActivity(), items -> {
+                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
                     // Update item to fragment
                     todoItemList = items;
                     if (items.size() % 20 == 0) {
@@ -130,30 +120,27 @@ public class CompletedItemFragment extends Fragment {
         });
     }
     private void loadNextPage() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        new Handler().postDelayed(() -> {
 
-                List<TodoItem> list = new ArrayList<>();
-                if (todoItemList.size() > 20) {
-                    list = todoItemList.subList(startitem, enditem);
+            List<TodoItem> list = new ArrayList<>();
+            if (todoItemList.size() > 20) {
+                list = todoItemList.subList(startitem, enditem);
 
-                    startitem = enditem;
-                    if ((enditem + 20) < todoItemList.size()) {
-                        enditem += 20;
-                    } else {
-                        enditem = todoItemList.size();
-                    }
-                }
-                todoItemAdapter.removeFooterLoading();
-                todoItemload.addAll(list);
-                todoItemAdapter.notifyDataSetChanged();
-                isLoading = false;
-                if (currentPage < totalPage) {
-                    todoItemAdapter.addFooterLoading();
+                startitem = enditem;
+                if ((enditem + 20) < todoItemList.size()) {
+                    enditem += 20;
                 } else {
-                    isLastPage = true;
+                    enditem = todoItemList.size();
                 }
+            }
+            todoItemAdapter.removeFooterLoading();
+            todoItemload.addAll(list);
+            todoItemAdapter.notifyDataSetChanged();
+            isLoading = false;
+            if (currentPage < totalPage) {
+                todoItemAdapter.addFooterLoading();
+            } else {
+                isLastPage = true;
             }
         }, 2000);
     }
@@ -168,11 +155,11 @@ public class CompletedItemFragment extends Fragment {
                 .build();
 
 
-        Navigation.findNavController(getView()).navigate(R.id.updateItemFragment, bundle,null,extras);
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater,container,false);

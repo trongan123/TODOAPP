@@ -244,9 +244,7 @@ fun AllItemScreen(
     viewModel: TodoItemViewModel,
     viewModelLoad: MainViewModel
 ) {
-//    var state = remember(viewModelLoad.state) {
-//        viewModelLoad.state
-//    }
+
 
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
@@ -254,8 +252,8 @@ fun AllItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
                 viewModel.getAllList(viewModel.stringMutableLiveData.value)
                     .observe(owner) { item: List<TodoItem> ->
                         items = item as ArrayList<TodoItem>
@@ -337,9 +335,9 @@ fun PendingItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-                viewModel.getPendingList().observe(owner) { item: List<TodoItem> ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
+                viewModel.pendingList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
             }
@@ -372,9 +370,9 @@ fun CompletedItemScreen(
 
     ) {
 
-        LazyColumn() {
-            viewModel.getStringMutableLiveData().observe(owner) { s: String ->
-                viewModel.getCompletedList().observe(owner) { item: List<TodoItem> ->
+        LazyColumn {
+            viewModel.getStringMutableLiveData().observe(owner) {
+                viewModel.completedList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
             }
@@ -404,7 +402,7 @@ fun ItemList(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                if (isChecked.value == true) {
+                if (isChecked.value) {
                     isChecked.value = false
                     viewModel.setClearAll(i.id, false)
                     viewModel.setCheckItem(i.id.toLong(), false)
@@ -458,17 +456,18 @@ fun ItemList(
                 Spacer(modifier = Modifier.size(10.dp))
             }
             androidx.compose.material3.Text(
-                i.description, modifier = Modifier.padding(top = 10.dp, start = 16.dp)
+                i.description, modifier = Modifier.padding(start = 16.dp)
             )
-            Spacer(modifier = Modifier.size(10.dp))
+
             androidx.compose.material3.Text(
-                "Created Date:     " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
-                modifier = Modifier.padding(top = 10.dp, start = 16.dp)
+                "Created Date:    " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                modifier = Modifier.padding(top = 10.dp, start = 16.dp),
+                style = MaterialTheme.typography.overline
             )
-            Spacer(modifier = Modifier.size(10.dp))
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
-                modifier = Modifier.padding(top = 10.dp, start = 16.dp)
+                modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
+                style = MaterialTheme.typography.overline
             )
         }
     }
@@ -484,7 +483,7 @@ fun ItemListRecycle(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                if (isChecked.value == true) {
+                if (isChecked.value) {
                     isChecked.value = false
                     viewModel.setClearAll(i.id, false)
                     viewModel.setCheckItem(i.id.toLong(), false)
@@ -501,9 +500,7 @@ fun ItemListRecycle(
             Spacer(modifier = Modifier.size(16.dp))
             Row {
                 val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
-                if (check != null) {
-                    isChecked.value = check.contains(i.id.toLong())
-                }
+                isChecked.value = check.contains(i.id.toLong())
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
                     viewModel.setClearAll(i.id, it)
@@ -542,7 +539,20 @@ fun ItemListRecycle(
                         .size(30.dp))
                 Spacer(modifier = Modifier.size(10.dp))
             }
+            androidx.compose.material3.Text(
+                i.description, modifier = Modifier.padding(start = 16.dp)
+            )
 
+            androidx.compose.material3.Text(
+                "Created Date:    " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                modifier = Modifier.padding(top = 10.dp, start = 16.dp),
+                style = MaterialTheme.typography.overline
+            )
+            androidx.compose.material3.Text(
+                "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
+                modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
+                style = MaterialTheme.typography.overline
+            )
         }
     }
 }

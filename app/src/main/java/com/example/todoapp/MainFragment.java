@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
         fragmentMainBinding.vpg.setAdapter(new TabItemAdapter(requireActivity(), todoItemViewModel));
-        TabLayout tabLayout = getView().findViewById(R.id.tlomenu);
+        TabLayout tabLayout = requireView().findViewById(R.id.tlomenu);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
                 tabLayout, viewPager2, (tab, position) -> {
@@ -79,20 +79,17 @@ public class MainFragment extends Fragment {
                         (v, actionId, event) -> {
                             fragmentMainBinding.searchBar.setText(fragmentMainBinding.svSearch.getText());
                             fragmentMainBinding.svSearch.hide();
-                            todoItemViewModel.getStringMutableLiveData().postValue(fragmentMainBinding.svSearch.getText().toString());
+                            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
                             return false;
                         });
 
-        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> {
-            fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0);
-
-        });
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
         fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
     }
 
 
     private void clearItem() {
-        new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Confirm Clear All")
                 .setMessage("Are you sure?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {

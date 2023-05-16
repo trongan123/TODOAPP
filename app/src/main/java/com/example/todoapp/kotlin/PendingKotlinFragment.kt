@@ -9,8 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.Adapter.TodoItemAdapterKotlin
+
 import com.example.todoapp.R
+import com.example.todoapp.Adapter.TodoItemAdapterKotlin
 import com.example.todoapp.databinding.FragmentPendingKotlinBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel

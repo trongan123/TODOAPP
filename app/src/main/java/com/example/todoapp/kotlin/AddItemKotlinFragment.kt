@@ -67,7 +67,7 @@ class AddItemKotlinFragment : Fragment() {
                 val calendar =
                     Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long?)!!
-                val format = SimpleDateFormat("yyyy-MM-dd")
+                val format = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
                 fragmentAddItemBinding!!.edtcreatedDate.setText(formattedDate)
             }
@@ -83,7 +83,7 @@ class AddItemKotlinFragment : Fragment() {
                 val calendar =
                     Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat("yyyy-MM-dd")
+                val format = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
                 fragmentAddItemBinding!!.edtcompletedDate.setText(formattedDate)
             }
@@ -113,11 +113,11 @@ class AddItemKotlinFragment : Fragment() {
             val strDes: String =
                 Objects.requireNonNull(fragmentAddItemBinding!!.edtdescription.text).toString()
                     .trim { it <= ' ' }
-            val credate = SimpleDateFormat("yyyy-MM-dd")
+            val credate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 .parse(
                     Objects.requireNonNull(fragmentAddItemBinding!!.edtcreatedDate.text)
                         .toString().trim { it <= ' ' })
-            val comdate = SimpleDateFormat("yyyy-MM-dd")
+            val comdate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 .parse(
                     Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text)
                         .toString().trim { it <= ' ' })
@@ -159,11 +159,11 @@ class AddItemKotlinFragment : Fragment() {
             check = false
         }
         if (!check) {
-            return check
+            return false
         }
-        val credate = SimpleDateFormat("yyyy-MM-dd")
+        val credate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
             .parse(fragmentAddItemBinding!!.edtcreatedDate.text.toString().trim())
-        val comdate = SimpleDateFormat("yyyy-MM-dd")
+        val comdate = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
             .parse(fragmentAddItemBinding!!.edtcompletedDate.text.toString().trim())
         if (credate != null) {
             if (credate > comdate) {

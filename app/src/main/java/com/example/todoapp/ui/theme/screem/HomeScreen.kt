@@ -18,14 +18,14 @@ fun HomeScreen(
 ) {
 
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
-    viewModel.getStringMutableLiveData().observe(owner) { s: String ->
+    viewModel.getStringMutableLiveData().observe(owner) {
         viewModel.getAllList(viewModel.stringMutableLiveData.value)
             .observe(owner) { item: List<TodoItem> ->
                 items = item as ArrayList<TodoItem>
             }
     }
-    CompositionLocalProvider(localListTodo provides appListTodo(todolist =items)) {
-        Column() {
+    CompositionLocalProvider(localListTodo provides AppListTodo(todolist =items)) {
+        Column {
             TabScreen(openAddItemScreen = {
                 openAddItemScreen()
             }, openUpdateItemScreen = {

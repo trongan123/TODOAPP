@@ -17,7 +17,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: Repository =  Repository(application)
 
-    var state by mutableStateOf(ScreenState())
+    private var state by mutableStateOf(ScreenState())
 
     private val paginator = DefaultPaginator(
         initialKey = state.page,
@@ -47,7 +47,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun loadNextItems() {
+    private fun loadNextItems() {
         viewModelScope.launch {
             paginator.loadNextItems()
         }

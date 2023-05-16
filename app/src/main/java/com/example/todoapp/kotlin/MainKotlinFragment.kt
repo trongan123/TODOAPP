@@ -26,7 +26,6 @@ class MainKotlinFragment : Fragment() {
     private var mView: View? = null
     private var todoItemViewModel: TodoItemViewModel? = null
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener {

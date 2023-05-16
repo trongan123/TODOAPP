@@ -1,7 +1,6 @@
 package com.example.todoapp.ui.theme.screem
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,11 +25,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -45,6 +42,8 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 var titleItem: String = ""
@@ -61,14 +60,14 @@ var errorstatusItem: String = ""
 
 var todoItem: TodoItem = TodoItem()
 
-data class appListTodo(val todolist: List<TodoItem>)
+data class AppListTodo(val todolist: List<TodoItem>)
 
-val localListTodo = compositionLocalOf { appListTodo(todolist = ArrayList()) }
+val localListTodo = compositionLocalOf { AppListTodo(todolist = ArrayList()) }
 
 var checkValidate = false
 
 @Composable
-fun Texttitle(errortitleItem : String) {
+fun Texttitle() {
     var title by remember {
         mutableStateOf(titleItem)
     }
@@ -80,10 +79,10 @@ fun Texttitle(errortitleItem : String) {
         onValueChange = {
             title = it
             titleItem = title
-            if (it.equals("")) {
-                error = "Field title can't empty"
+            error = if (it == "") {
+                "Field title can't empty"
             } else {
-                error = ""
+                ""
             }
         },
         modifier = Modifier.fillMaxWidth(),
@@ -106,10 +105,10 @@ fun TextDescription() {
         onValueChange = {
             description = it
             descriptionItem = description
-            if (it.equals("")) {
-                error = "Field description can't empty"
+            error = if (it == "") {
+                "Field description can't empty"
             } else {
-                error = ""
+                ""
             }
         },
         modifier = Modifier.fillMaxWidth(),
@@ -134,10 +133,10 @@ fun TextCreatedDate() {
         selection = CalendarSelection.Date { date ->
             createdDate = date.toString()
             createdDateItem = createdDate
-            if (createdDate.equals("")) {
-                error = "Field created date can't empty"
+            error = if (createdDate == "") {
+                "Field created date can't empty"
             } else {
-                error = ""
+                ""
             }
         }
     )
@@ -179,10 +178,10 @@ fun TextCompletedDate() {
         selection = CalendarSelection.Date { date ->
             completedDate = date.toString()
             completedDateItem = completedDate
-            if (completedDate.equals("")) {
-                error = "Field completed date can't empty"
+            error = if (completedDate == "") {
+                "Field completed date can't empty"
             } else {
-                error = ""
+                ""
             }
         }
     )
@@ -209,10 +208,7 @@ fun TextCompletedDate() {
 }
 
 
-@Composable
-fun CommonSpace() {
-    Spacer(modifier = Modifier.height(20.dp))
-}
+
 
 @Composable
 fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
@@ -222,7 +218,7 @@ fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
             checkValidate()
             if (checkValidate) {
                 todoItem = TodoItem()
-                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                val formatter = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -366,8 +362,6 @@ fun checkValidate() {
     checkValidate = true
     if (titleItem.isEmpty()) {
         checkValidate = false
-    } else {
-
     }
     if (descriptionItem.isEmpty()) {
         errordescriptionItem = R.string.errordescription.toString()
@@ -402,7 +396,7 @@ fun UpdateButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         onClick = {
             checkValidate()
             if (checkValidate) {
-                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                val formatter = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -449,7 +443,7 @@ fun DropDownMenuStatus() {
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("pending", "completed")
     var selectedText by remember { mutableStateOf(statusItem) }
-    var error by remember {
+    val error by remember {
         mutableStateOf(errorstatusItem)
     }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }

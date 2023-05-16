@@ -9,17 +9,18 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     titleItem = todoItem.title
     descriptionItem = todoItem.description
     statusItem = todoItem.status
     createdDateItem = dateFormat.format(todoItem.createdDate)
     completedDateItem = dateFormat.format(todoItem.completedDate)
     Column(modifier = Modifier.padding(30.dp)) {
-        Texttitle("SDf")
+        Texttitle()
 
         TextDescription()
 

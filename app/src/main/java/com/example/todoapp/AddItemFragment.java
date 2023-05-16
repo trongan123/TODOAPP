@@ -123,8 +123,99 @@ public class AddItemFragment extends Fragment {
                     fragmentAddItemBinding.tiltitle.setError("Field title can't empty");
                 } else {
                     fragmentAddItemBinding.tiltitle.setError(null);
-                    fragmentAddItemBinding.btnAdd.setEnabled(true);
                 }
+                boolean check = checkvalidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
+
+
+            }
+        });
+        fragmentAddItemBinding.edtdescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
+                    fragmentAddItemBinding.tildescription.setError("Field description can't empty");
+                } else {
+                    fragmentAddItemBinding.tildescription.setError(null);
+                }
+                boolean check = checkvalidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
+            }
+        });
+        fragmentAddItemBinding.edtcreatedDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
+                    fragmentAddItemBinding.tilcreatedDate.setError("Field created date can't empty");
+                } else {
+                    fragmentAddItemBinding.tilcreatedDate.setError(null);
+                }
+                boolean check = checkvalidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
+            }
+        });
+        fragmentAddItemBinding.edtcompletedDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
+                    fragmentAddItemBinding.tilcompletedDate.setError("Field completed date can't empty");
+                } else {
+                    fragmentAddItemBinding.tilcompletedDate.setError(null);
+                }
+                boolean check = checkvalidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
+            }
+        });
+        fragmentAddItemBinding.dropdownstatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
+                    fragmentAddItemBinding.tilstatus.setError("Please choice a status");
+                } else {
+                    fragmentAddItemBinding.tilstatus.setError(null);
+                }
+                boolean check = checkvalidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
             }
         });
     }
@@ -151,7 +242,31 @@ public class AddItemFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(R.id.mainFragment);
         }
     }
+    private boolean checkvalidate(){
+        boolean check = true;
 
+        if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText())
+                .toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText())
+                .toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText())
+                .toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText())
+                .toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText())
+                .toString().trim().isEmpty()) {
+            check = false;
+        }
+        return check;
+    }
     private boolean validation() throws ParseException {
         boolean check = true;
 
