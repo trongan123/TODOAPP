@@ -82,6 +82,4 @@ class CompletedKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment(
         bundle.putSerializable("object_TodoItem", todoItem)
         Navigation.findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
-
-
 }

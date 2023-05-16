@@ -47,15 +47,14 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
         holder.myitem.i=todoItem
         holder.myitem.todoViewModel = todoItemViewModel
         holder.myitem.view =view
+        holder.myitem.transitionName = "update_"+position
         holder.myitem.disposeComposition()
-
 
     }
 
     override fun getItemViewType(position: Int): Int {
         return 1
     }
-
 
     class DiffCallback : DiffUtil.ItemCallback<TodoItem>() {
         override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean {

@@ -10,7 +10,6 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
     public PaginationScrollListener(LinearLayoutManager linearLayoutManager) {
         this.linearLayoutManager = linearLayoutManager;
     }
-
     @Override
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);

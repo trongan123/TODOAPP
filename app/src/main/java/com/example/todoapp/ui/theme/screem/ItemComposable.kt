@@ -115,7 +115,7 @@ fun TextDescription() {
         placeholder = { Text("Description") },
         label = { Text("Description") },
     )
-    Text(text =error , color = Color.Red)
+    Text(text = error, color = Color.Red)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -141,7 +141,6 @@ fun TextCreatedDate() {
         }
     )
     OutlinedTextField(
-
         value = createdDate,
         onValueChange = {
             createdDate = it
@@ -149,7 +148,6 @@ fun TextCreatedDate() {
         enabled = false,
         modifier = Modifier
             .fillMaxWidth()
-
             .clickable(
                 onClick = { calendarState.show() }),
         placeholder = { Text("CreatedDate") },
@@ -158,7 +156,6 @@ fun TextCreatedDate() {
             disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
             disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium)
         )
-
     )
     Text(text = error, color = Color.Red)
 }
@@ -208,8 +205,6 @@ fun TextCompletedDate() {
 }
 
 
-
-
 @Composable
 fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
 
@@ -218,7 +213,7 @@ fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
             checkValidate()
             if (checkValidate) {
                 todoItem = TodoItem()
-                val formatter = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -247,7 +242,6 @@ fun DeleteButton(
     negativeButtonColor: Color = Color(0xFF35898F),
     positiveButtonColor: Color = Color(0xFFFF0000)
 ) {
-    //   var showDeleteConfirm by remember { mutableStateOf(false) }
     var dialogOpen by remember {
         mutableStateOf(false)
     }
@@ -274,7 +268,6 @@ fun DeleteButton(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-
                     // text and buttons
                     Column(
                         modifier = Modifier
@@ -345,17 +338,6 @@ fun DeleteButton(
             }
         }
     }
-//    if (showDeleteConfirm) {
-//        ConfirmDialog(
-//            content = "Confirm Delete?",
-//            onDismiss = { showDeleteConfirm = false },
-//            onConfirm = {
-//                showDeleteConfirm = false
-//                viewModel.deleteItem(todoItem)
-//                backHome()
-//            }
-//        )
-//    }
 }
 
 fun checkValidate() {
@@ -364,25 +346,21 @@ fun checkValidate() {
         checkValidate = false
     }
     if (descriptionItem.isEmpty()) {
-        errordescriptionItem = R.string.errordescription.toString()
         checkValidate = false
     } else {
         errordescriptionItem = ""
     }
     if (createdDateItem.isEmpty()) {
-        errorcreatedDateItem = R.string.errorcreateddate.toString()
         checkValidate = false
     } else {
         errorcreatedDateItem = ""
     }
     if (completedDateItem.isEmpty()) {
-        errorcompletedDateItem = R.string.errorcompleteddate.toString()
         checkValidate = false
     } else {
         errorcompletedDateItem = ""
     }
     if (statusItem.isEmpty()) {
-        errorstatusItem = R.string.errorstatus.toString()
         checkValidate = false
     } else {
         errorstatusItem = ""
@@ -396,7 +374,7 @@ fun UpdateButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         onClick = {
             checkValidate()
             if (checkValidate) {
-                val formatter = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -423,10 +401,10 @@ fun ClearButton() {
     Button(
         onClick = {
             titleItem = ""
-            descriptionItem =""
-            statusItem =""
-            completedDateItem =""
-            createdDateItem =""
+            descriptionItem = ""
+            statusItem = ""
+            completedDateItem = ""
+            createdDateItem = ""
         },
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
@@ -526,7 +504,8 @@ fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel
                 IconButton(
                     onClick = {
                         state.value =
-                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                            TextFieldValue("")
+                        // Remove text from TextField when you press the 'X' icon
                     }
                 ) {
                     Icon(

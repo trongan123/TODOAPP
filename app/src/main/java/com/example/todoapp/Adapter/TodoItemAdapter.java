@@ -29,6 +29,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
     public interface IClickItemToDo {
         void DetaiItem(TodoItem todoItem, CardView cardView);
+
         void clearItem(TodoItem todoItem, long id, boolean check);
     }
 
@@ -47,7 +48,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         return getCurrentList().get(position).getId();
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,7 +59,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
             return new LoadingViewHolder(itemLoadingBinding);
         }
-
     }
 
     @Override
@@ -91,29 +90,30 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
 
             todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
-            todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
+            todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.DetaiItem(todoItem, todoItemViewHolder.itemTodoBinding.cardItem));
 
 
             todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
 
-//            todoItemViewHolder.itemTodoBinding.btndetail.setOnClickListener(view -> iClickItem.DetaiItem(todoItem,todoItemViewHolder.itemTodoBinding.cardItem));
-            todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder,todoItem,id));
+            todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder, todoItem, id));
         }
     }
-     private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id){
-         if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
-             todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                     todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-             );
-             iClickItem.clearItem(todoItem, id, true);
 
-         } else {
-             todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                     todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-             );
-             iClickItem.clearItem(todoItem, id, false);
-         }
-     }
+    private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id) {
+        if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
+                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+            );
+            iClickItem.clearItem(todoItem, id, true);
+
+        } else {
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
+                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
+            );
+            iClickItem.clearItem(todoItem, id, false);
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
         List<TodoItem> todoItems = getCurrentList();
@@ -134,7 +134,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             return oldItem.getTitle().equals(newItem.getTitle());
         }
     }
-
     public static class TodoItemViewHoldel extends RecyclerView.ViewHolder {
         private final ItemTodoBinding itemTodoBinding;
 

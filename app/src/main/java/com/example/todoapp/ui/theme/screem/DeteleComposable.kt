@@ -34,7 +34,6 @@ fun DialogButton(
             text = buttonText,
             color = Color.White,
             fontSize = 18.sp,
-
             )
     }
 }

@@ -4,7 +4,6 @@ package com.example.todoapp;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +40,9 @@ public class UpdateItemFragment extends Fragment {
     private MaterialDatePicker datePickerCreated;
     private TodoItem todoItem = new TodoItem();
 
-
     public UpdateItemFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -136,15 +133,12 @@ public class UpdateItemFragment extends Fragment {
         String strStt;
         strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
 
-
         //update database
         todoItem.setTitle(strtitle);
         todoItem.setDescription(strDes);
         todoItem.setCreatedDate(credate);
         todoItem.setCompletedDate(comdate);
         todoItem.setStatus(strStt);
-
-
 
         new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Confirm delete")
@@ -157,8 +151,6 @@ public class UpdateItemFragment extends Fragment {
                 .setNegativeButton("No", null)
                 .show();
         Toast.makeText(getActivity(), "Delete success", Toast.LENGTH_SHORT).show();
-
-
     }
 
     private void initUi() {
@@ -168,7 +160,7 @@ public class UpdateItemFragment extends Fragment {
         String transition =  getArguments().getString("transition");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         fragmentUpdateItemBinding.constraint.setTransitionName(transition);
-        Log.e("TAG", "initUi: "+transition );
+
         if (todoItem != null) {
             fragmentUpdateItemBinding.edttitle.setText(todoItem.getTitle());
             fragmentUpdateItemBinding.edtdescription.setText(todoItem.getDescription());
@@ -181,7 +173,6 @@ public class UpdateItemFragment extends Fragment {
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.setTimeInMillis((Long) selection);
-
                 String formattedDate = dateFormat.format(calendar.getTime());
                 fragmentUpdateItemBinding.edtcreatedDate.setText(formattedDate);
             });
@@ -193,8 +184,7 @@ public class UpdateItemFragment extends Fragment {
             datePickerCompleted.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.setTimeInMillis((Long) selection);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String formattedDate = format.format(calendar.getTime());
+                String formattedDate = dateFormat.format(calendar.getTime());
                 fragmentUpdateItemBinding.edtcompletedDate.setText(formattedDate);
             });
         });
@@ -237,5 +227,4 @@ public class UpdateItemFragment extends Fragment {
         }
         return check;
     }
-
 }

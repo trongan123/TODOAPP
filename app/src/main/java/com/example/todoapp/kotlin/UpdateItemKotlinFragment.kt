@@ -2,6 +2,8 @@ package com.example.todoapp.kotlin
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,13 +56,17 @@ class UpdateItemKotlinFragment : Fragment() {
             }
         }
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        sharedElementEnterTransition = ChangeBounds()
         fragmentUpdateItemBinding =
             inflater.let { FragmentUpdateItemKotlinBinding.inflate(it, container, false) }
         mView = fragmentUpdateItemBinding!!.root
@@ -114,7 +120,6 @@ class UpdateItemKotlinFragment : Fragment() {
         )
         val strStt: String = fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim()
 
-
         //update database
         todoItem!!.title = strtitle
         todoItem!!.description = strDes
@@ -136,6 +141,10 @@ class UpdateItemKotlinFragment : Fragment() {
 
     private fun initUi() {
         todoItem = requireArguments().getSerializable("object_TodoItem") as TodoItem?
+
+        val transition = requireArguments().getString("transition")
+        fragmentUpdateItemBinding!!.constraint.transitionName = transition
+
         val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
         if (todoItem != null) {
             fragmentUpdateItemBinding!!.edttitle.setText(todoItem!!.title)

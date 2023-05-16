@@ -12,11 +12,14 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 public class TabItemAdapter extends FragmentStateAdapter {
     private final TodoItemViewModel todoItemViewModel;
+
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         switch (position){
             case 0 :
+                //Create net fragment for tab
                 return new AllItemFragment(todoItemViewModel);
             case 1 :
                 return new PendingItemFragment(todoItemViewModel);

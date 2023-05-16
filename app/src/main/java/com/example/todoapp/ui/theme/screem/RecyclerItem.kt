@@ -16,6 +16,6 @@ class MyComposeView @JvmOverloads constructor(context: Context, attrs: Attribute
     var view :View? = null
     @Composable
     override fun Content() {
-        todoViewModel?.let { ItemListRecycle(i =i , view = view, viewModel = it) }
+        todoViewModel?.let { ItemListRecycle(i =i , view = view, viewModel = it, this) }
     }
 }

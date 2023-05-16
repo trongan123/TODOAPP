@@ -56,7 +56,6 @@ public class PendingItemFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
-
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 todoItemViewModel.getPendingList().observe(requireActivity(), items -> {

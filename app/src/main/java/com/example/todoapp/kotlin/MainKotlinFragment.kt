@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,22 @@ class MainKotlinFragment : Fragment() {
     private var todoItemViewModel: TodoItemViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
+        //set shared element back for recylerview
+        postponeEnterTransition()
+        val parentView = view.parent as ViewGroup
+        parentView.viewTreeObserver
+            .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    parentView.viewTreeObserver.removeOnPreDrawListener(this)
+                    startPostponedEnterTransition()
+                    return true
+                }
+            })
+        super.onViewCreated(view, savedInstanceState)
+
+
         super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener {
             val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
@@ -60,14 +77,12 @@ class MainKotlinFragment : Fragment() {
                 fragmentMainBinding!!.svSearch.hide()
                 todoItemViewModel!!.stringMutableLiveData
                     .postValue(fragmentMainBinding!!.svSearch.text.toString())
-
                 false
             }
 
         todoItemViewModel!!.getListMutableLiveDataCheck()
             .observe(requireActivity()
             ) { value -> fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0 }
-
 
         fragmentMainBinding!!.btnclearall.setOnClickListener { clearItem() }
     }
@@ -91,7 +106,6 @@ class MainKotlinFragment : Fragment() {
         fragmentMainBinding =  FragmentMainKotlinBinding.inflate(inflater,container,false)
         mView = fragmentMainBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-
         return mView
     }
 

@@ -243,12 +243,9 @@ public class AddItemFragment extends Fragment {
         }
     }
     private boolean checkvalidate(){
-        boolean check = true;
+        boolean check = !Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText())
+                .toString().trim().isEmpty();
 
-        if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText())
-                .toString().trim().isEmpty()) {
-            check = false;
-        }
         if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText())
                 .toString().trim().isEmpty()) {
             check = false;
@@ -270,28 +267,29 @@ public class AddItemFragment extends Fragment {
     private boolean validation() throws ParseException {
         boolean check = true;
 
-        if (fragmentAddItemBinding.edttitle.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tiltitle.setError("Field title can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtdescription.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tildescription.setError("Field description can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtcreatedDate.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tilcreatedDate.setError("Field created date can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.edtcompletedDate.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.tilcompletedDate.setError("Field completed date can't empty");
             check = false;
         }
-        if (fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
+        if (!fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
+        } else {
             fragmentAddItemBinding.tilstatus.setError("Please choice a status");
             check = false;
         }
         if (!check) {
-            return check;
+            return false;
         }
 
         Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -305,7 +303,6 @@ public class AddItemFragment extends Fragment {
         }
         return check;
     }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -319,10 +316,10 @@ public class AddItemFragment extends Fragment {
         datePickerCreated = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
-
         datePickerCompleted = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
+
         fragmentAddItemBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME
                 | InputType.TYPE_DATETIME_VARIATION_DATE);
         fragmentAddItemBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME

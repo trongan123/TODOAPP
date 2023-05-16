@@ -131,8 +131,6 @@ public class AllItemFragment extends Fragment {
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(cardView,cardView.getTransitionName())
                 .build();
-
-
         Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
     }
 

@@ -1,7 +1,8 @@
 package com.example.todoapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Fade
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 
@@ -23,4 +24,6 @@ class MainKotlinActivity : AppCompatActivity() {
         val navController = navHostFragment!!.navController
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+
 }

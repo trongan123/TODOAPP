@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import com.example.todoapp.*
 import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
@@ -39,7 +40,6 @@ import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -244,7 +244,6 @@ fun AllItemScreen(
     viewModel: TodoItemViewModel,
     viewModelLoad: MainViewModel
 ) {
-
 
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
@@ -475,7 +474,7 @@ fun ItemList(
 
 @Composable
 fun ItemListRecycle(
-    i: TodoItem, view: View?, viewModel: TodoItemViewModel
+    i: TodoItem, view: View?, viewModel: TodoItemViewModel, myitem: MyComposeView
 ) {
     val isChecked = remember { mutableStateOf(false) }
     Card(
@@ -483,21 +482,25 @@ fun ItemListRecycle(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                if (isChecked.value) {
-                    isChecked.value = false
-                    viewModel.setClearAll(i.id, false)
-                    viewModel.setCheckItem(i.id.toLong(), false)
-                } else {
-                    isChecked.value = true
-                    viewModel.setClearAll(i.id, true)
-                    viewModel.setCheckItem(i.id.toLong(), true)
-                }
+                todoItem = i
+                val bundle = Bundle()
+                bundle.putSerializable("object_TodoItem", todoItem)
+                bundle.putString("transition", myitem.transitionName)
+
+                val extras: FragmentNavigator.Extras = FragmentNavigator.Extras
+                    .Builder()
+                    .addSharedElement(myitem, myitem.transitionName)
+                    .build()
+
+                findNavController(view!!).navigate(
+                    R.id.updateItemKotlinFragment,
+                    bundle, null, extras
+                )
             }, elevation = 5.dp
     ) {
         Column(
             modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.size(16.dp))
             Row {
                 val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
                 isChecked.value = check.contains(i.id.toLong())
@@ -523,31 +526,16 @@ fun ItemListRecycle(
                         .weight(1f)
                         .fillMaxHeight()
                 )
-                Image(painter = painterResource(id = R.drawable.ellipsis),
-                    contentDescription = null,
-
-                    modifier = Modifier
-                        .clickable {
-                            todoItem = i
-                            val bundle = Bundle()
-                            bundle.putSerializable("object_TodoItem", todoItem)
-                            findNavController(view!!).navigate(
-                                R.id.updateItemKotlinFragment,
-                                bundle
-                            )
-                        }
-                        .size(30.dp))
-                Spacer(modifier = Modifier.size(10.dp))
             }
             androidx.compose.material3.Text(
                 i.description, modifier = Modifier.padding(start = 16.dp)
             )
-
             androidx.compose.material3.Text(
-                "Created Date:    " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                "Created Date    :" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
+
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),

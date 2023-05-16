@@ -34,9 +34,7 @@ fun HomeScreen(
                 viewModel = viewModel,
                 owner = owner,
                 viewModelLoad = viewModelLoad
-
             )
         }
-
     }
 }

@@ -37,7 +37,6 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom
     ) {
-
         DeleteButton(viewModel,
             backHome = {
                 backHome()

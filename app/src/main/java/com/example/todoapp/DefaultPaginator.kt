@@ -11,7 +11,6 @@ class DefaultPaginator<Key, Item>(
 
     private var currentKey = initialKey
     private var isMakingRequest = false
-
     override suspend fun loadNextItems() {
         if(isMakingRequest) {
             return

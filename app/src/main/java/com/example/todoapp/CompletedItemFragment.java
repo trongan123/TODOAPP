@@ -28,12 +28,10 @@ import java.util.List;
 public class CompletedItemFragment extends Fragment {
 
     private FragmentCompletedItemBinding fragmentCompletedItemBinding;
-
     private final TodoItemViewModel todoItemViewModel;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItemList;
     private List<TodoItem> todoItemload;
-
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;

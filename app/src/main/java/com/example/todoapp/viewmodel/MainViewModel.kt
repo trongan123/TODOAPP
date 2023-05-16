@@ -44,7 +44,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         loadNextItems()
-
     }
 
     private fun loadNextItems() {
@@ -52,7 +51,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             paginator.loadNextItems()
         }
     }
-
 }
 
 data class ScreenState(

@@ -91,7 +91,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         assert item != null;
         if (check) {
             if (!item.contains(id)) {
-
                 item.add(id);
             }
         } else {
@@ -99,8 +98,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         }
         listMutableLiveDataCheck.postValue(item);
     }
-
-
 
     public void clearItem() {
         mRepository.clear(clearItem);

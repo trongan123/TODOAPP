@@ -33,10 +33,8 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
     ): View {
         // Inflate the layout for this fragment
         fragmentPendingKotlinBinding =  FragmentPendingKotlinBinding.inflate(inflater,container,false)
-        val mView = fragmentPendingKotlinBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-
-        return mView
+        return fragmentPendingKotlinBinding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +66,6 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
                     clickDetailItem(todoItem)
                 }
             }
-
             override fun clearItem(todoItem: TodoItem?, id: Long, check: Boolean) {
                 if (todoItem != null) {
                     todoItemViewModel!!.setClearAll( todoItem.id, check)
@@ -83,5 +80,4 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
         bundle.putSerializable("object_TodoItem", todoItem)
         Navigation.findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
-
 }

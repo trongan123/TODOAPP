@@ -31,6 +31,8 @@ public class MainFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        //set shared element back for recylerview
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
         parentView.getViewTreeObserver()

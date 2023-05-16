@@ -15,17 +15,11 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     completedDateItem =""
     createdDateItem =""
     Column(modifier = Modifier.padding(30.dp)) {
-
         Texttitle()
-
         TextDescription()
-
         TextCreatedDate()
-
         TextCompletedDate()
-
         DropDownMenuStatus()
-
     }
     Row(
         modifier = Modifier
@@ -34,7 +28,6 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom
     ) {
-
         ClearButton()
         AddButton(viewModel,
             backHome = {
