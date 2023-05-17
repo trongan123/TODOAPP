@@ -14,7 +14,7 @@ class Repository(application: Application) {
 
     suspend fun getItems(page: Int, pageSize: Int): Result<List<TodoItem>> {
         delay(2000L)
-        val list = mTodoItemDAO.resultlistTodoItem
+        val list = mTodoItemDAO.allListTodoItem
         val startingIndex = page * pageSize
 
         return if (startingIndex + pageSize <= list.size) {

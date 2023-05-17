@@ -1,7 +1,6 @@
 package com.example.todoapp
 
 import android.content.Intent
-import android.graphics.Paint.Style
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

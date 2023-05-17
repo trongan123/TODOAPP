@@ -181,23 +181,23 @@ class UpdateItemKotlinFragment : Fragment() {
     private fun validation(): Boolean {
         var check = true
         if (fragmentUpdateItemBinding!!.edttitle.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.tiltitle.error = "Field title can't empty"
+            fragmentUpdateItemBinding!!.edttitle.error = "Field title can't empty"
             check = false
         }
         if (fragmentUpdateItemBinding!!.edtdescription.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.tildescription.error = "Field description can't empty"
+            fragmentUpdateItemBinding!!.edtdescription.error = "Field description can't empty"
             check = false
         }
         if (fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.tilcreatedDate.error = "Field created date can't empty"
+            fragmentUpdateItemBinding!!.edtcreatedDate.error = "Field created date can't empty"
             check = false
         }
         if (fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.tilcompletedDate.error = "Field completed date can't empty"
+            fragmentUpdateItemBinding!!.edtcompletedDate.error = "Field completed date can't empty"
             check = false
         }
         if (fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.tilstatus.error = "Please choice a status"
+            fragmentUpdateItemBinding!!.dropdownstatus.error = "Please choice a status"
             check = false
         }
         if (!check) {
@@ -209,7 +209,7 @@ class UpdateItemKotlinFragment : Fragment() {
             .parse(fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim())
         if (credate != null) {
             if (credate > comdate) {
-                fragmentUpdateItemBinding!!.tilcompletedDate.error = "Completed date must be after created date"
+                fragmentUpdateItemBinding!!.edtcompletedDate.error = "Completed date must be after created date"
                 check = false
             }
         }

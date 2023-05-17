@@ -39,7 +39,6 @@ import java.util.TimeZone;
 
 public class MainBottomSheetFragment extends Fragment {
 
-
     private BottomSheetDialog bottomSheetDialog;
     private FragmentMainBottomSheetBinding fragmentMainBinding;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
@@ -69,7 +68,8 @@ public class MainBottomSheetFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         fragmentMainBinding.btnAdd.setOnClickListener(view1 ->
-            addItemBottomSheet(parentView)
+                //click button add to show bottom sheet add new item todo
+                addItemBottomSheet(parentView)
         );
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
@@ -114,9 +114,6 @@ public class MainBottomSheetFragment extends Fragment {
             bottomSheetDialog = new BottomSheetDialog(requireContext());
             bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
 
-            // BottomSheetBehavior
-            // bottomSheetDialog.cancel();
-
             updateBottomSheetLayoutBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME
                     | InputType.TYPE_DATETIME_VARIATION_DATE);
             updateBottomSheetLayoutBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME
@@ -131,7 +128,7 @@ public class MainBottomSheetFragment extends Fragment {
             if (datePickerCreated.isAdded()) {
                 return;
             }
-//        updateBottomSheetLayoutBinding.btnAdd.setEnabled(false);
+
             updateBottomSheetLayoutBinding.btnAdd.setOnClickListener(view1 -> {
                 try {
                     addItem();
@@ -140,9 +137,7 @@ public class MainBottomSheetFragment extends Fragment {
                 }
 
             });
-            updateBottomSheetLayoutBinding.btnclear.setOnClickListener(view12 -> {
-                clearText();
-            });
+            updateBottomSheetLayoutBinding.btnclear.setOnClickListener(view12 -> clearText());
 
             updateBottomSheetLayoutBinding.edtcreatedDate.setOnClickListener(view13 -> {
                 if (datePickerCreated.isAdded()) {
@@ -181,7 +176,7 @@ public class MainBottomSheetFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-
+    //show dialog to comfirm clear all item choiced
     private void clearItem() {
         new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Confirm Clear All")

@@ -24,10 +24,4 @@ class TabItemKotlinAdapter(fragmentActivity: FragmentActivity,todoItemViewModel:
     override fun getItemCount(): Int {
         return 3
     }
-
-
-
-
-
-
 }

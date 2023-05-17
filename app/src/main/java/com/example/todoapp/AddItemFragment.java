@@ -66,9 +66,7 @@ public class AddItemFragment extends Fragment {
                 throw new RuntimeException(e);
             }
         });
-        fragmentAddItemBinding.btnclear.setOnClickListener(view12 -> {
-            clearText();
-        });
+        fragmentAddItemBinding.btnclear.setOnClickListener(view2 -> clearText());
 
         fragmentAddItemBinding.edtcreatedDate.setOnClickListener(view13 -> {
             if (datePickerCreated.isAdded()) {
@@ -121,8 +119,6 @@ public class AddItemFragment extends Fragment {
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
-
-
             }
         });
         fragmentAddItemBinding.edtdescription.addTextChangedListener(new TextWatcher() {
@@ -234,7 +230,7 @@ public class AddItemFragment extends Fragment {
 
             todoItemViewModel.addItem(todoItem);
             Toast.makeText(getActivity(), "Add success", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getView()).navigate(R.id.mainFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
         }
     }
     private boolean checkvalidate(){
@@ -278,8 +274,7 @@ public class AddItemFragment extends Fragment {
             fragmentAddItemBinding.edtcompletedDate.setError("Field completed date can't empty");
             check = false;
         }
-        if (!fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
-        } else {
+        if (fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
             fragmentAddItemBinding.dropdownstatus.setError("Please choice a status");
             check = false;
         }

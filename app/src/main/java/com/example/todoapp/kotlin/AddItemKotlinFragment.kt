@@ -52,12 +52,9 @@ class AddItemKotlinFragment : Fragment() {
             }
         }
         fragmentAddItemBinding!!.btnclear.setOnClickListener {
-            fragmentAddItemBinding!!.edttitle.setText("")
-            this.fragmentAddItemBinding!!.edtdescription.setText("")
-            fragmentAddItemBinding!!.edtcreatedDate.setText("")
-            fragmentAddItemBinding!!.edtcompletedDate.setText("")
-            fragmentAddItemBinding!!.dropdownstatus.setText("", false)
+            clearText()
         }
+
         fragmentAddItemBinding!!.edtcreatedDate.setOnClickListener {
             if (datePickerCreated!!.isAdded) {
                 return@setOnClickListener
@@ -206,23 +203,23 @@ class AddItemKotlinFragment : Fragment() {
     private fun validation(): Boolean {
         var check = true
         if (fragmentAddItemBinding!!.edttitle.text.toString().trim().isEmpty()) {
-            fragmentAddItemBinding!!.tiltitle.error = "Field title can't empty"
+            fragmentAddItemBinding!!.edttitle.error = "Field title can't empty"
             check = false
         }
         if (fragmentAddItemBinding!!.edtdescription.text.toString().trim().isEmpty()) {
-            fragmentAddItemBinding!!.tildescription.error = "Field description can't empty"
+            fragmentAddItemBinding!!.edtdescription.error = "Field description can't empty"
             check = false
         }
         if (fragmentAddItemBinding!!.edtcreatedDate.text.toString().trim().isEmpty()) {
-            fragmentAddItemBinding!!.tilcreatedDate.error = "Field created date can't empty"
+            fragmentAddItemBinding!!.edtcreatedDate.error = "Field created date can't empty"
             check = false
         }
         if (fragmentAddItemBinding!!.edtcompletedDate.text.toString().trim().isEmpty()) {
-            fragmentAddItemBinding!!.tilcompletedDate.error = "Field completed date can't empty"
+            fragmentAddItemBinding!!.edtcompletedDate.error = "Field completed date can't empty"
             check = false
         }
         if (fragmentAddItemBinding!!.dropdownstatus.text.toString().trim().isEmpty()) {
-            fragmentAddItemBinding!!.tilstatus.error = "Please choice a status"
+            fragmentAddItemBinding!!.dropdownstatus.error = "Please choice a status"
             check = false
         }
         if (!check) {
@@ -291,6 +288,18 @@ class AddItemKotlinFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return mView
+    }
+    private fun clearText(){
+        fragmentAddItemBinding!!.edttitle.setText("")
+        fragmentAddItemBinding!!.edttitle.error = null
+        fragmentAddItemBinding!!.edtdescription.setText("")
+        fragmentAddItemBinding!!.edtdescription.error = null
+        fragmentAddItemBinding!!.edtcreatedDate.setText("")
+        fragmentAddItemBinding!!.edtcreatedDate.error = null
+        fragmentAddItemBinding!!.edtcompletedDate.setText("")
+        fragmentAddItemBinding!!.edtcompletedDate.error = null
+        fragmentAddItemBinding!!.dropdownstatus.setText("", false)
+        fragmentAddItemBinding!!.dropdownstatus.error = null
     }
 
 }

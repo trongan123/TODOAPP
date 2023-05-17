@@ -139,6 +139,5 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
         public LoadingViewHolder(@NonNull ItemLoadingBinding itemLoadingBinding) {
             super(itemLoadingBinding.getRoot());
         }
-
     }
 }

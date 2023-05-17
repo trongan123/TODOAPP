@@ -16,13 +16,13 @@ public interface TodoItemDAO {
     void insertTodoItem(TodoItem todoItem);
 
     @Query("SELECT * FROM todoItem WHERE title LIKE '%' || :key || '%'")
-    LiveData<List<TodoItem>> getlistTodoItem(String key);
+    LiveData<List<TodoItem>> getListTodoItem(String key);
 
     @Query("SELECT * FROM todoItem ")
-    List<TodoItem> getResultlistTodoItem();
+    List<TodoItem> getAllListTodoItem();
 
     @Query("SELECT * FROM todoItem WHERE status=:status AND title LIKE '%' || :key || '%'")
-    LiveData<List<TodoItem>> getlistTodoItemByStatus(String status,String key);
+    LiveData<List<TodoItem>> getListTodoItemByStatus(String status, String key);
 
     @Update
     void updateTodoItem(TodoItem item);

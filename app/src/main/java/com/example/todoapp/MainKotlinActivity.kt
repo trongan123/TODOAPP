@@ -1,7 +1,6 @@
 package com.example.todoapp
 
 import android.os.Bundle
-import android.transition.Fade
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController

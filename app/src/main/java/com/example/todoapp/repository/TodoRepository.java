@@ -21,12 +21,12 @@ public class TodoRepository {
     }
 
     public LiveData<List<TodoItem>> getAllList(String key) {
-        mTodoItems = mTodoItemDAO.getlistTodoItem(key);
+        mTodoItems = mTodoItemDAO.getListTodoItem(key);
         return mTodoItems;
     }
 
     public LiveData<List<TodoItem>> getlistTodoItemByStatus(String status, String key) {
-        mTodoItems = mTodoItemDAO.getlistTodoItemByStatus(status, key);
+        mTodoItems = mTodoItemDAO.getListTodoItemByStatus(status, key);
         return mTodoItems;
     }
 

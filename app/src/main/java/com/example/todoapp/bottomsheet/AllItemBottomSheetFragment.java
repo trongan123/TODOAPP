@@ -29,7 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -111,6 +110,7 @@ public class AllItemBottomSheetFragment extends Fragment {
         rcvItem.setAdapter(todoItemAdapter);
     }
 
+    //method create new bottom sheet
     private void setBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());

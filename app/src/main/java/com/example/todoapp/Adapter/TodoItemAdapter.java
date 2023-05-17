@@ -18,6 +18,7 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHolder> {
 
@@ -36,7 +37,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     public void setClickListenner(IClickItemToDo iClickItem) {
         this.iClickItem = iClickItem;
     }
-
 
     public TodoItemAdapter(@NonNull DiffUtil.ItemCallback<TodoItem> diffCallback, TodoItemViewModel todoItemViewModel) {
         super(diffCallback);
@@ -85,7 +85,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             }
 
             // set date to item
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
 
 
@@ -99,6 +99,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         }
     }
 
+    //method set status for check box
     private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id) {
         if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
             todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(

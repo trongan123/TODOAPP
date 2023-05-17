@@ -4,7 +4,6 @@ package com.example.todoapp;
 import static androidx.navigation.ui.NavigationUI.setupActionBarWithNavController;
 
 import android.os.Bundle;
-import android.transition.Fade;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
