@@ -15,7 +15,7 @@ public class TabItemBottomSheetAdapter  extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0 :
-                //Create net fragment for tab
+                //Create new fragment for tab
                 return new AllItemBottomSheetFragment(todoItemViewModel,1);
             case 1 :
                 return new AllItemBottomSheetFragment(todoItemViewModel,2);

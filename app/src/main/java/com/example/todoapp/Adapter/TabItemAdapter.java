@@ -18,7 +18,7 @@ public class TabItemAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0 :
-                //Create net fragment for tab
+                //Create new fragment for tab
                 return new AllItemFragment(todoItemViewModel);
             case 1 :
                 return new PendingItemFragment(todoItemViewModel);
