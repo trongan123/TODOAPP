@@ -15,7 +15,7 @@ import java.util.List;
 public class TodoItemViewModel extends AndroidViewModel {
 
     private final TodoRepository mRepository;
-    private LiveData<List<TodoItem>> mTodoItems;
+    private LiveData<List<TodoItem>> todoItems;
     private TodoItem todoItem;
     public MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
     public List<Integer> clearItem = new ArrayList<>();
@@ -31,8 +31,8 @@ public class TodoItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<TodoItem>> getAllList(String key) {
-        mTodoItems = mRepository.getAllList(key);
-        return mTodoItems;
+        todoItems = mRepository.getAllList(key);
+        return todoItems;
     }
 
     public MutableLiveData<String> getStringMutableLiveData() {
@@ -44,9 +44,9 @@ public class TodoItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<TodoItem>> getPendingList() {
-        mTodoItems = mRepository.getlistTodoItemByStatus("pending", stringMutableLiveData.getValue());
+        todoItems = mRepository.getlistTodoItemByStatus("pending", stringMutableLiveData.getValue());
 
-        return mTodoItems;
+        return todoItems;
     }
 
     public void addItem(TodoItem todoItem) {
@@ -54,8 +54,8 @@ public class TodoItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<TodoItem>> getCompletedList() {
-        mTodoItems = mRepository.getlistTodoItemByStatus("completed", stringMutableLiveData.getValue());
-        return mTodoItems;
+        todoItems = mRepository.getlistTodoItemByStatus("completed", stringMutableLiveData.getValue());
+        return todoItems;
     }
 
     public TodoItem getTodoItem() {
