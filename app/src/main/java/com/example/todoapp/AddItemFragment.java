@@ -49,7 +49,6 @@ public class AddItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(getActivity(),
@@ -68,11 +67,7 @@ public class AddItemFragment extends Fragment {
             }
         });
         fragmentAddItemBinding.btnclear.setOnClickListener(view12 -> {
-            fragmentAddItemBinding.edttitle.setText("");
-            fragmentAddItemBinding.edtdescription.setText("");
-            fragmentAddItemBinding.edtcreatedDate.setText("");
-            fragmentAddItemBinding.edtcompletedDate.setText("");
-            fragmentAddItemBinding.dropdownstatus.setText("", false);
+            clearText();
         });
 
         fragmentAddItemBinding.edtcreatedDate.setOnClickListener(view13 -> {
@@ -120,9 +115,9 @@ public class AddItemFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.tiltitle.setError("Field title can't empty");
+                    fragmentAddItemBinding.edttitle.setError("Field title can't empty");
                 } else {
-                    fragmentAddItemBinding.tiltitle.setError(null);
+                    fragmentAddItemBinding.edttitle.setError(null);
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
@@ -144,9 +139,9 @@ public class AddItemFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.tildescription.setError("Field description can't empty");
+                    fragmentAddItemBinding.edtdescription.setError("Field description can't empty");
                 } else {
-                    fragmentAddItemBinding.tildescription.setError(null);
+                    fragmentAddItemBinding.edtdescription.setError(null);
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
@@ -166,9 +161,9 @@ public class AddItemFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.tilcreatedDate.setError("Field created date can't empty");
+                    fragmentAddItemBinding.edtcreatedDate.setError("Field created date can't empty");
                 } else {
-                    fragmentAddItemBinding.tilcreatedDate.setError(null);
+                    fragmentAddItemBinding.edtcreatedDate.setError(null);
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
@@ -188,9 +183,9 @@ public class AddItemFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.tilcompletedDate.setError("Field completed date can't empty");
+                    fragmentAddItemBinding.edtcompletedDate.setError("Field completed date can't empty");
                 } else {
-                    fragmentAddItemBinding.tilcompletedDate.setError(null);
+                    fragmentAddItemBinding.edtcompletedDate.setError(null);
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
@@ -210,9 +205,9 @@ public class AddItemFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.tilstatus.setError("Please choice a status");
+                    fragmentAddItemBinding.dropdownstatus.setError("Please choice a status");
                 } else {
-                    fragmentAddItemBinding.tilstatus.setError(null);
+                    fragmentAddItemBinding.dropdownstatus.setError(null);
                 }
                 boolean check = checkvalidate();
                 fragmentAddItemBinding.btnAdd.setEnabled(check);
@@ -268,37 +263,36 @@ public class AddItemFragment extends Fragment {
         boolean check = true;
 
         if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.tiltitle.setError("Field title can't empty");
+            fragmentAddItemBinding.edttitle.setError("Field title can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.tildescription.setError("Field description can't empty");
+            fragmentAddItemBinding.edtdescription.setError("Field description can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.tilcreatedDate.setError("Field created date can't empty");
+            fragmentAddItemBinding.edtcreatedDate.setError("Field created date can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.tilcompletedDate.setError("Field completed date can't empty");
+            fragmentAddItemBinding.edtcompletedDate.setError("Field completed date can't empty");
             check = false;
         }
         if (!fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
         } else {
-            fragmentAddItemBinding.tilstatus.setError("Please choice a status");
+            fragmentAddItemBinding.dropdownstatus.setError("Please choice a status");
             check = false;
         }
         if (!check) {
             return false;
         }
-
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        Date credate = new SimpleDateFormat("yyyy-M M-dd", Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtcreatedDate.getText().toString().trim());
         Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
-            fragmentAddItemBinding.tilcompletedDate.setError("Completed date must be after created date");
+            fragmentAddItemBinding.edtcompletedDate.setError("Completed date must be after created date");
             check = false;
         }
         return check;
@@ -327,5 +321,18 @@ public class AddItemFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return mView;
+    }
+
+    private void clearText() {
+        fragmentAddItemBinding.edttitle.setText("");
+        fragmentAddItemBinding.edttitle.setError(null);
+        fragmentAddItemBinding.edtdescription.setText("");
+        fragmentAddItemBinding.edtdescription.setError(null);
+        fragmentAddItemBinding.edtcreatedDate.setText("");
+        fragmentAddItemBinding.edtcreatedDate.setError(null);
+        fragmentAddItemBinding.edtcompletedDate.setText("");
+        fragmentAddItemBinding.edtcompletedDate.setError(null);
+        fragmentAddItemBinding.dropdownstatus.setText("", false);
+        fragmentAddItemBinding.dropdownstatus.setError(null);
     }
 }

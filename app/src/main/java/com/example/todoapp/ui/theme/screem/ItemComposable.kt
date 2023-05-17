@@ -52,17 +52,17 @@ var createdDateItem: String = ""
 var completedDateItem: String = ""
 var statusItem: String = ""
 
-var errordescriptionItem: String = ""
-var errorcreatedDateItem: String = ""
-var errorcompletedDateItem: String = ""
-var errorstatusItem: String = ""
+var errorDescriptionItem: String = ""
+var errorCreatedDateItem: String = ""
+var errorCompletedDateItem: String = ""
+var errorStatusItem: String = ""
 
 
 var todoItem: TodoItem = TodoItem()
 
 data class AppListTodo(val todolist: List<TodoItem>)
 
-val localListTodo = compositionLocalOf { AppListTodo(todolist = ArrayList()) }
+val localListTodos = compositionLocalOf { AppListTodo(todolist = ArrayList()) }
 
 var checkValidate = false
 
@@ -98,7 +98,7 @@ fun TextDescription() {
         mutableStateOf(descriptionItem)
     }
     var error by remember {
-        mutableStateOf(errordescriptionItem)
+        mutableStateOf(errorDescriptionItem)
     }
     OutlinedTextField(
         value = description,
@@ -126,7 +126,7 @@ fun TextCreatedDate() {
         mutableStateOf(createdDateItem)
     }
     var error by remember {
-        mutableStateOf(errorcreatedDateItem)
+        mutableStateOf(errorCreatedDateItem)
     }
     CalendarDialog(
         state = calendarState,
@@ -168,7 +168,7 @@ fun TextCompletedDate() {
     }
     val calendarState = rememberSheetState()
     var error by remember {
-        mutableStateOf(errorcompletedDateItem)
+        mutableStateOf(errorCompletedDateItem)
     }
     CalendarDialog(
         state = calendarState,
@@ -348,22 +348,22 @@ fun checkValidate() {
     if (descriptionItem.isEmpty()) {
         checkValidate = false
     } else {
-        errordescriptionItem = ""
+        errorDescriptionItem = ""
     }
     if (createdDateItem.isEmpty()) {
         checkValidate = false
     } else {
-        errorcreatedDateItem = ""
+        errorCreatedDateItem = ""
     }
     if (completedDateItem.isEmpty()) {
         checkValidate = false
     } else {
-        errorcompletedDateItem = ""
+        errorCompletedDateItem = ""
     }
     if (statusItem.isEmpty()) {
         checkValidate = false
     } else {
-        errorstatusItem = ""
+        errorStatusItem = ""
     }
 }
 
@@ -422,7 +422,7 @@ fun DropDownMenuStatus() {
     val suggestions = listOf("pending", "completed")
     var selectedText by remember { mutableStateOf(statusItem) }
     val error by remember {
-        mutableStateOf(errorstatusItem)
+        mutableStateOf(errorStatusItem)
     }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 

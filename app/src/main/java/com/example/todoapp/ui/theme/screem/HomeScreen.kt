@@ -24,7 +24,7 @@ fun HomeScreen(
                 items = item as ArrayList<TodoItem>
             }
     }
-    CompositionLocalProvider(localListTodo provides AppListTodo(todolist =items)) {
+    CompositionLocalProvider(localListTodos provides AppListTodo(todolist =items)) {
         Column {
             TabScreen(openAddItemScreen = {
                 openAddItemScreen()

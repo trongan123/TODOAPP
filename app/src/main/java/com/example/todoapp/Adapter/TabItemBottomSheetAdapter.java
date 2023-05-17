@@ -5,35 +5,33 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.todoapp.AllItemFragment;
-import com.example.todoapp.CompletedItemFragment;
-import com.example.todoapp.PendingItemFragment;
+import com.example.todoapp.bottomsheet.AllItemBottomSheetFragment;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 
-public class TabItemAdapter extends FragmentStateAdapter {
+public class TabItemBottomSheetAdapter  extends FragmentStateAdapter {
     private final TodoItemViewModel todoItemViewModel;
-
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         switch (position){
             case 0 :
                 //Create net fragment for tab
-                return new AllItemFragment(todoItemViewModel);
+                return new AllItemBottomSheetFragment(todoItemViewModel,1);
             case 1 :
-                return new PendingItemFragment(todoItemViewModel);
+                return new AllItemBottomSheetFragment(todoItemViewModel,2);
             default:
-                return new CompletedItemFragment(todoItemViewModel);
+                return new AllItemBottomSheetFragment(todoItemViewModel,3);
         }
     }
-
     @Override
     public int getItemCount() {
         return 3;
     }
 
-    public TabItemAdapter(@NonNull FragmentActivity fragmentActivity, TodoItemViewModel todoItemViewModel) {
+    public TabItemBottomSheetAdapter(@NonNull FragmentActivity fragmentActivity, TodoItemViewModel todoItemViewModel) {
         super(fragmentActivity);
         this.todoItemViewModel = todoItemViewModel;
     }
 }
+
+

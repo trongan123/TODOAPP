@@ -29,8 +29,8 @@ public class PendingItemFragment extends Fragment {
     private final TodoItemViewModel todoItemViewModel;
     private FragmentPendingItemBinding fragmentPendingItemBinding;
     private TodoItemAdapter todoItemAdapter;
-    private List<TodoItem> todoItemList;
-    private List<TodoItem> todoItemload;
+    private List<TodoItem> todoItems;
+    private List<TodoItem> todoItemLoads;
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
@@ -60,7 +60,7 @@ public class PendingItemFragment extends Fragment {
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
                     // Update item to fragment
-                    todoItemList = items;
+                    todoItems = items;
                     currentPage = 0;
                     isLastPage = false;
                     if (items.size() % 20 == 0) {
@@ -91,7 +91,7 @@ public class PendingItemFragment extends Fragment {
                 currentPage += 1;
                 todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
                     // Update item to fragment
-                    todoItemList = items;
+                    todoItems = items;
                     if (items.size() % 20 == 0) {
                         totalPage = (items.size() / 20);
                     } else {
@@ -117,18 +117,18 @@ public class PendingItemFragment extends Fragment {
         new Handler().postDelayed(() -> {
 
             List<TodoItem> list = new ArrayList<>();
-            if (todoItemList.size() > 20) {
-                list = todoItemList.subList(startitem, enditem);
+            if (todoItems.size() > 20) {
+                list = todoItems.subList(startitem, enditem);
 
                 startitem = enditem;
-                if ((enditem + 20) < todoItemList.size()) {
+                if ((enditem + 20) < todoItems.size()) {
                     enditem += 20;
                 } else {
-                    enditem = todoItemList.size();
+                    enditem = todoItems.size();
                 }
             }
             todoItemAdapter.removeFooterLoading();
-            todoItemload.addAll(list);
+            todoItemLoads.addAll(list);
             todoItemAdapter.notifyDataSetChanged();
             isLoading = false;
             if (currentPage < totalPage) {
@@ -166,16 +166,16 @@ public class PendingItemFragment extends Fragment {
     private void setFirstData() {
         startitem = 0;
         enditem = 20;
-        if (todoItemList.size() > 20) {
-            todoItemload = todoItemList.subList(startitem, enditem);
+        if (todoItems.size() > 20) {
+            todoItemLoads = todoItems.subList(startitem, enditem);
             startitem = enditem;
-            if ((enditem + 20) < todoItemList.size()) {
+            if ((enditem + 20) < todoItems.size()) {
                 enditem += 20;
             }
         } else {
-            todoItemload = todoItemList;
+            todoItemLoads = todoItems;
         }
-        todoItemAdapter.submitList(todoItemload);
+        todoItemAdapter.submitList(todoItemLoads);
         if (currentPage < totalPage) {
             todoItemAdapter.addFooterLoading();
         } else {

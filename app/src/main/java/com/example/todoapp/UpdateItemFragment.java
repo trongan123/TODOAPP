@@ -46,21 +46,13 @@ public class UpdateItemFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
 
-        String[] type = new String[]{"pending", "completed"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(getActivity(),
-                        R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-                        type);
-        fragmentUpdateItemBinding.dropdownstatus.setAdapter(adapter);
-
         initUi();
+
         fragmentUpdateItemBinding.btnupdate.setOnClickListener(view1 -> {
             try {
                 updateItem();
-
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -92,13 +84,7 @@ public class UpdateItemFragment extends Fragment {
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
         fragmentUpdateItemBinding.setTodoItemViewModel(todoItemViewModel);
 
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
 
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
         return mView;
     }
 
@@ -150,10 +136,18 @@ public class UpdateItemFragment extends Fragment {
                 })
                 .setNegativeButton("No", null)
                 .show();
-        Toast.makeText(getActivity(), "Delete success", Toast.LENGTH_SHORT).show();
+
     }
 
     private void initUi() {
+        datePickerCreated = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
+
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
+
         assert getArguments() != null;
         todoItem = (TodoItem) getArguments().getSerializable("object_TodoItem");
 
@@ -168,6 +162,13 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.edtcompletedDate.setText(dateFormat.format(todoItem.getCompletedDate()));
             fragmentUpdateItemBinding.dropdownstatus.setText(todoItem.getStatus(), false);
         }
+        String[] type = new String[]{"pending", "completed"};
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(getActivity(),
+                        R.layout.dropdown_menu_popup_item, R.id.txtstyle,
+                        type);
+        fragmentUpdateItemBinding.dropdownstatus.setAdapter(adapter);
+
         fragmentUpdateItemBinding.edtcreatedDate.setOnClickListener(view -> {
             datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
@@ -194,23 +195,23 @@ public class UpdateItemFragment extends Fragment {
         boolean check = true;
 
         if (Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding.tiltitle.setError("Field title can't empty");
+            fragmentUpdateItemBinding.edttitle.setError("Field title can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding.tildescription.setError("Field description can't empty");
+            fragmentUpdateItemBinding.edtdescription.setError("Field description can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentUpdateItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding.tilcreatedDate.setError("Field created date can't empty");
+            fragmentUpdateItemBinding.edtcreatedDate.setError("Field created date can't empty");
             check = false;
         }
         if (Objects.requireNonNull(fragmentUpdateItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding.tilcompletedDate.setError("Field completed date can't empty");
+            fragmentUpdateItemBinding.edtcompletedDate.setError("Field completed date can't empty");
             check = false;
         }
         if (fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding.tilstatus.setError("Please choice a status");
+            fragmentUpdateItemBinding.dropdownstatus.setError("Please choice a status");
             check = false;
         }
         if (!check) {
@@ -222,7 +223,7 @@ public class UpdateItemFragment extends Fragment {
                 .parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
-            fragmentUpdateItemBinding.tilcompletedDate.setError("Completed date must be after created date");
+            fragmentUpdateItemBinding.edtcompletedDate.setError("Completed date must be after created date");
             check = false;
         }
         return check;

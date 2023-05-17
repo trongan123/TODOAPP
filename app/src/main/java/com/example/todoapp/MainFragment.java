@@ -85,7 +85,8 @@ public class MainFragment extends Fragment {
                             return false;
                         });
 
-        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs ->
+                fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
         fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
     }
 
