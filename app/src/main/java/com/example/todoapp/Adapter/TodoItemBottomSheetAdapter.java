@@ -110,8 +110,6 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-
-
         return TYPE_ITEM;
     }
 
@@ -143,7 +141,4 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
         }
 
     }
-
-
-
 }
