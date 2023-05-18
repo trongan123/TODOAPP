@@ -26,8 +26,8 @@ import java.util.List;
 
 public class AllItemFragment extends Fragment {
 
-    private FragmentAllItemBinding fragmentAllItemBinding;
     private final TodoItemViewModel todoItemViewModel;
+    private FragmentAllItemBinding fragmentAllItemBinding;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItems;
     private List<TodoItem> todoItemLoads;
@@ -62,7 +62,6 @@ public class AllItemFragment extends Fragment {
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
 
-
         //set data to recyclerview
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(), items -> {
             // Update item to fragment
@@ -80,7 +79,7 @@ public class AllItemFragment extends Fragment {
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void DetaiItem(TodoItem todoItem, CardView cardView) {
-                clickDetailItem(todoItem,cardView);
+                clickDetailItem(todoItem, cardView);
             }
 
             @Override
@@ -90,7 +89,6 @@ public class AllItemFragment extends Fragment {
             }
         });
         rcvItem.setAdapter(todoItemAdapter);
-
 
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -125,18 +123,15 @@ public class AllItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        bundle.putString("transition",cardView.getTransitionName() );
+        bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView,cardView.getTransitionName())
-                .build();
-        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentAllItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
         View mView = fragmentAllItemBinding.getRoot();
         fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
@@ -147,7 +142,6 @@ public class AllItemFragment extends Fragment {
 
     private void loadNextPage() {
         new Handler().postDelayed(() -> {
-
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
                 list = todoItems.subList(startitem, enditem);
@@ -190,6 +184,4 @@ public class AllItemFragment extends Fragment {
             isLastPage = true;
         }
     }
-
-
 }

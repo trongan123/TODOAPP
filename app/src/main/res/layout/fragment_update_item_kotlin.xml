@@ -17,8 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:transitionName="update_fragment"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:transitionName="update_fragment">
 
         <LinearLayout
             android:id="@+id/activity_main"

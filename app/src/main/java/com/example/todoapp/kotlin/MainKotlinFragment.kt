@@ -33,22 +33,21 @@ class MainKotlinFragment : Fragment() {
         //set shared element back for recylerview
         postponeEnterTransition()
         val parentView = view.parent as ViewGroup
-        parentView.viewTreeObserver
-            .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    parentView.viewTreeObserver.removeOnPreDrawListener(this)
-                    startPostponedEnterTransition()
-                    return true
-                }
-            })
+        parentView.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                parentView.viewTreeObserver.removeOnPreDrawListener(this)
+                startPostponedEnterTransition()
+                return true
+            }
+        })
         super.onViewCreated(view, savedInstanceState)
 
 
         super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener {
             val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
-                .addSharedElement(fragmentMainBinding!!.btnAdd, "add_fragment")
-                .build()
+                .addSharedElement(fragmentMainBinding!!.btnAdd, "add_fragment").build()
             findNavController(it).navigate(R.id.addItemKotlinFragment, null, null, extras)
         }
         val viewPager2 = requireView().findViewById<ViewPager2>(R.id.vpg)
@@ -70,40 +69,36 @@ class MainKotlinFragment : Fragment() {
         tabLayoutMediator.attach()
 
 
-        fragmentMainBinding!!.svSearch
-            .editText
-            .setOnEditorActionListener { _, _, _ ->
-                fragmentMainBinding!!.searchBar.text = fragmentMainBinding!!.svSearch.text
-                fragmentMainBinding!!.svSearch.hide()
-                todoItemViewModel!!.stringMutableLiveData
-                    .postValue(fragmentMainBinding!!.svSearch.text.toString())
-                false
-            }
+        fragmentMainBinding!!.svSearch.editText.setOnEditorActionListener { _, _, _ ->
+            fragmentMainBinding!!.searchBar.text = fragmentMainBinding!!.svSearch.text
+            fragmentMainBinding!!.svSearch.hide()
+            todoItemViewModel!!.stringMutableLiveData.postValue(fragmentMainBinding!!.svSearch.text.toString())
+            false
+        }
 
-        todoItemViewModel!!.getListMutableLiveDataCheck()
-            .observe(requireActivity()
-            ) { value -> fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0 }
+        todoItemViewModel!!.getListMutableLiveDataCheck().observe(
+            requireActivity()
+        ) { value -> fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0 }
 
         fragmentMainBinding!!.btnclearall.setOnClickListener { clearItem() }
     }
+
     private fun clearItem() {
-        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
-            .setTitle("Confirm Clear All")
-            .setMessage("Are you sure?")
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.ThemeOverlay_App_MaterialAlertDialog
+        ).setTitle("Confirm Clear All").setMessage("Are you sure?")
             .setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                 todoItemViewModel!!.clearItem()
                 Toast.makeText(activity, "Clear successfully", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("No", null)
-            .show()
+            }.setNegativeButton("No", null).show()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        fragmentMainBinding =  FragmentMainKotlinBinding.inflate(inflater,container,false)
+        fragmentMainBinding = FragmentMainKotlinBinding.inflate(inflater, container, false)
         mView = fragmentMainBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         return mView

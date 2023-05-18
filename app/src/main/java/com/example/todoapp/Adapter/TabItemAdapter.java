@@ -13,14 +13,19 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 public class TabItemAdapter extends FragmentStateAdapter {
     private final TodoItemViewModel todoItemViewModel;
 
+    public TabItemAdapter(@NonNull FragmentActivity fragmentActivity, TodoItemViewModel todoItemViewModel) {
+        super(fragmentActivity);
+        this.todoItemViewModel = todoItemViewModel;
+    }
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
-            case 0 :
+        switch (position) {
+            case 0:
                 //Create new fragment for tab
                 return new AllItemFragment(todoItemViewModel);
-            case 1 :
+            case 1:
                 return new PendingItemFragment(todoItemViewModel);
             default:
                 return new CompletedItemFragment(todoItemViewModel);
@@ -30,10 +35,5 @@ public class TabItemAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return 3;
-    }
-
-    public TabItemAdapter(@NonNull FragmentActivity fragmentActivity, TodoItemViewModel todoItemViewModel) {
-        super(fragmentActivity);
-        this.todoItemViewModel = todoItemViewModel;
     }
 }

@@ -21,23 +21,16 @@ import java.util.Locale;
 
 public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHolder> {
     private static final int TYPE_ITEM = 1;
-    private TodoItemBottomSheetAdapter.IClickItemToDo iClickItem;
     private final TodoItemViewModel todoItemViewModel;
-
-    public interface IClickItemToDo {
-        void DetaiItem(TodoItem todoItem);
-
-        void clearItem(TodoItem todoItem, long id, boolean check);
-    }
-
-    public void setClickListenner(IClickItemToDo iClickItem) {
-        this.iClickItem = iClickItem;
-    }
-
+    private TodoItemBottomSheetAdapter.IClickItemToDo iClickItem;
 
     public TodoItemBottomSheetAdapter(@NonNull DiffUtil.ItemCallback<TodoItem> diffCallback, TodoItemViewModel todoItemViewModel) {
         super(diffCallback);
         this.todoItemViewModel = todoItemViewModel;
+    }
+
+    public void setClickListenner(IClickItemToDo iClickItem) {
+        this.iClickItem = iClickItem;
     }
 
     @Override
@@ -70,14 +63,10 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
             if (checkItem != null) {
                 if (checkItem.contains(id)) {
                     todoItemViewHolder.itemTodoBinding.txttitle.setChecked(true);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                            todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-                    );
+                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     todoItemViewHolder.itemTodoBinding.txttitle.setChecked(false);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                            todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-                    );
+                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
 
@@ -95,15 +84,11 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
 
     private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id) {
         if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-            );
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, true);
 
         } else {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-            );
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, false);
         }
     }
@@ -111,6 +96,12 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
     @Override
     public int getItemViewType(int position) {
         return TYPE_ITEM;
+    }
+
+    public interface IClickItemToDo {
+        void DetaiItem(TodoItem todoItem);
+
+        void clearItem(TodoItem todoItem, long id, boolean check);
     }
 
     public static class TodoItemDiff extends DiffUtil.ItemCallback<TodoItem> {

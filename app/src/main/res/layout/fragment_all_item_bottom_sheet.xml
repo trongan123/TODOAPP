@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    android:id="@+id/fragmentAllItem"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentAllItem">
 
     <data>
+
         <variable
             name="AllItemViewModel"
             type="com.example.todoapp.viewmodel.TodoItemViewModel" />
@@ -19,16 +18,16 @@
         <!-- TODO: Update blank fragment layout -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvTodoitem"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionGroup="true"
-            />
+            android:layout_marginTop="20dp"
+            android:transitionGroup="true" />
+
         <ProgressBar
             android:id="@+id/idPBLoading"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 </layout>

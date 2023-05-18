@@ -9,7 +9,7 @@
         android:id="@+id/mainFragment"
         android:name="com.example.todoapp.MainFragment"
         android:label="List To Do Item"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
@@ -21,7 +21,7 @@
         android:id="@+id/addItemFragment"
         android:name="com.example.todoapp.AddItemFragment"
         android:label="Add New To Do Item"
-        tools:layout="@layout/fragment_add_item" >
+        tools:layout="@layout/fragment_add_item">
         <action
             android:id="@+id/action_addItemFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -30,7 +30,7 @@
         android:id="@+id/updateItemFragment"
         android:name="com.example.todoapp.UpdateItemFragment"
         android:label="Update To Do Item"
-        tools:layout="@layout/fragment_update_item" >
+        tools:layout="@layout/fragment_update_item">
         <action
             android:id="@+id/action_updateItemFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

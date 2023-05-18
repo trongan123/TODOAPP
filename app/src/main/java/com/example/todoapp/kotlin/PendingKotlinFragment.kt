@@ -9,9 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import com.example.todoapp.R
 import com.example.todoapp.Adapter.TodoItemAdapterKotlin
+import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentPendingKotlinBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
@@ -32,7 +31,8 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        fragmentPendingKotlinBinding =  FragmentPendingKotlinBinding.inflate(inflater,container,false)
+        fragmentPendingKotlinBinding =
+            FragmentPendingKotlinBinding.inflate(inflater, container, false)
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         return fragmentPendingKotlinBinding!!.root
     }
@@ -48,7 +48,7 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
         rcvItem.layoutManager = linearLayoutManager
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         rcvItem.addItemDecoration(dividerItemDecoration)
-        todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it,requireView()) }
+        todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it, requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
         todoItemViewModel!!.getStringMutableLiveData()
             .observe(requireActivity()) {
@@ -66,15 +66,17 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
                     clickDetailItem(todoItem)
                 }
             }
+
             override fun clearItem(todoItem: TodoItem?, id: Long, check: Boolean) {
                 if (todoItem != null) {
-                    todoItemViewModel!!.setClearAll( todoItem.id, check)
+                    todoItemViewModel!!.setClearAll(todoItem.id, check)
                 }
                 todoItemViewModel!!.setCheckItem(id, check)
             }
         })
         rcvItem.adapter = todoItemAdapter
     }
+
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
         bundle.putSerializable("object_TodoItem", todoItem)

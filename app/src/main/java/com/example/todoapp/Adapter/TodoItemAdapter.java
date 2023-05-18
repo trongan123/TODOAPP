@@ -24,23 +24,17 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOADING = 2;
-    private IClickItemToDo iClickItem;
     private final TodoItemViewModel todoItemViewModel;
+    private IClickItemToDo iClickItem;
     private boolean isLoadingAdd;
-
-    public interface IClickItemToDo {
-        void DetaiItem(TodoItem todoItem, CardView cardView);
-
-        void clearItem(TodoItem todoItem, long id, boolean check);
-    }
-
-    public void setClickListenner(IClickItemToDo iClickItem) {
-        this.iClickItem = iClickItem;
-    }
 
     public TodoItemAdapter(@NonNull DiffUtil.ItemCallback<TodoItem> diffCallback, TodoItemViewModel todoItemViewModel) {
         super(diffCallback);
         this.todoItemViewModel = todoItemViewModel;
+    }
+
+    public void setClickListenner(IClickItemToDo iClickItem) {
+        this.iClickItem = iClickItem;
     }
 
     @Override
@@ -73,14 +67,10 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             if (checkItem != null) {
                 if (checkItem.contains(id)) {
                     todoItemViewHolder.itemTodoBinding.txttitle.setChecked(true);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                            todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-                    );
+                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     todoItemViewHolder.itemTodoBinding.txttitle.setChecked(false);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                            todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-                    );
+                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
 
@@ -102,15 +92,11 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     //method set status for check box
     private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id) {
         if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-            );
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, true);
 
         } else {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(
-                    todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
-            );
+            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, false);
         }
     }
@@ -124,6 +110,21 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         return TYPE_ITEM;
     }
 
+    public void addFooterLoading() {
+        isLoadingAdd = true;
+    }
+
+    public void removeFooterLoading() {
+        isLoadingAdd = false;
+
+    }
+
+    public interface IClickItemToDo {
+        void DetaiItem(TodoItem todoItem, CardView cardView);
+
+        void clearItem(TodoItem todoItem, long id, boolean check);
+    }
+
     public static class TodoItemDiff extends DiffUtil.ItemCallback<TodoItem> {
         @Override
         public boolean areItemsTheSame(@NonNull TodoItem oldItem, @NonNull TodoItem newItem) {
@@ -135,6 +136,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             return oldItem.getTitle().equals(newItem.getTitle());
         }
     }
+
     public static class TodoItemViewHoldel extends RecyclerView.ViewHolder {
         private final ItemTodoBinding itemTodoBinding;
 
@@ -149,15 +151,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         public LoadingViewHolder(@NonNull ItemLoadingBinding itemLoadingBinding) {
             super(itemLoadingBinding.getRoot());
         }
-
-    }
-
-    public void addFooterLoading() {
-        isLoadingAdd = true;
-    }
-
-    public void removeFooterLoading() {
-        isLoadingAdd = false;
 
     }
 

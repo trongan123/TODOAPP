@@ -17,6 +17,7 @@ class MainKotlinActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(this, navController)
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment?

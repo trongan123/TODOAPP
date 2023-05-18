@@ -37,14 +37,14 @@ import java.util.TimeZone;
 public class AllItemBottomSheetFragment extends Fragment {
 
     private final int TAP_NUMBER;
-    private FragmentAllItemBottomSheetBinding fragmentAllItemBinding;
     private final TodoItemViewModel todoItemViewModel;
+    MaterialAlertDialogBuilder materialAlertDialogBuilder;
+    private FragmentAllItemBottomSheetBinding fragmentAllItemBinding;
     private TodoItemBottomSheetAdapter todoItemAdapter;
     private BottomSheetDialog bottomSheetDialog;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
     private MaterialDatePicker datePickerCompleted;
     private MaterialDatePicker datePickerCreated;
-    MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
 
     public AllItemBottomSheetFragment(TodoItemViewModel todoItemViewModel, int TAP_NUMBER) {
@@ -76,21 +76,15 @@ public class AllItemBottomSheetFragment extends Fragment {
             switch (TAP_NUMBER) {
                 case 1:
                     //set data for tab all item
-                    todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(),
-                            items -> todoItemAdapter.submitList(items)
-                    );
+                    todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(), items -> todoItemAdapter.submitList(items));
                     break;
                 case 2:
                     //set data for tab pending item
-                    todoItemViewModel.getPendingList().observe(requireActivity(), items ->
-                            todoItemAdapter.submitList(items)
-                    );
+                    todoItemViewModel.getPendingList().observe(requireActivity(), items -> todoItemAdapter.submitList(items));
                     break;
                 case 3:
                     //set data for tab completed item
-                    todoItemViewModel.getCompletedList().observe(requireActivity(), items ->
-                            todoItemAdapter.submitList(items)
-                    );
+                    todoItemViewModel.getCompletedList().observe(requireActivity(), items -> todoItemAdapter.submitList(items));
                     break;
             }
         });
@@ -115,18 +109,11 @@ public class AllItemBottomSheetFragment extends Fragment {
         bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
         String[] type = new String[]{"pending", "completed"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(getActivity(),
-                        R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-                        type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
         updateBottomSheetLayoutBinding.dropdownstatus.setAdapter(adapter);
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         updateBottomSheetLayoutBinding.edtcreatedDate.setOnClickListener(view -> {
             datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
@@ -168,7 +155,6 @@ public class AllItemBottomSheetFragment extends Fragment {
         updateBottomSheetLayoutBinding.btnclear.setOnClickListener(view12 -> {
             try {
                 deleteItemTodo(todoItem);
-
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -179,8 +165,7 @@ public class AllItemBottomSheetFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentAllItemBinding = FragmentAllItemBottomSheetBinding.inflate(inflater, container, false);
 
         updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
@@ -202,16 +187,13 @@ public class AllItemBottomSheetFragment extends Fragment {
             updateBottomSheetLayoutBinding.edtcompletedDate.setText(dateFormat.format(item.getCompletedDate()));
             updateBottomSheetLayoutBinding.dropdownstatus.setText(item.getStatus(), false);
         }
-
     }
 
     private void deleteItemTodo(TodoItem todoItem) throws ParseException {
         String strtitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edttitle.getText()).toString().trim();
         String strDes = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtdescription.getText()).toString().trim();
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim());
         String strStt;
         strStt = updateBottomSheetLayoutBinding.dropdownstatus.getText().toString().trim();
 
@@ -223,10 +205,7 @@ public class AllItemBottomSheetFragment extends Fragment {
         todoItem.setStatus(strStt);
 
         if (materialAlertDialogBuilder == null) {
-            materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
-                    .setTitle("Confirm delete")
-                    .setMessage("Are you sure?")
-                    .setNegativeButton("No", null);
+            materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm delete").setMessage("Are you sure?").setNegativeButton("No", null);
         }
 
         materialAlertDialogBuilder.setPositiveButton("Yes", (dialogInterface, i) -> {
@@ -283,10 +262,8 @@ public class AllItemBottomSheetFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
             updateBottomSheetLayoutBinding.edtcompletedDate.setError("Completed date must be after created date");

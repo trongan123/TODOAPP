@@ -24,16 +24,13 @@ fun HomeScreen(
                 items = item as ArrayList<TodoItem>
             }
     }
-    CompositionLocalProvider(localListTodos provides AppListTodo(todolist =items)) {
+    CompositionLocalProvider(localListTodos provides AppListTodo(todolist = items)) {
         Column {
             TabScreen(openAddItemScreen = {
                 openAddItemScreen()
             }, openUpdateItemScreen = {
                 openUpdateItemScreen()
-            },
-                viewModel = viewModel,
-                owner = owner,
-                viewModelLoad = viewModelLoad
+            }, viewModel = viewModel, owner = owner, viewModelLoad = viewModelLoad
             )
         }
     }

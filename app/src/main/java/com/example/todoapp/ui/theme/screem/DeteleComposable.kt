@@ -14,26 +14,20 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DialogButton(
-    cornerRadiusPercent: Int = 26,
-    buttonColor: Color,
-    buttonText: String,
-    onDismiss: () -> Unit
+    cornerRadiusPercent: Int = 26, buttonColor: Color, buttonText: String, onDismiss: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .background(
-                color = buttonColor,
-                shape = RoundedCornerShape(percent = cornerRadiusPercent)
-            )
-            .clickable {
-                onDismiss()
-            }
-            .padding(horizontal = 16.dp, vertical = 6.dp)
-    ) {
+    Box(modifier = Modifier
+        .background(
+            color = buttonColor, shape = RoundedCornerShape(percent = cornerRadiusPercent)
+        )
+        .clickable {
+            onDismiss()
+        }
+        .padding(horizontal = 16.dp, vertical = 6.dp)) {
         Text(
             text = buttonText,
             color = Color.White,
             fontSize = 18.sp,
-            )
+        )
     }
 }

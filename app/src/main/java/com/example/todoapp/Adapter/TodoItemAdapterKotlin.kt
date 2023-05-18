@@ -17,7 +17,7 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
 
     private var iClickItem: IClickItemToDo? = null
     private var todoItemViewModel: TodoItemViewModel? = null
-    private var view: View?=null
+    private var view: View? = null
 
     init {
         this.todoItemViewModel = todoItemViewModel
@@ -34,19 +34,22 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHoldel {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_jetpack, parent, false)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_jetpack, parent, false)
         return TodoItemViewHoldel(view)
     }
+
     override fun getItemId(position: Int): Long {
         return currentList[position].id.toLong()
     }
+
     override fun onBindViewHolder(holder: TodoItemViewHoldel, position: Int) {
         val todoItem = getItem(position)
 
-        holder.myitem.i=todoItem
+        holder.myitem.i = todoItem
         holder.myitem.todoViewModel = todoItemViewModel
-        holder.myitem.view =view
-        holder.myitem.transitionName = "update_"+position
+        holder.myitem.view = view
+        holder.myitem.transitionName = "update_" + position
         holder.myitem.disposeComposition()
 
     }
@@ -65,9 +68,9 @@ class TodoItemAdapterKotlin(todoItemViewModel: TodoItemViewModel, view: View) :
         }
     }
 
-    class TodoItemViewHoldel(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class TodoItemViewHoldel(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var myitem: MyComposeView
+
         init {
             myitem = itemView.findViewById(R.id.myitem)
         }

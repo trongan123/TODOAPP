@@ -57,24 +57,23 @@ public class PendingItemFragment extends Fragment {
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                }));
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
+            // Update item to fragment
+            todoItems = items;
+            currentPage = 0;
+            isLastPage = false;
+            if (items.size() % 20 == 0) {
+                totalPage = (items.size() / 20);
+            } else {
+                totalPage = (items.size() / 20) + 1;
+            }
+            setFirstData();
+        }));
 
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void DetaiItem(TodoItem todoItem, CardView cardView) {
-                clickDetailItem(todoItem,cardView);
+                clickDetailItem(todoItem, cardView);
             }
 
             @Override
@@ -142,24 +141,19 @@ public class PendingItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        bundle.putString("transition",cardView.getTransitionName() );
+        bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView,cardView.getTransitionName())
-                .build();
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
 
-        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPendingItemBinding = FragmentPendingItemBinding.inflate(inflater, container, false);
         View mView = fragmentPendingItemBinding.getRoot();
-
         fragmentPendingItemBinding.setAllItemViewModel(todoItemViewModel);
-
         return mView;
     }
 

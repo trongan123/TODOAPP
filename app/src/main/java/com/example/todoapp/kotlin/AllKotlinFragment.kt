@@ -26,8 +26,7 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         fragmentAllItemBinding = FragmentAllKotlinBinding.inflate(inflater, container, false)
@@ -45,18 +44,17 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
         rcvItem.layoutManager = linearLayoutManager
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         rcvItem.addItemDecoration(dividerItemDecoration)
-        todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it,requireView()) }
+        todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it, requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
-        todoItemViewModel!!.getStringMutableLiveData()
-            .observe(requireActivity()) {
-                todoItemViewModel!!.getAllList(todoItemViewModel!!.getStringMutableLiveData().value)
-                    .observe(
-                        requireActivity()
-                    ) { items ->
-                        // Update item to fragment
-                        todoItemAdapter!!.submitList(items)
-                    }
-            }
+        todoItemViewModel!!.getStringMutableLiveData().observe(requireActivity()) {
+            todoItemViewModel!!.getAllList(todoItemViewModel!!.getStringMutableLiveData().value)
+                .observe(
+                    requireActivity()
+                ) { items ->
+                    // Update item to fragment
+                    todoItemAdapter!!.submitList(items)
+                }
+        }
         todoItemAdapter!!.setClickListenner(object : TodoItemAdapterKotlin.IClickItemToDo {
             override fun detaiItem(todoItem: TodoItem?) {
                 if (todoItem != null) {
@@ -66,13 +64,14 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
 
             override fun clearItem(todoItem: TodoItem?, id: Long, check: Boolean) {
                 if (todoItem != null) {
-                    todoItemViewModel!!.setClearAll( todoItem.id, check)
+                    todoItemViewModel!!.setClearAll(todoItem.id, check)
                 }
                 todoItemViewModel!!.setCheckItem(id, check)
             }
         })
         rcvItem.adapter = todoItemAdapter
     }
+
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
         bundle.putSerializable("object_TodoItem", todoItem)

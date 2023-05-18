@@ -36,11 +36,11 @@ import java.util.TimeZone;
 public class AddItemFragment extends Fragment {
 
 
+    private final TodoItem todoItem = new TodoItem();
     private FragmentAddItemBinding fragmentAddItemBinding;
     private TodoItemViewModel todoItemViewModel;
     private MaterialDatePicker<Long> datePickerCompleted;
     private MaterialDatePicker<Long> datePickerCreated;
-    private final TodoItem todoItem = new TodoItem();
 
     public AddItemFragment() {
     }
@@ -50,10 +50,7 @@ public class AddItemFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         String[] type = new String[]{"pending", "completed"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(getActivity(),
-                        R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-                        type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
         fragmentAddItemBinding.dropdownstatus.setAdapter(adapter);
         if (datePickerCreated.isAdded()) {
             return;
@@ -75,7 +72,7 @@ public class AddItemFragment extends Fragment {
             datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
             datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long) selection);
+                calendar.setTimeInMillis(selection);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = format.format(calendar.getTime());
                 fragmentAddItemBinding.edtcreatedDate.setText(formattedDate);
@@ -215,10 +212,8 @@ public class AddItemFragment extends Fragment {
         if (validation()) {
             String strtitle = Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim();
             String strDes = Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .parse(Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .parse(Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim());
+            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim());
+            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim());
             String strStt = fragmentAddItemBinding.dropdownstatus.getText().toString().trim();
 
             //update database
@@ -233,28 +228,25 @@ public class AddItemFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
         }
     }
-    private boolean checkvalidate(){
-        boolean check = !Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText())
-                .toString().trim().isEmpty();
 
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText())
-                .toString().trim().isEmpty()) {
+    private boolean checkvalidate() {
+        boolean check = !Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty();
+
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
             check = false;
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText())
-                .toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
             check = false;
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText())
-                .toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
             check = false;
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText())
-                .toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
             check = false;
         }
         return check;
     }
+
     private boolean validation() throws ParseException {
         boolean check = true;
 
@@ -281,10 +273,8 @@ public class AddItemFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date credate = new SimpleDateFormat("yyyy-M M-dd", Locale.getDefault())
-                .parse(fragmentAddItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(fragmentAddItemBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-M M-dd", Locale.getDefault()).parse(fragmentAddItemBinding.edtcreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentAddItemBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
             fragmentAddItemBinding.edtcompletedDate.setError("Completed date must be after created date");
@@ -292,9 +282,9 @@ public class AddItemFragment extends Fragment {
         }
         return check;
     }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setSharedElementEnterTransition(new ChangeBounds());
         fragmentAddItemBinding = FragmentAddItemBinding.inflate(inflater, container, false);
         View mView = fragmentAddItemBinding.getRoot();
@@ -302,17 +292,11 @@ public class AddItemFragment extends Fragment {
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
         fragmentAddItemBinding.setTodoItemViewModel(todoItemViewModel);
 
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
-        fragmentAddItemBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME
-                | InputType.TYPE_DATETIME_VARIATION_DATE);
-        fragmentAddItemBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME
-                | InputType.TYPE_DATETIME_VARIATION_DATE);
+        fragmentAddItemBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+        fragmentAddItemBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
 
         // Inflate the layout for this fragment
         return mView;

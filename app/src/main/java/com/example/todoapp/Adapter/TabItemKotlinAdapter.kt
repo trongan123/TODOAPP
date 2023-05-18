@@ -9,7 +9,10 @@ import com.example.todoapp.kotlin.PendingKotlinFragment
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
 //Class adapter kotlen
-class TabItemKotlinAdapter(fragmentActivity: FragmentActivity,todoItemViewModel: TodoItemViewModel) : FragmentStateAdapter(fragmentActivity){
+class TabItemKotlinAdapter(
+    fragmentActivity: FragmentActivity,
+    todoItemViewModel: TodoItemViewModel
+) : FragmentStateAdapter(fragmentActivity) {
 
     private var todoItemViewModel: TodoItemViewModel? = todoItemViewModel
 

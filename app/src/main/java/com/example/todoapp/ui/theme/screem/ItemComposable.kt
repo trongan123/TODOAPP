@@ -43,7 +43,6 @@ import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 var titleItem: String = ""
@@ -56,7 +55,6 @@ var errorDescriptionItem: String = ""
 var errorCreatedDateItem: String = ""
 var errorCompletedDateItem: String = ""
 var errorStatusItem: String = ""
-
 
 var todoItem: TodoItem = TodoItem()
 
@@ -128,18 +126,15 @@ fun TextCreatedDate() {
     var error by remember {
         mutableStateOf(errorCreatedDateItem)
     }
-    CalendarDialog(
-        state = calendarState,
-        selection = CalendarSelection.Date { date ->
-            createdDate = date.toString()
-            createdDateItem = createdDate
-            error = if (createdDate == "") {
-                "Field created date can't empty"
-            } else {
-                ""
-            }
+    CalendarDialog(state = calendarState, selection = CalendarSelection.Date { date ->
+        createdDate = date.toString()
+        createdDateItem = createdDate
+        error = if (createdDate == "") {
+            "Field created date can't empty"
+        } else {
+            ""
         }
-    )
+    })
     OutlinedTextField(
         value = createdDate,
         onValueChange = {
@@ -148,8 +143,7 @@ fun TextCreatedDate() {
         enabled = false,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                onClick = { calendarState.show() }),
+            .clickable(onClick = { calendarState.show() }),
         placeholder = { Text("CreatedDate") },
         label = { Text("CreatedDate") },
         colors = TextFieldDefaults.textFieldColors(
@@ -170,18 +164,15 @@ fun TextCompletedDate() {
     var error by remember {
         mutableStateOf(errorCompletedDateItem)
     }
-    CalendarDialog(
-        state = calendarState,
-        selection = CalendarSelection.Date { date ->
-            completedDate = date.toString()
-            completedDateItem = completedDate
-            error = if (completedDate == "") {
-                "Field completed date can't empty"
-            } else {
-                ""
-            }
+    CalendarDialog(state = calendarState, selection = CalendarSelection.Date { date ->
+        completedDate = date.toString()
+        completedDateItem = completedDate
+        error = if (completedDate == "") {
+            "Field completed date can't empty"
+        } else {
+            ""
         }
-    )
+    })
     OutlinedTextField(
         value = completedDate,
         onValueChange = {
@@ -190,8 +181,7 @@ fun TextCompletedDate() {
         enabled = false,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                onClick = { calendarState.show() }),
+            .clickable(onClick = { calendarState.show() }),
 
         placeholder = { Text("CompletedDate") },
         label = { Text("CompletedDate") },
@@ -224,10 +214,7 @@ fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
                 viewModel.addItem(todoItem)
                 backHome()
             }
-        },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .padding(bottom = 100.dp)
+        }, shape = RoundedCornerShape(20.dp), modifier = Modifier.padding(bottom = 100.dp)
     ) {
         Text("ADD")
     }
@@ -248,25 +235,19 @@ fun DeleteButton(
     Button(
         onClick = {
             dialogOpen = true
-        },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .padding(bottom = 100.dp)
+        }, shape = RoundedCornerShape(20.dp), modifier = Modifier.padding(bottom = 100.dp)
     ) {
         Text("Delete")
     }
     if (dialogOpen) {
         Dialog(onDismissRequest = {
             dialogOpen = false
-        }
-        ) {
+        }) {
             Surface(
-                modifier = Modifier.fillMaxWidth(0.92f),
-                color = Color.Transparent
+                modifier = Modifier.fillMaxWidth(0.92f), color = Color.Transparent
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     // text and buttons
                     Column(
@@ -274,16 +255,13 @@ fun DeleteButton(
                             .padding(top = 30.dp)
                             .fillMaxWidth()
                             .background(
-                                color = Color.White,
-                                shape = RoundedCornerShape(percent = 10)
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                                color = Color.White, shape = RoundedCornerShape(percent = 10)
+                            ), horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(height = 36.dp))
 
                         Text(
-                            text = "Delete?",
-                            fontSize = 24.sp
+                            text = "Delete?", fontSize = 24.sp
                         )
 
                         Spacer(modifier = Modifier.height(height = spaceBetweenElements))
@@ -303,17 +281,12 @@ fun DeleteButton(
                                 dialogOpen = false
                             }
                             DialogButton(
-                                buttonColor = positiveButtonColor,
-                                buttonText = "Yes"
+                                buttonColor = positiveButtonColor, buttonText = "Yes"
                             ) {
                                 dialogOpen = false
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Delete item successfull",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                                Toast.makeText(
+                                    context, "Delete item successfull", Toast.LENGTH_SHORT
+                                ).show()
                                 viewModel.deleteItem(todoItem)
                                 backHome()
                             }
@@ -327,9 +300,7 @@ fun DeleteButton(
                         modifier = Modifier
                             .background(color = Color.White, shape = CircleShape)
                             .border(
-                                width = 2.dp,
-                                shape = CircleShape,
-                                color = positiveButtonColor
+                                width = 2.dp, shape = CircleShape, color = positiveButtonColor
                             )
                             .padding(all = 16.dp)
                             .align(alignment = Alignment.TopCenter)
@@ -385,10 +356,7 @@ fun UpdateButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
                 viewModel.updateItem(todoItem)
                 backHome()
             }
-        },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .padding(bottom = 100.dp)
+        }, shape = RoundedCornerShape(20.dp), modifier = Modifier.padding(bottom = 100.dp)
     ) {
         Text("Update")
     }
@@ -405,10 +373,7 @@ fun ClearButton() {
             statusItem = ""
             completedDateItem = ""
             createdDateItem = ""
-        },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .padding(bottom = 100.dp)
+        }, shape = RoundedCornerShape(20.dp), modifier = Modifier.padding(bottom = 100.dp)
     ) {
         Text("CLEAR")
     }
@@ -426,18 +391,16 @@ fun DropDownMenuStatus() {
     }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val icon = if (expanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
+    val icon = if (expanded) Icons.Filled.KeyboardArrowUp
+    else Icons.Filled.KeyboardArrowDown
 
 
     Column {
-        OutlinedTextField(
-            value = selectedText,
+        OutlinedTextField(value = selectedText,
             onValueChange = {
                 selectedText = it
-            }, readOnly = true,
+            },
+            readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
@@ -445,26 +408,22 @@ fun DropDownMenuStatus() {
                     textfieldSize = coordinates.size.toSize()
                 },
             label = { Text("Status") },
-            interactionSource = remember { MutableInteractionSource() }
-                .also { interactionSource ->
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect {
-                            if (it is PressInteraction.Release) {
-                                expanded = !expanded
-                            }
+            interactionSource = remember { MutableInteractionSource() }.also { interactionSource ->
+                LaunchedEffect(interactionSource) {
+                    interactionSource.interactions.collect {
+                        if (it is PressInteraction.Release) {
+                            expanded = !expanded
                         }
                     }
-                },
+                }
+            },
             trailingIcon = {
-                Icon(icon, "contentDescription",
-                    Modifier.clickable { expanded = !expanded })
-            }
-        )
+                Icon(icon, "contentDescription", Modifier.clickable { expanded = !expanded })
+            })
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+            modifier = Modifier.width(with(LocalDensity.current) { textfieldSize.width.toDp() })
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {
@@ -501,13 +460,10 @@ fun SearchView(state: MutableState<TextFieldValue>, viewModel: TodoItemViewModel
         },
         trailingIcon = {
             if (state.value != TextFieldValue("")) {
-                IconButton(
-                    onClick = {
-                        state.value =
-                            TextFieldValue("")
-                        // Remove text from TextField when you press the 'X' icon
-                    }
-                ) {
+                IconButton(onClick = {
+                    state.value = TextFieldValue("")
+                    // Remove text from TextField when you press the 'X' icon
+                }) {
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "",

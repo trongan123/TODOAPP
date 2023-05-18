@@ -1,18 +1,17 @@
 package com.example.todoapp.ui.theme.screem
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.viewmodel.TodoItemViewModel
-
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit){
+fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     titleItem = todoItem.title
     descriptionItem = todoItem.description

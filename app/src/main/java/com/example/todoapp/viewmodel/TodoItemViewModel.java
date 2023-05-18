@@ -15,11 +15,11 @@ import java.util.List;
 public class TodoItemViewModel extends AndroidViewModel {
 
     private final TodoRepository mRepository;
-    private LiveData<List<TodoItem>> todoItems;
-    private TodoItem todoItem;
     public MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
     public List<Integer> clearItem = new ArrayList<>();
     public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
+    private LiveData<List<TodoItem>> todoItems;
+    private TodoItem todoItem;
 
 
     public TodoItemViewModel(Application application) {

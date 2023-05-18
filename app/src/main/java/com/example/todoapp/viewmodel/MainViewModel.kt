@@ -15,32 +15,23 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: Repository =  Repository(application)
+    private val repository: Repository = Repository(application)
 
     private var state by mutableStateOf(ScreenState())
 
-    private val paginator = DefaultPaginator(
-        initialKey = state.page,
-        onLoadUpdated = {
-            state = state.copy(isLoading = it)
-        },
-        onRequest = { nextPage ->
-            repository.getItems(nextPage, 10)
-        },
-        getNextKey = {
-            state.page + 1
-        },
-        onError = {
-            state = state.copy(error = it?.localizedMessage)
-        },
-        onSuccess = { items, newKey ->
-            state = state.copy(
-                items = state.items + items,
-                page = newKey,
-                endReached = items.isEmpty()
-            )
-        }
-    )
+    private val paginator = DefaultPaginator(initialKey = state.page, onLoadUpdated = {
+        state = state.copy(isLoading = it)
+    }, onRequest = { nextPage ->
+        repository.getItems(nextPage, 10)
+    }, getNextKey = {
+        state.page + 1
+    }, onError = {
+        state = state.copy(error = it?.localizedMessage)
+    }, onSuccess = { items, newKey ->
+        state = state.copy(
+            items = state.items + items, page = newKey, endReached = items.isEmpty()
+        )
+    })
 
     init {
         loadNextItems()

@@ -11,11 +11,12 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 class MyComposeView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     AbstractComposeView(context, attrs) {
 
-    var i : TodoItem = TodoItem()
-    var todoViewModel :TodoItemViewModel? = null
-    var view :View? = null
+    var i: TodoItem = TodoItem()
+    var todoViewModel: TodoItemViewModel? = null
+    var view: View? = null
+
     @Composable
     override fun Content() {
-        todoViewModel?.let { ItemListRecycle(i =i , view = view, viewModel = it, this) }
+        todoViewModel?.let { ItemListRecycle(i = i, view = view, viewModel = it, this) }
     }
 }

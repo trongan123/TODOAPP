@@ -27,8 +27,8 @@ import java.util.List;
 
 public class CompletedItemFragment extends Fragment {
 
-    private FragmentCompletedItemBinding fragmentCompletedItemBinding;
     private final TodoItemViewModel todoItemViewModel;
+    private FragmentCompletedItemBinding fragmentCompletedItemBinding;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItems;
     private List<TodoItem> todoItemLoads;
@@ -47,12 +47,10 @@ public class CompletedItemFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         displayListTodo();
-
     }
 
-    public void displayListTodo(){
+    public void displayListTodo() {
         RecyclerView rcvItem = fragmentCompletedItemBinding.rcvTodoitem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         rcvItem.setLayoutManager(linearLayoutManager);
@@ -61,9 +59,8 @@ public class CompletedItemFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
-        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(),todoItemViewModel);
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
+        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
             // Update item to fragment
             todoItems = items;
             currentPage = 0;
@@ -79,12 +76,13 @@ public class CompletedItemFragment extends Fragment {
         todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void DetaiItem(TodoItem todoItem, CardView cardView) {
-                clickDetailItem(todoItem,cardView);
+                clickDetailItem(todoItem, cardView);
             }
+
             @Override
-            public void clearItem(TodoItem todoItem,long id, boolean check) {
-                todoItemViewModel.setClearAll(todoItem.getId(),check);
-                todoItemViewModel.setCheckItem(id,check);
+            public void clearItem(TodoItem todoItem, long id, boolean check) {
+                todoItemViewModel.setClearAll(todoItem.getId(), check);
+                todoItemViewModel.setCheckItem(id, check);
             }
         });
         rcvItem.setAdapter(todoItemAdapter);
@@ -117,9 +115,9 @@ public class CompletedItemFragment extends Fragment {
             }
         });
     }
+
     private void loadNextPage() {
         new Handler().postDelayed(() -> {
-
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
                 list = todoItems.subList(startitem, enditem);
@@ -146,20 +144,16 @@ public class CompletedItemFragment extends Fragment {
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_TodoItem", todoItem);
-        bundle.putString("transition",cardView.getTransitionName() );
+        bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView,cardView.getTransitionName())
-                .build();
-
-        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle,null,extras);
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
+        Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater,container,false);
+        fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater, container, false);
         View mView = fragmentCompletedItemBinding.getRoot();
 
 
@@ -167,6 +161,7 @@ public class CompletedItemFragment extends Fragment {
         // Inflate the layout for this fragment
         return mView;
     }
+
     private void setFirstData() {
         startitem = 0;
         enditem = 20;

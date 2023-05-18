@@ -17,9 +17,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/bg_round"
-        android:transitionName="update_1"
-        android:layout_height="match_parent">
+        android:transitionName="update_1">
 
         <LinearLayout
             android:id="@+id/activity_main"
@@ -42,8 +42,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/title"
-                    android:transitionName="update_edttitle"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:transitionName="update_edttitle" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

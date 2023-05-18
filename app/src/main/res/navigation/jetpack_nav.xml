@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/mainFragment2"
         android:name="com.example.todoapp.MainFragment"
-        android:label="MainFragment" >
+        android:label="MainFragment">
         <action
             android:id="@+id/action_mainFragment2_to_addItemJetpackFragment"
             app:destination="@id/addItemJetpackFragment" />
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/addItemJetpackFragment"
         android:name="com.example.todoapp.AddItemJetpackFragment"
-        android:label="AddItemJetpackFragment" >
+        android:label="AddItemJetpackFragment">
         <action
             android:id="@+id/action_addItemJetpackFragment_to_mainFragment2"
             app:destination="@id/mainFragment2" />
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/updateItemJetpackFragment"
         android:name="com.example.todoapp.UpdateItemJetpackFragment"
-        android:label="UpdateItemJetpackFragment" >
+        android:label="UpdateItemJetpackFragment">
         <action
             android:id="@+id/action_updateItemJetpackFragment_to_mainFragment2"
             app:destination="@id/mainFragment2" />

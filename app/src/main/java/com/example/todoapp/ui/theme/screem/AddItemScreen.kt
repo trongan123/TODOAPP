@@ -10,10 +10,10 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 @Composable
 fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     titleItem = ""
-    descriptionItem =""
-    statusItem =""
-    completedDateItem =""
-    createdDateItem =""
+    descriptionItem = ""
+    statusItem = ""
+    completedDateItem = ""
+    createdDateItem = ""
     Column(modifier = Modifier.padding(30.dp)) {
         Texttitle()
         TextDescription()
@@ -29,11 +29,9 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         verticalAlignment = Alignment.Bottom
     ) {
         ClearButton()
-        AddButton(viewModel,
-            backHome = {
-                backHome()
-            }
-        )
+        AddButton(viewModel, backHome = {
+            backHome()
+        })
 
     }
 }

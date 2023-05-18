@@ -21,8 +21,10 @@ public class TodoItem implements Serializable {
     private Date createdDate;
     @TypeConverters(DateConverter.class)
     private Date completedDate;
+
     public TodoItem() {
     }
+
     public TodoItem(String title, String description, String status, Date createdDate, Date completedDate) {
 
         this.title = title;

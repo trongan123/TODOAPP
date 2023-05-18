@@ -57,8 +57,7 @@ fun TabScreen(
         AllItemScreen(
             owner, openUpdateItemScreen = {
                 openUpdateItemScreen()
-            }, viewModel = viewModel,
-            viewModelLoad = viewModelLoad
+            }, viewModel = viewModel, viewModelLoad = viewModelLoad
         )
     }
     tabs += TabItem("Pending") {
@@ -97,7 +96,9 @@ fun TabScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Tabs(
-    tabs: List<TabItem>, pagerState: PagerState, viewModel: TodoItemViewModel,
+    tabs: List<TabItem>,
+    pagerState: PagerState,
+    viewModel: TodoItemViewModel,
     negativeButtonColor: Color = Color(0xFF35898F),
     positiveButtonColor: Color = Color(0xFFFF0000),
     spaceBetweenElements: Dp = 18.dp,
@@ -138,15 +139,12 @@ fun Tabs(
         if (dialogOpen) {
             Dialog(onDismissRequest = {
                 dialogOpen = false
-            }
-            ) {
+            }) {
                 Surface(
-                    modifier = Modifier.fillMaxWidth(0.92f),
-                    color = Color.Transparent
+                    modifier = Modifier.fillMaxWidth(0.92f), color = Color.Transparent
                 ) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
 
                         // text and buttons
@@ -155,16 +153,13 @@ fun Tabs(
                                 .padding(top = 30.dp)
                                 .fillMaxWidth()
                                 .background(
-                                    color = Color.White,
-                                    shape = RoundedCornerShape(percent = 10)
-                                ),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                    color = Color.White, shape = RoundedCornerShape(percent = 10)
+                                ), horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Spacer(modifier = Modifier.height(height = 36.dp))
 
                             Text(
-                                text = "Delete?",
-                                fontSize = 24.sp
+                                text = "Delete?", fontSize = 24.sp
                             )
 
                             Spacer(modifier = Modifier.height(height = spaceBetweenElements))
@@ -184,17 +179,12 @@ fun Tabs(
                                     dialogOpen = false
                                 }
                                 DialogButton(
-                                    buttonColor = positiveButtonColor,
-                                    buttonText = "Yes"
+                                    buttonColor = positiveButtonColor, buttonText = "Yes"
                                 ) {
                                     dialogOpen = false
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Clear all successfull",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
+                                    Toast.makeText(
+                                        context, "Clear all successfull", Toast.LENGTH_SHORT
+                                    ).show()
                                     viewModel.clearItem()
                                 }
                             }
@@ -207,9 +197,7 @@ fun Tabs(
                             modifier = Modifier
                                 .background(color = Color.White, shape = CircleShape)
                                 .border(
-                                    width = 2.dp,
-                                    shape = CircleShape,
-                                    color = positiveButtonColor
+                                    width = 2.dp, shape = CircleShape, color = positiveButtonColor
                                 )
                                 .padding(all = 16.dp)
                                 .align(alignment = Alignment.TopCenter)
@@ -263,11 +251,9 @@ fun AllItemScreen(
             }, itemContent = { index ->
                 val cartItemData = items[index]
                 ItemList(
-                    cartItemData,
-                    openUpdateItemScreen = {
+                    cartItemData, openUpdateItemScreen = {
                         openUpdateItemScreen()
-                    },
-                    viewModel
+                    }, viewModel
                 )
             })
         }
@@ -345,11 +331,9 @@ fun PendingItemScreen(
             }, itemContent = { index ->
                 val cartItemData = items[index]
                 ItemList(
-                    cartItemData,
-                    openUpdateItemScreen = {
+                    cartItemData, openUpdateItemScreen = {
                         openUpdateItemScreen()
-                    },
-                    viewModel
+                    }, viewModel
                 )
             })
         }
@@ -459,12 +443,18 @@ fun ItemList(
             )
 
             androidx.compose.material3.Text(
-                "Created Date:    " + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                "Created Date:    " + SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
             androidx.compose.material3.Text(
-                "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
+                "Completed Date:" + SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
@@ -493,8 +483,7 @@ fun ItemListRecycle(
                     .build()
 
                 findNavController(view!!).navigate(
-                    R.id.updateItemKotlinFragment,
-                    bundle, null, extras
+                    R.id.updateItemKotlinFragment, bundle, null, extras
                 )
             }, elevation = 5.dp
     ) {
@@ -531,13 +520,19 @@ fun ItemListRecycle(
                 i.description, modifier = Modifier.padding(start = 16.dp)
             )
             androidx.compose.material3.Text(
-                "Created Date    :" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.createdDate),
+                "Created Date    :" + SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
 
             androidx.compose.material3.Text(
-                "Completed Date:" + SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(i.completedDate),
+                "Completed Date:" + SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )

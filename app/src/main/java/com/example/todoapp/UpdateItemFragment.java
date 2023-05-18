@@ -67,6 +67,7 @@ public class UpdateItemFragment extends Fragment {
 
 
     }
+
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -74,17 +75,12 @@ public class UpdateItemFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setSharedElementEnterTransition(new ChangeBounds());
-
         fragmentUpdateItemBinding = FragmentUpdateItemBinding.inflate(inflater, container, false);
         View mView = fragmentUpdateItemBinding.getRoot();
-
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
         fragmentUpdateItemBinding.setTodoItemViewModel(todoItemViewModel);
-
-
         return mView;
     }
 
@@ -112,10 +108,8 @@ public class UpdateItemFragment extends Fragment {
     private void deleteItem() throws ParseException {
         String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edttitle.getText()).toString().trim();
         String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtdescription.getText()).toString().trim();
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtcreatedDate.getText()).toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtcompletedDate.getText()).toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtcreatedDate.getText()).toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtcompletedDate.getText()).toString().trim());
         String strStt;
         strStt = fragmentUpdateItemBinding.dropdownstatus.getText().toString().trim();
 
@@ -126,32 +120,23 @@ public class UpdateItemFragment extends Fragment {
         todoItem.setCompletedDate(comdate);
         todoItem.setStatus(strStt);
 
-        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
-                .setTitle("Confirm delete")
-                .setMessage("Are you sure?")
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    todoItemViewModel.deleteItem(todoItem);
-                    Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
-                    Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
-                })
-                .setNegativeButton("No", null)
-                .show();
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm delete").setMessage("Are you sure?").setPositiveButton("Yes", (dialogInterface, i) -> {
+            todoItemViewModel.deleteItem(todoItem);
+            Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
+        }).setNegativeButton("No", null).show();
 
     }
 
     private void initUi() {
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
         assert getArguments() != null;
         todoItem = (TodoItem) getArguments().getSerializable("object_TodoItem");
 
-        String transition =  getArguments().getString("transition");
+        String transition = getArguments().getString("transition");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         fragmentUpdateItemBinding.constraint.setTransitionName(transition);
 
@@ -163,10 +148,7 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.dropdownstatus.setText(todoItem.getStatus(), false);
         }
         String[] type = new String[]{"pending", "completed"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(getActivity(),
-                        R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-                        type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
         fragmentUpdateItemBinding.dropdownstatus.setAdapter(adapter);
 
         fragmentUpdateItemBinding.edtcreatedDate.setOnClickListener(view -> {
@@ -217,10 +199,8 @@ public class UpdateItemFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentUpdateItemBinding.edtcreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentUpdateItemBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
             fragmentUpdateItemBinding.edtcompletedDate.setError("Completed date must be after created date");

@@ -39,12 +39,12 @@ import java.util.TimeZone;
 
 public class MainBottomSheetFragment extends Fragment {
 
+    private final TodoItem todoItem = new TodoItem();
     private BottomSheetDialog bottomSheetDialog;
     private FragmentMainBottomSheetBinding fragmentMainBinding;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
     private MaterialDatePicker<Long> datePickerCompleted;
     private MaterialDatePicker<Long> datePickerCreated;
-    private final TodoItem todoItem = new TodoItem();
     private TodoItemViewModel todoItemViewModel;
 
     public MainBottomSheetFragment() {
@@ -56,28 +56,25 @@ public class MainBottomSheetFragment extends Fragment {
         //set shared element back for recylerview
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
-        parentView.getViewTreeObserver()
-                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        parentView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        startPostponedEnterTransition();
-                        return true;
-                    }
-                });
+        parentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                parentView.getViewTreeObserver().removeOnPreDrawListener(this);
+                startPostponedEnterTransition();
+                return true;
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
 
         fragmentMainBinding.btnAdd.setOnClickListener(view1 ->
                 //click button add to show bottom sheet add new item todo
-                addItemBottomSheet(parentView)
-        );
+                addItemBottomSheet(parentView));
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
         fragmentMainBinding.vpg.setAdapter(new TabItemBottomSheetAdapter(requireActivity(), todoItemViewModel));
         TabLayout tabLayout = requireView().findViewById(R.id.tlomenu);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
-                tabLayout, viewPager2, (tab, position) -> {
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
                     tab.setText("All");
@@ -89,19 +86,15 @@ public class MainBottomSheetFragment extends Fragment {
                     tab.setText("Completed");
                     break;
             }
-        }
-        );
+        });
 
         tabLayoutMediator.attach();
-        fragmentMainBinding.svSearch
-                .getEditText()
-                .setOnEditorActionListener(
-                        (v, actionId, event) -> {
-                            fragmentMainBinding.searchBar.setText(fragmentMainBinding.svSearch.getText());
-                            fragmentMainBinding.svSearch.hide();
-                            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
-                            return false;
-                        });
+        fragmentMainBinding.svSearch.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+            fragmentMainBinding.searchBar.setText(fragmentMainBinding.svSearch.getText());
+            fragmentMainBinding.svSearch.hide();
+            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
+            return false;
+        });
 
         todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
         fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
@@ -114,16 +107,11 @@ public class MainBottomSheetFragment extends Fragment {
             bottomSheetDialog = new BottomSheetDialog(requireContext());
             bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
 
-            updateBottomSheetLayoutBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME
-                    | InputType.TYPE_DATETIME_VARIATION_DATE);
-            updateBottomSheetLayoutBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME
-                    | InputType.TYPE_DATETIME_VARIATION_DATE);
+            updateBottomSheetLayoutBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+            updateBottomSheetLayoutBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
 
             String[] type = new String[]{"pending", "completed"};
-            ArrayAdapter<String> adapter =
-                    new ArrayAdapter<>(getActivity(),
-                            R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-                            type);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
             updateBottomSheetLayoutBinding.dropdownstatus.setAdapter(adapter);
             if (datePickerCreated.isAdded()) {
                 return;
@@ -146,7 +134,7 @@ public class MainBottomSheetFragment extends Fragment {
                 datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
                 datePickerCreated.addOnPositiveButtonClickListener(selection -> {
                     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    calendar.setTimeInMillis((Long) selection);
+                    calendar.setTimeInMillis(selection);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     String formattedDate = format.format(calendar.getTime());
                     updateBottomSheetLayoutBinding.edtcreatedDate.setText(formattedDate);
@@ -178,32 +166,22 @@ public class MainBottomSheetFragment extends Fragment {
 
     //show dialog to comfirm clear all item choiced
     private void clearItem() {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
-                .setTitle("Confirm Clear All")
-                .setMessage("Are you sure?")
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    todoItemViewModel.clearItem();
-                    Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("No", null)
-                .show();
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm Clear All").setMessage("Are you sure?").setPositiveButton("Yes", (dialogInterface, i) -> {
+            todoItemViewModel.clearItem();
+            Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
+        }).setNegativeButton("No", null).show();
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         fragmentMainBinding = FragmentMainBottomSheetBinding.inflate(inflater, container, false);
 
         View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
 
         fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
@@ -215,10 +193,8 @@ public class MainBottomSheetFragment extends Fragment {
         if (validation()) {
             String strtitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edttitle.getText()).toString().trim();
             String strDes = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim());
+            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim());
+            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim());
             String strStt = updateBottomSheetLayoutBinding.dropdownstatus.getText().toString().trim();
 
             //update database
@@ -263,10 +239,8 @@ public class MainBottomSheetFragment extends Fragment {
             return false;
         }
 
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
             updateBottomSheetLayoutBinding.tilcompletedDate.setError("Completed date must be after created date");

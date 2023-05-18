@@ -35,9 +35,7 @@ class AddItemKotlinFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val type = arrayOf("pending", "completed")
         val adapter = ArrayAdapter(
-            requireActivity(),
-            R.layout.dropdown_menu_popup_item, R.id.txtstyle,
-            type
+            requireActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type
         )
         fragmentAddItemBinding!!.dropdownstatus.setAdapter(adapter)
         if (datePickerCreated!!.isAdded) {
@@ -61,8 +59,7 @@ class AddItemKotlinFragment : Fragment() {
             }
             datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCreated!!.addOnPositiveButtonClickListener { selection: Any? ->
-                val calendar =
-                    Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long?)!!
                 val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
@@ -77,8 +74,7 @@ class AddItemKotlinFragment : Fragment() {
             }
             datePickerCompleted!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCompleted!!.addOnPositiveButtonClickListener { selection ->
-                val calendar =
-                    Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
                 val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
@@ -90,8 +86,7 @@ class AddItemKotlinFragment : Fragment() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding!!.edttitle.text).toString()
-                        .trim { it <= ' ' }
-                        .isEmpty()
+                        .trim { it <= ' ' }.isEmpty()
                 ) {
                     fragmentAddItemBinding!!.tiltitle.error = "Field title can't empty"
                 } else {
@@ -106,8 +101,7 @@ class AddItemKotlinFragment : Fragment() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding!!.edtdescription.text).toString()
-                        .trim { it <= ' ' }
-                        .isEmpty()
+                        .trim { it <= ' ' }.isEmpty()
                 ) {
                     fragmentAddItemBinding!!.tildescription.error = "Field description can't empty"
                 } else {
@@ -122,8 +116,7 @@ class AddItemKotlinFragment : Fragment() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcreatedDate.text).toString()
-                        .trim { it <= ' ' }
-                        .isEmpty()
+                        .trim { it <= ' ' }.isEmpty()
                 ) {
                     fragmentAddItemBinding!!.tilcreatedDate.error = "Field created date can't empty"
                 } else {
@@ -137,11 +130,11 @@ class AddItemKotlinFragment : Fragment() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text).toString()
-                        .trim { it <= ' ' }
-                        .isEmpty()
+                if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text)
+                        .toString().trim { it <= ' ' }.isEmpty()
                 ) {
-                    fragmentAddItemBinding!!.tilcompletedDate.error = "Field completed date can't empty"
+                    fragmentAddItemBinding!!.tilcompletedDate.error =
+                        "Field completed date can't empty"
                 } else {
                     fragmentAddItemBinding!!.tilcompletedDate.error = null
                 }
@@ -154,8 +147,7 @@ class AddItemKotlinFragment : Fragment() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (Objects.requireNonNull(fragmentAddItemBinding!!.dropdownstatus.text).toString()
-                        .trim { it <= ' ' }
-                        .isEmpty()
+                        .trim { it <= ' ' }.isEmpty()
                 ) {
                     fragmentAddItemBinding!!.tilstatus.error = "Please choice a status"
                 } else {
@@ -172,19 +164,18 @@ class AddItemKotlinFragment : Fragment() {
         if (validation()) {
             val strtitle: String =
                 Objects.requireNonNull(/* obj = */ fragmentAddItemBinding?.edttitle?.text)
-                    .toString()
-                    .trim { it <= ' ' }
+                    .toString().trim { it <= ' ' }
             val strDes: String =
                 Objects.requireNonNull(fragmentAddItemBinding!!.edtdescription.text).toString()
                     .trim { it <= ' ' }
-            val credate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(
-                    Objects.requireNonNull(fragmentAddItemBinding!!.edtcreatedDate.text)
-                        .toString().trim { it <= ' ' })
-            val comdate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .parse(
-                    Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text)
-                        .toString().trim { it <= ' ' })
+            val credate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(
+                    fragmentAddItemBinding!!.edtcreatedDate.text
+                ).toString().trim { it <= ' ' })
+            val comdate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(
+                    fragmentAddItemBinding!!.edtcompletedDate.text
+                ).toString().trim { it <= ' ' })
             val strStt: String = fragmentAddItemBinding!!.dropdownstatus.text.toString().trim()
 
             //update database
@@ -225,10 +216,14 @@ class AddItemKotlinFragment : Fragment() {
         if (!check) {
             return false
         }
-        val credate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            .parse(fragmentAddItemBinding!!.edtcreatedDate.text.toString().trim())
-        val comdate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            .parse(fragmentAddItemBinding!!.edtcompletedDate.text.toString().trim())
+        val credate = SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.getDefault()
+        ).parse(fragmentAddItemBinding!!.edtcreatedDate.text.toString().trim())
+        val comdate = SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.getDefault()
+        ).parse(fragmentAddItemBinding!!.edtcompletedDate.text.toString().trim())
         if (credate != null) {
             if (credate > comdate) {
                 fragmentAddItemBinding!!.tilcompletedDate.error =
@@ -240,25 +235,26 @@ class AddItemKotlinFragment : Fragment() {
     }
 
     private fun checkvalidate(): Boolean {
-        var check: Boolean = Objects.requireNonNull(fragmentAddItemBinding!!.edttitle.text)
-            .toString().trim { it <= ' ' }.isNotEmpty()
-        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtdescription.text)
-                .toString().trim { it <= ' ' }.isEmpty()
+        var check: Boolean =
+            Objects.requireNonNull(fragmentAddItemBinding!!.edttitle.text).toString()
+                .trim { it <= ' ' }.isNotEmpty()
+        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtdescription.text).toString()
+                .trim { it <= ' ' }.isEmpty()
         ) {
             check = false
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcreatedDate.text)
-                .toString().trim { it <= ' ' }.isEmpty()
+        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcreatedDate.text).toString()
+                .trim { it <= ' ' }.isEmpty()
         ) {
             check = false
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text)
-                .toString().trim { it <= ' ' }.isEmpty()
+        if (Objects.requireNonNull(fragmentAddItemBinding!!.edtcompletedDate.text).toString()
+                .trim { it <= ' ' }.isEmpty()
         ) {
             check = false
         }
-        if (Objects.requireNonNull(fragmentAddItemBinding!!.dropdownstatus.text)
-                .toString().trim { it <= ' ' }.isEmpty()
+        if (Objects.requireNonNull(fragmentAddItemBinding!!.dropdownstatus.text).toString()
+                .trim { it <= ' ' }.isEmpty()
         ) {
             check = false
         }
@@ -266,8 +262,7 @@ class AddItemKotlinFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         sharedElementEnterTransition = ChangeBounds()
         fragmentAddItemBinding = FragmentAddItemKotlinBinding.inflate(inflater, container, false)
@@ -275,21 +270,20 @@ class AddItemKotlinFragment : Fragment() {
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         fragmentAddItemBinding!!.todoItemViewModel = todoItemViewModel
 
-        datePickerCreated = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
-        fragmentAddItemBinding!!.edtcompletedDate.inputType = (InputType.TYPE_CLASS_DATETIME
-                or InputType.TYPE_DATETIME_VARIATION_DATE)
-        fragmentAddItemBinding!!.edtcreatedDate.inputType = (InputType.TYPE_CLASS_DATETIME
-                or InputType.TYPE_DATETIME_VARIATION_DATE)
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+        fragmentAddItemBinding!!.edtcompletedDate.inputType =
+            (InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE)
+        fragmentAddItemBinding!!.edtcreatedDate.inputType =
+            (InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE)
 
         // Inflate the layout for this fragment
         return mView
     }
-    private fun clearText(){
+
+    private fun clearText() {
         fragmentAddItemBinding!!.edttitle.setText("")
         fragmentAddItemBinding!!.edttitle.error = null
         fragmentAddItemBinding!!.edtdescription.setText("")
