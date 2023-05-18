@@ -14,7 +14,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DialogButton(
-    cornerRadiusPercent: Int = 26, buttonColor: Color, buttonText: String, onDismiss: () -> Unit
+    cornerRadiusPercent: Int = 26,
+    buttonColor: Color,
+    buttonText: String,
+    onDismiss: () -> Unit
 ) {
     Box(modifier = Modifier
         .background(

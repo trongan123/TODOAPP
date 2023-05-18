@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.viewpager2.widget.ViewPager2
-import com.example.todoapp.Adapter.TabItemKotlinAdapter
 import com.example.todoapp.R
+import com.example.todoapp.adater.TabItemKotlinAdapter
 import com.example.todoapp.databinding.FragmentMainKotlinBinding
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,8 +29,7 @@ class MainKotlinFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-        //set shared element back for recylerview
+        //set shared element back for recyclerview
         postponeEnterTransition()
         val parentView = view.parent as ViewGroup
         parentView.viewTreeObserver.addOnPreDrawListener(object :
@@ -43,7 +42,6 @@ class MainKotlinFragment : Fragment() {
         })
         super.onViewCreated(view, savedInstanceState)
 
-
         super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener {
             val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
@@ -55,7 +53,7 @@ class MainKotlinFragment : Fragment() {
         fragmentMainBinding!!.vpg.adapter =
             todoItemViewModel?.let { TabItemKotlinAdapter(requireActivity(), it) }
 
-        val tabLayout = requireView().findViewById<TabLayout>(R.id.tlomenu)
+        val tabLayout = requireView().findViewById<TabLayout>(R.id.tloMenu)
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         val tabLayoutMediator = TabLayoutMediator(
             tabLayout, viewPager2
@@ -70,17 +68,17 @@ class MainKotlinFragment : Fragment() {
 
 
         fragmentMainBinding!!.svSearch.editText.setOnEditorActionListener { _, _, _ ->
-            fragmentMainBinding!!.searchBar.text = fragmentMainBinding!!.svSearch.text
+            fragmentMainBinding!!.sbSearchBar.text = fragmentMainBinding!!.svSearch.text
             fragmentMainBinding!!.svSearch.hide()
             todoItemViewModel!!.stringMutableLiveData.postValue(fragmentMainBinding!!.svSearch.text.toString())
             false
         }
 
-        todoItemViewModel!!.getListMutableLiveDataCheck().observe(
+        todoItemViewModel!!.listMutableLiveDataCheck.observe(
             requireActivity()
-        ) { value -> fragmentMainBinding!!.btnclearall.isEnabled = value!!.size > 0 }
+        ) { value -> fragmentMainBinding!!.btnClearAll.isEnabled = value!!.size > 0 }
 
-        fragmentMainBinding!!.btnclearall.setOnClickListener { clearItem() }
+        fragmentMainBinding!!.btnClearAll.setOnClickListener { clearItem() }
     }
 
     private fun clearItem() {
@@ -89,7 +87,7 @@ class MainKotlinFragment : Fragment() {
             R.style.ThemeOverlay_App_MaterialAlertDialog
         ).setTitle("Confirm Clear All").setMessage("Are you sure?")
             .setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
-                todoItemViewModel!!.clearItem()
+                todoItemViewModel!!.clearAllItem()
                 Toast.makeText(activity, "Clear successfully", Toast.LENGTH_SHORT).show()
             }.setNegativeButton("No", null).show()
     }

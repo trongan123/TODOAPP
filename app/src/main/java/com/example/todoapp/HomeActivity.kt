@@ -29,8 +29,7 @@ class HomeActivity : ComponentActivity() {
                     text = "Home Screen", style = MaterialTheme.typography.h4
                 )
                 Spacer(modifier = Modifier.height(40.dp))
-                Button(
-                    modifier = Modifier.width(150.dp),
+                Button(modifier = Modifier.width(150.dp),
                     shape = RoundedCornerShape(20.dp),
                     onClick = {
                         val intent = Intent(this@HomeActivity, MainActivity::class.java)
@@ -39,8 +38,7 @@ class HomeActivity : ComponentActivity() {
                     androidx.compose.material.Text("Material")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    modifier = Modifier.width(200.dp),
+                Button(modifier = Modifier.width(200.dp),
                     shape = RoundedCornerShape(20.dp),
                     onClick = {
                         val intent = Intent(this@HomeActivity, MainJetpackActivity::class.java)
@@ -49,8 +47,7 @@ class HomeActivity : ComponentActivity() {
                     androidx.compose.material.Text(text = "Jetpack")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    modifier = Modifier.width(250.dp),
+                Button(modifier = Modifier.width(250.dp),
                     shape = RoundedCornerShape(20.dp),
                     onClick = {
                         val intent = Intent(this@HomeActivity, MainBottomSheetActivity::class.java)
@@ -59,9 +56,7 @@ class HomeActivity : ComponentActivity() {
                     androidx.compose.material.Text(text = "Bottom Sheet")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-
-                Button(
-                    modifier = Modifier.width(300.dp),
+                Button(modifier = Modifier.width(300.dp),
                     shape = RoundedCornerShape(20.dp),
                     onClick = {
                         val intent = Intent(this@HomeActivity, MainKotlinActivity::class.java)
@@ -69,7 +64,6 @@ class HomeActivity : ComponentActivity() {
                     }) {
                     androidx.compose.material.Text(text = "Kotlin With Jetpack Item")
                 }
-
             }
         }
     }

@@ -21,5 +21,6 @@
     <string name="errorcreateddate">Field created date can\'t empty</string>
     <string name="errorcompleteddate">Field completed date can\'t empty</string>
     <string name="errorstatus">Please choice a status</string>
+    <string name="tab">tab</string>
 
 </resources>

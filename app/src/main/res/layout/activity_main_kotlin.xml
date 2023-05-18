@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainKotlinActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -16,6 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/my_navkotlin" />
+        app:navGraph="@navigation/my_nav_kotlin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

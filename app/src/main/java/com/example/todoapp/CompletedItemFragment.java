@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todoapp.Adapter.TodoItemAdapter;
+import com.example.todoapp.adater.TodoItemAdapter;
 import com.example.todoapp.databinding.FragmentCompletedItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -43,6 +43,15 @@ public class CompletedItemFragment extends Fragment {
         this.todoItemViewModel = todoItemViewModel;
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater, container, false);
+        View mView = fragmentCompletedItemBinding.getRoot();
+        fragmentCompletedItemBinding.setAllItemViewModel(todoItemViewModel);
+        // Inflate the layout for this fragment
+        return mView;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -51,31 +60,31 @@ public class CompletedItemFragment extends Fragment {
     }
 
     public void displayListTodo() {
-        RecyclerView rcvItem = fragmentCompletedItemBinding.rcvTodoitem;
+        RecyclerView rcvItem = fragmentCompletedItemBinding.rcvTodoItem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         rcvItem.setLayoutManager(linearLayoutManager);
 
-        //set rach chan field
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
-            // Update item to fragment
-            todoItems = items;
-            currentPage = 0;
-            isLastPage = false;
-            if (items.size() % 20 == 0) {
-                totalPage = (items.size() / 20);
-            } else {
-                totalPage = (items.size() / 20) + 1;
-            }
-            setFirstData();
-        }));
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
+                    // Update item to fragment
+                    todoItems = items;
+                    currentPage = 0;
+                    isLastPage = false;
+                    if (items.size() % 20 == 0) {
+                        totalPage = (items.size() / 20);
+                    } else {
+                        totalPage = (items.size() / 20) + 1;
+                    }
+                    setFirstData();
+                }));
 
-        todoItemAdapter.setClickListenner(new TodoItemAdapter.IClickItemToDo() {
+        todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
-            public void DetaiItem(TodoItem todoItem, CardView cardView) {
+            public void detailItem(TodoItem todoItem, CardView cardView) {
                 clickDetailItem(todoItem, cardView);
             }
 
@@ -131,7 +140,7 @@ public class CompletedItemFragment extends Fragment {
             }
             todoItemAdapter.removeFooterLoading();
             todoItemLoads.addAll(list);
-            todoItemAdapter.notifyDataSetChanged();
+            todoItemAdapter.notifyItemRangeChanged(startitem - 20, todoItemLoads.size());
             isLoading = false;
             if (currentPage < totalPage) {
                 todoItemAdapter.addFooterLoading();
@@ -143,23 +152,12 @@ public class CompletedItemFragment extends Fragment {
 
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("object_TodoItem", todoItem);
+        bundle.putSerializable("objectTodoItem", todoItem);
         bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(cardView, cardView.getTransitionName()).build();
         Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater, container, false);
-        View mView = fragmentCompletedItemBinding.getRoot();
-
-
-        fragmentCompletedItemBinding.setAllItemViewModel(todoItemViewModel);
-        // Inflate the layout for this fragment
-        return mView;
     }
 
     private void setFirstData() {

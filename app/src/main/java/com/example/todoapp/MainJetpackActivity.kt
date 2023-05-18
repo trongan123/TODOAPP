@@ -47,41 +47,41 @@ fun MainApp(
         AnimatedNavHost(navController = navController, startDestination = "home") {
             composable("home", enterTransition = {
                 when (initialState.destination.route) {
-                    "additem", "updateitem" -> slideIntoContainer(
+                    "addItem", "updateItem" -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700)
                     )
                     else -> null
                 }
             }, exitTransition = {
                 when (targetState.destination.route) {
-                    "additem", "updateitem" -> slideOutOfContainer(
+                    "addItem", "updateItem" -> slideOutOfContainer(
                         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700)
                     )
                     else -> null
                 }
             }, popEnterTransition = {
                 when (initialState.destination.route) {
-                    "additem", "updateitem" -> slideIntoContainer(
+                    "addItem", "updateItem" -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700)
                     )
                     else -> null
                 }
             }, popExitTransition = {
                 when (targetState.destination.route) {
-                    "additem", "updateitem" -> slideOutOfContainer(
+                    "addItem", "updateItem" -> slideOutOfContainer(
                         AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700)
                     )
                     else -> null
                 }
             }) {
                 HomeScreen(openAddItemScreen = {
-                    navController.navigate("additem")
+                    navController.navigate("addItem")
                 }, openUpdateItemScreen = {
-                    navController.navigate("updateitem")
+                    navController.navigate("updateItem")
                 }, viewModel = viewModel, owner = owner, viewModelLoad = viewModelLoad
                 )
             }
-            composable("additem", enterTransition = {
+            composable("addItem", enterTransition = {
                 when (initialState.destination.route) {
                     "home" -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700)
@@ -116,7 +116,7 @@ fun MainApp(
                     )
                 })
             }
-            composable("updateitem", enterTransition = {
+            composable("updateItem", enterTransition = {
                 when (initialState.destination.route) {
                     "home" -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700)

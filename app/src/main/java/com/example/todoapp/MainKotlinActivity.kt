@@ -24,6 +24,4 @@ class MainKotlinActivity : AppCompatActivity() {
         val navController = navHostFragment!!.navController
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-
 }

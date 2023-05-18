@@ -15,7 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.todoapp.Adapter.TabItemAdapter;
+import com.example.todoapp.adater.TabItemAdapter;
 import com.example.todoapp.databinding.FragmentMainBinding;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -25,15 +25,23 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.Objects;
 
 public class MainFragment extends Fragment {
+
     private FragmentMainBinding fragmentMainBinding;
     private TodoItemViewModel todoItemViewModel;
 
-    public MainFragment() {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
+        View mView = fragmentMainBinding.getRoot();
+        todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
+        fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
+        // Inflate the layout for this fragment
+        return mView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //set shared element back for recylerview
+        //set shared element back for recyclerview
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
         parentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -46,15 +54,15 @@ public class MainFragment extends Fragment {
         });
         super.onViewCreated(view, savedInstanceState);
 
-
         fragmentMainBinding.btnAdd.setOnClickListener(view1 -> {
-            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(fragmentMainBinding.btnAdd, "add_fragment").build();
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(fragmentMainBinding.btnAdd, "add_fragment").build();
             Navigation.findNavController(view1).navigate(R.id.addItemFragment, null, null, extras);
         });
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
         fragmentMainBinding.vpg.setAdapter(new TabItemAdapter(requireActivity(), todoItemViewModel));
-        TabLayout tabLayout = requireView().findViewById(R.id.tlomenu);
+        TabLayout tabLayout = requireView().findViewById(R.id.tloMenu);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
@@ -64,7 +72,7 @@ public class MainFragment extends Fragment {
                 case 1:
                     tab.setText("Pending");
                     break;
-                case 2:
+                default:
                     tab.setText("Completed");
                     break;
             }
@@ -72,35 +80,24 @@ public class MainFragment extends Fragment {
 
         tabLayoutMediator.attach();
         fragmentMainBinding.svSearch.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-            fragmentMainBinding.searchBar.setText(fragmentMainBinding.svSearch.getText());
+            fragmentMainBinding.sbSearchBar.setText(fragmentMainBinding.svSearch.getText());
             fragmentMainBinding.svSearch.hide();
-            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
+            todoItemViewModel.getStringMutableLiveData()
+                    .postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
             return false;
         });
 
-        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
-        fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs ->
+                fragmentMainBinding.btnClearAll.setEnabled(!longs.isEmpty()));
+        fragmentMainBinding.btnClearAll.setOnClickListener(view12 -> clearItem());
     }
-
 
     private void clearItem() {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm Clear All").setMessage("Are you sure?").setPositiveButton("Yes", (dialogInterface, i) -> {
-            todoItemViewModel.clearItem();
-            Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
-        }).setNegativeButton("No", null).show();
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+                .setTitle("Confirm Clear All").setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    todoItemViewModel.clearAllItem();
+                    Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
+                }).setNegativeButton("No", null).show();
     }
-
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
-        View mView = fragmentMainBinding.getRoot();
-        todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-        fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
-        // Inflate the layout for this fragment
-        return mView;
-    }
-
-
 }

@@ -1,8 +1,8 @@
 package com.example.todoapp.repository
 
 import android.app.Application
-import com.example.todoapp.Database.TodoItemDAO
-import com.example.todoapp.Database.TodoItemDatabase
+import com.example.todoapp.database.TodoItemDAO
+import com.example.todoapp.database.TodoItemDatabase
 import com.example.todoapp.model.TodoItem
 import kotlinx.coroutines.delay
 

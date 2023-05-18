@@ -12,7 +12,6 @@
         <variable
             name="TodoItemViewModel"
             type="com.example.todoapp.viewmodel.TodoItemViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,14 +20,14 @@
         android:transitionName="add_fragment">
 
         <LinearLayout
-            android:id="@+id/activity_main"
+            android:id="@+id/activityMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:context=".AddItemFragment">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tiltitle"
+                android:id="@+id/tilTitle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,20 +35,16 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp">
 
-
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edttitle"
+                    android:id="@+id/edtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-
                     android:hint="@string/title"
                     android:inputType="text" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tildescription"
+                android:id="@+id/tilDescription"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,17 +53,16 @@
                 android:layout_marginRight="30dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtdescription"
+                    android:id="@+id/edtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:hint="@string/description"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilcreatedDate"
+                android:id="@+id/tilCreatedDate"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,7 +71,7 @@
                 android:layout_marginRight="30dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtcreatedDate"
+                    android:id="@+id/edtCreatedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -87,7 +81,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilcompletedDate"
+                android:id="@+id/tilCompletedDate"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +91,7 @@
                 android:layout_toStartOf="@+id/btndetail">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtcompletedDate"
+                    android:id="@+id/edtCompletedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -108,9 +102,8 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilstatus"
+                android:id="@+id/tilStatus"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -120,7 +113,7 @@
                 android:orientation="horizontal">
 
                 <AutoCompleteTextView
-                    android:id="@+id/dropdownstatus"
+                    android:id="@+id/dropDownStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />
@@ -135,11 +128,9 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/btnclear"
-
+                android:id="@+id/btnClear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="30dp"
@@ -149,10 +140,8 @@
                 android:textSize="50px"
                 tools:ignore="TextSizeCheck" />
 
-
             <Button
                 android:id="@+id/btnAdd"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -161,11 +150,9 @@
                 android:layout_marginEnd="80dp"
                 android:layout_marginBottom="100dp"
                 android:text="@string/add"
-
                 android:textColor="@color/white"
                 android:textSize="50px"
                 tools:ignore="TextSizeCheck" />
-
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

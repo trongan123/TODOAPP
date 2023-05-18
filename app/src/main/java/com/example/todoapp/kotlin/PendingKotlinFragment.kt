@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.Adapter.TodoItemAdapterKotlin
 import com.example.todoapp.R
+import com.example.todoapp.adater.TodoItemAdapterKotlin
 import com.example.todoapp.databinding.FragmentPendingKotlinBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
@@ -43,14 +43,14 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
     }
 
     private fun displayListTodo() {
-        val rcvItem = fragmentPendingKotlinBinding!!.rcvTodoitem
+        val rcvItem = fragmentPendingKotlinBinding!!.rcvTodoItem
         val linearLayoutManager = LinearLayoutManager(context)
         rcvItem.layoutManager = linearLayoutManager
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         rcvItem.addItemDecoration(dividerItemDecoration)
         todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it, requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
-        todoItemViewModel!!.getStringMutableLiveData()
+        todoItemViewModel!!.stringMutableLiveData
             .observe(requireActivity()) {
                 todoItemViewModel!!.pendingList
                     .observe(
@@ -79,7 +79,7 @@ class PendingKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() 
 
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
-        bundle.putSerializable("object_TodoItem", todoItem)
+        bundle.putSerializable("objectTodoItem", todoItem)
         Navigation.findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
 }

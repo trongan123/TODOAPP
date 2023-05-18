@@ -10,11 +10,9 @@
             type="com.example.todoapp.viewmodel.TodoItemViewModel" />
     </data>
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,7 +23,7 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.search.SearchBar
-                    android:id="@+id/search_bar"
+                    android:id="@+id/sbSearchBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Add a new task" />
@@ -37,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/search"
-            app:layout_anchor="@id/search_bar">
+            app:layout_anchor="@id/sbSearchBar">
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
         </com.google.android.material.search.SearchView>
 
@@ -47,19 +45,19 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tlomenu"
+                android:id="@+id/tloMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="100dp"
-                android:layout_marginRight="140dp"
+                android:layout_marginEnd="140dp"
                 android:contentDescription="tab" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpg"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_below="@+id/tlomenu"
+                android:layout_below="@+id/tloMenu"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -68,14 +66,13 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp" />
 
-
             <Button
-                android:id="@+id/btnclearall"
+                android:id="@+id/btnClearAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-130dp"
                 android:layout_marginTop="100dp"
-                android:layout_toEndOf="@+id/tlomenu"
+                android:layout_toEndOf="@+id/tloMenu"
                 android:text="@string/clear_all"
                 android:textColor="@color/white"
                 android:textSize="40px"
@@ -94,8 +91,6 @@
                 android:transitionName="add"
                 app:srcCompat="@android:drawable/ic_input_add" />
 
-
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </layout>

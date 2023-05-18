@@ -5,7 +5,11 @@ import androidx.room.TypeConverter;
 import java.util.Date;
 
 public class DateConverter {
-    //convert date
+
+    private DateConverter() {
+        throw new IllegalStateException("DateConverter class");
+    }
+
     @TypeConverter
     public static Date toDate(Long timestamp) {
         return timestamp == null ? null : new Date(timestamp);

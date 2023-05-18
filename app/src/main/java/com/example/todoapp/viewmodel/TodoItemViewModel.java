@@ -14,13 +14,12 @@ import java.util.List;
 
 public class TodoItemViewModel extends AndroidViewModel {
 
+    public static final MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
+    public static final MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
+    protected static final List<Integer> clearItem = new ArrayList<>();
     private final TodoRepository mRepository;
-    public MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
-    public List<Integer> clearItem = new ArrayList<>();
-    public MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
     private LiveData<List<TodoItem>> todoItems;
     private TodoItem todoItem;
-
 
     public TodoItemViewModel(Application application) {
         super(application);
@@ -74,7 +73,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         mRepository.delete(todoItem);
     }
 
-
     public void setClearAll(int id, boolean check) {
         if (check) {
             if (!clearItem.contains(id)) {
@@ -84,7 +82,6 @@ public class TodoItemViewModel extends AndroidViewModel {
             clearItem.removeIf(a -> a == id);
         }
     }
-
 
     public void setCheckItem(long id, boolean check) {
         List<Long> item = listMutableLiveDataCheck.getValue();
@@ -99,7 +96,7 @@ public class TodoItemViewModel extends AndroidViewModel {
         listMutableLiveDataCheck.postValue(item);
     }
 
-    public void clearItem() {
+    public void clearAllItem() {
         mRepository.clear(clearItem);
     }
 }

@@ -51,7 +51,6 @@ fun TabScreen(
     viewModelLoad: MainViewModel
 ) {
 
-
     val tabs: MutableList<TabItem> = ArrayList<TabItem>().toMutableList()
     tabs += TabItem("All") {
         AllItemScreen(
@@ -185,7 +184,7 @@ fun Tabs(
                                     Toast.makeText(
                                         context, "Clear all successfull", Toast.LENGTH_SHORT
                                     ).show()
-                                    viewModel.clearItem()
+                                    viewModel.clearAllItem()
                                 }
                             }
                             Spacer(modifier = Modifier.height(height = spaceBetweenElements * 2))
@@ -240,7 +239,7 @@ fun AllItemScreen(
     ) {
 
         LazyColumn {
-            viewModel.getStringMutableLiveData().observe(owner) {
+            viewModel.stringMutableLiveData.observe(owner) {
                 viewModel.getAllList(viewModel.stringMutableLiveData.value)
                     .observe(owner) { item: List<TodoItem> ->
                         items = item as ArrayList<TodoItem>
@@ -261,55 +260,6 @@ fun AllItemScreen(
     }
 }
 
-//@Composable
-//fun AllItemScreen(
-//    owner: LifecycleOwner,
-//    openUpdateItemScreen: () -> Unit,
-//    viewModel: TodoItemViewModel,
-//    viewModelLoad: MainViewModel
-//) {
-//    var state = remember(viewModelLoad.state) {
-//        viewModelLoad.state
-//    }
-//
-//    Column(
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        LazyColumn(
-//            modifier = Modifier.fillMaxSize()
-//        ) {
-//            items(state.items.size,
-//                key= {state.items[it].id
-//
-//                }) { i ->
-//                val item = state.items[i]
-//                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-//                    viewModelLoad.loadNextItems()
-//                }
-//                ItemList(
-//                    item,
-//                    openUpdateItemScreen = {
-//                        openUpdateItemScreen()
-//                    },
-//                    viewModel
-//                )
-//            }
-//            item {
-//                if (state.isLoading) {
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(8.dp),
-//                        horizontalArrangement = Arrangement.Center
-//                    ) {
-//                        CircularProgressIndicator()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 @Composable
 fun PendingItemScreen(
     owner: LifecycleOwner, openUpdateItemScreen: () -> Unit, viewModel: TodoItemViewModel
@@ -321,7 +271,7 @@ fun PendingItemScreen(
     ) {
 
         LazyColumn {
-            viewModel.getStringMutableLiveData().observe(owner) {
+            viewModel.stringMutableLiveData.observe(owner) {
                 viewModel.pendingList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
@@ -354,7 +304,7 @@ fun CompletedItemScreen(
     ) {
 
         LazyColumn {
-            viewModel.getStringMutableLiveData().observe(owner) {
+            viewModel.stringMutableLiveData.observe(owner) {
                 viewModel.completedList.observe(owner) { item: List<TodoItem> ->
                     items = item as ArrayList<TodoItem>
                 }
@@ -401,7 +351,7 @@ fun ItemList(
         ) {
             Spacer(modifier = Modifier.size(16.dp))
             Row {
-                val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
+                val check: List<Long> = viewModel.listMutableLiveDataCheck.value as List<Long>
                 isChecked.value = check.contains(i.id.toLong())
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
@@ -444,16 +394,14 @@ fun ItemList(
 
             androidx.compose.material3.Text(
                 "Created Date:    " + SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
+                    "yyyy-MM-dd", Locale.getDefault()
                 ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
+                    "yyyy-MM-dd", Locale.getDefault()
                 ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
@@ -474,7 +422,7 @@ fun ItemListRecycle(
             .clickable {
                 todoItem = i
                 val bundle = Bundle()
-                bundle.putSerializable("object_TodoItem", todoItem)
+                bundle.putSerializable("objectTodoItem", todoItem)
                 bundle.putString("transition", myitem.transitionName)
 
                 val extras: FragmentNavigator.Extras = FragmentNavigator.Extras
@@ -491,7 +439,7 @@ fun ItemListRecycle(
             modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
         ) {
             Row {
-                val check: List<Long> = viewModel.getListMutableLiveDataCheck().value as List<Long>
+                val check: List<Long> = viewModel.listMutableLiveDataCheck.value as List<Long>
                 isChecked.value = check.contains(i.id.toLong())
                 androidx.compose.material3.Checkbox(checked = isChecked.value, onCheckedChange = {
                     isChecked.value = it
@@ -521,8 +469,7 @@ fun ItemListRecycle(
             )
             androidx.compose.material3.Text(
                 "Created Date    :" + SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
+                    "yyyy-MM-dd", Locale.getDefault()
                 ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
@@ -530,8 +477,7 @@ fun ItemListRecycle(
 
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
+                    "yyyy-MM-dd", Locale.getDefault()
                 ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline

@@ -18,7 +18,7 @@
         app:strokeWidth="0dp">
 
         <RelativeLayout
-            android:id="@+id/layout"
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -29,12 +29,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-
                 android:layout_toStartOf="@+id/txtDate"
                 android:orientation="vertical">
 
                 <CheckBox
-                    android:id="@+id/txttitle"
+                    android:id="@+id/txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{TodoItem.title}"
@@ -57,7 +56,6 @@
                 android:layout_centerVertical="true"
                 android:paddingEnd="5dp"
                 android:textSize="12sp" />
-
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -4,8 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.todoapp.Database.TodoItemDAO;
-import com.example.todoapp.Database.TodoItemDatabase;
+import com.example.todoapp.database.TodoItemDAO;
+import com.example.todoapp.database.TodoItemDatabase;
 import com.example.todoapp.model.TodoItem;
 
 import java.util.List;

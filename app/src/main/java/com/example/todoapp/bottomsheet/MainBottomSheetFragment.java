@@ -15,18 +15,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.todoapp.Adapter.TabItemBottomSheetAdapter;
 import com.example.todoapp.R;
+import com.example.todoapp.adater.TabItemBottomSheetAdapter;
 import com.example.todoapp.databinding.FragmentMainBottomSheetBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,15 +39,24 @@ import java.util.TimeZone;
 
 public class MainBottomSheetFragment extends Fragment {
 
+    private static final String STRING_DATE_FORMAT = "yyyy-MM-dd";
     private final TodoItem todoItem = new TodoItem();
     private BottomSheetDialog bottomSheetDialog;
     private FragmentMainBottomSheetBinding fragmentMainBinding;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
-    private MaterialDatePicker<Long> datePickerCompleted;
-    private MaterialDatePicker<Long> datePickerCreated;
     private TodoItemViewModel todoItemViewModel;
 
-    public MainBottomSheetFragment() {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        fragmentMainBinding = FragmentMainBottomSheetBinding.inflate(inflater, container, false);
+
+        View mView = fragmentMainBinding.getRoot();
+        todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
+
+        fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
+        // Inflate the layout for this fragment
+        return mView;
     }
 
     @Override
@@ -67,12 +76,12 @@ public class MainBottomSheetFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         fragmentMainBinding.btnAdd.setOnClickListener(view1 ->
-                //click button add to show bottom sheet add new item todo
+                //click button add to show bottom sheet add new item
                 addItemBottomSheet(parentView));
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
         fragmentMainBinding.vpg.setAdapter(new TabItemBottomSheetAdapter(requireActivity(), todoItemViewModel));
-        TabLayout tabLayout = requireView().findViewById(R.id.tlomenu);
+        TabLayout tabLayout = requireView().findViewById(R.id.tloMenu);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
@@ -82,7 +91,7 @@ public class MainBottomSheetFragment extends Fragment {
                 case 1:
                     tab.setText("Pending");
                     break;
-                case 2:
+                default:
                     tab.setText("Completed");
                     break;
             }
@@ -90,119 +99,103 @@ public class MainBottomSheetFragment extends Fragment {
 
         tabLayoutMediator.attach();
         fragmentMainBinding.svSearch.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-            fragmentMainBinding.searchBar.setText(fragmentMainBinding.svSearch.getText());
+            fragmentMainBinding.sbSearchBar.setText(fragmentMainBinding.svSearch.getText());
             fragmentMainBinding.svSearch.hide();
-            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
+            todoItemViewModel.getStringMutableLiveData()
+                    .postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
             return false;
         });
 
-        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs -> fragmentMainBinding.btnclearall.setEnabled(longs.size() > 0));
-        fragmentMainBinding.btnclearall.setOnClickListener(view12 -> clearItem());
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs ->
+                fragmentMainBinding.btnClearAll.setEnabled(!longs.isEmpty()));
+        fragmentMainBinding.btnClearAll.setOnClickListener(view12 -> clearItem());
     }
-
 
     private void addItemBottomSheet(ViewGroup parentView) {
         if (updateBottomSheetLayoutBinding == null) {
-            updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(LayoutInflater.from(parentView.getContext()), parentView, false);
+            updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(LayoutInflater
+                    .from(parentView.getContext()), parentView, false);
             bottomSheetDialog = new BottomSheetDialog(requireContext());
             bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
 
-            updateBottomSheetLayoutBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
-            updateBottomSheetLayoutBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+            updateBottomSheetLayoutBinding.edtCompletedDate.setInputType(
+                    InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+            updateBottomSheetLayoutBinding.edtCreatedDate.setInputType(
+                    InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
 
             String[] type = new String[]{"pending", "completed"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
-            updateBottomSheetLayoutBinding.dropdownstatus.setAdapter(adapter);
-            if (datePickerCreated.isAdded()) {
-                return;
-            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
+            updateBottomSheetLayoutBinding.dropDownStatus.setAdapter(adapter);
 
             updateBottomSheetLayoutBinding.btnAdd.setOnClickListener(view1 -> {
                 try {
                     addItem();
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    //Method empty
                 }
 
             });
-            updateBottomSheetLayoutBinding.btnclear.setOnClickListener(view12 -> clearText());
+            updateBottomSheetLayoutBinding.btnClear.setOnClickListener(view12 -> clearText());
 
-            updateBottomSheetLayoutBinding.edtcreatedDate.setOnClickListener(view13 -> {
-                if (datePickerCreated.isAdded()) {
-                    return;
-                }
-                datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
-                datePickerCreated.addOnPositiveButtonClickListener(selection -> {
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    calendar.setTimeInMillis(selection);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    String formattedDate = format.format(calendar.getTime());
-                    updateBottomSheetLayoutBinding.edtcreatedDate.setText(formattedDate);
-                });
-            });
+            updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view13 ->
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate));
 
             //create datePicker
-            updateBottomSheetLayoutBinding.edtcompletedDate.setOnClickListener(view14 -> {
-                if (datePickerCompleted.isAdded()) {
-                    return;
-                }
-                datePickerCompleted.show(getParentFragmentManager(), "Material_Date_Picker");
-                datePickerCompleted.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                    @Override
-                    public void onPositiveButtonClick(Object selection) {
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                        calendar.setTimeInMillis((Long) selection);
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                        String formattedDate = format.format(calendar.getTime());
-                        updateBottomSheetLayoutBinding.edtcompletedDate.setText(formattedDate);
-                    }
-                });
-            });
+            updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view14 ->
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate));
         }
         // Opt in to perform swipe to dismiss animation when dismissing bottom sheet dialog.
         bottomSheetDialog.setDismissWithAnimation(true);
         bottomSheetDialog.show();
     }
 
-    //show dialog to comfirm clear all item choiced
-    private void clearItem() {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm Clear All").setMessage("Are you sure?").setPositiveButton("Yes", (dialogInterface, i) -> {
-            todoItemViewModel.clearItem();
-            Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
-        }).setNegativeButton("No", null).show();
+    //create date picker
+    private void addDatePicker(TextInputEditText textDate) {
+        MaterialDatePicker<Long> datePickerCreated;
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        if (datePickerCreated.isAdded()) {
+            return;
+        }
+        datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
+        datePickerCreated.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis(selection);
+            SimpleDateFormat format = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
+            String formattedDate = format.format(calendar.getTime());
+            textDate.setText(formattedDate);
+        });
     }
 
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        fragmentMainBinding = FragmentMainBottomSheetBinding.inflate(inflater, container, false);
-
-        View mView = fragmentMainBinding.getRoot();
-        todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-
-
-        fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
-        // Inflate the layout for this fragment
-        return mView;
+    //show dialog to confirm clear all item choice
+    private void clearItem() {
+        new MaterialAlertDialogBuilder(requireContext(),
+                R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm Clear All")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    todoItemViewModel.clearAllItem();
+                    Toast.makeText(getActivity(), "Clear successfully", Toast.LENGTH_SHORT).show();
+                }).setNegativeButton("No", null).show();
     }
 
     private void addItem() throws ParseException {
         if (validation()) {
-            String strtitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edttitle.getText()).toString().trim();
-            String strDes = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim());
-            String strStt = updateBottomSheetLayoutBinding.dropdownstatus.getText().toString().trim();
+            String stringTitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim();
+            String stringDescription = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtDescription
+                    .getText()).toString().trim();
+            Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCreatedDate.getText()).toString().trim());
+            Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCompletedDate.getText()).toString().trim());
+            String stringStatus = updateBottomSheetLayoutBinding.dropDownStatus.getText().toString().trim();
 
             //update database
-            todoItem.setTitle(strtitle);
-            todoItem.setDescription(strDes);
-            todoItem.setCreatedDate(credate);
-            todoItem.setCompletedDate(comdate);
-            todoItem.setStatus(strStt);
+            todoItem.setTitle(stringTitle);
+            todoItem.setDescription(stringDescription);
+            todoItem.setCreatedDate(createdDate);
+            todoItem.setCompletedDate(completedDate);
+            todoItem.setStatus(stringStatus);
 
             todoItemViewModel.addItem(todoItem);
             clearText();
@@ -215,50 +208,52 @@ public class MainBottomSheetFragment extends Fragment {
     private boolean validation() throws ParseException {
         boolean check = true;
 
-        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edttitle.getText()).toString().trim().isEmpty()) {
-            updateBottomSheetLayoutBinding.edttitle.setError("Field title can't empty");
+        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim().isEmpty()) {
+            updateBottomSheetLayoutBinding.edtTitle.setError("Field title can't empty");
             check = false;
         }
-        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-            updateBottomSheetLayoutBinding.edtdescription.setError("Field description can't empty");
+        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtDescription.getText()).toString().trim().isEmpty()) {
+            updateBottomSheetLayoutBinding.edtDescription.setError("Field description can't empty");
             check = false;
         }
-        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-            updateBottomSheetLayoutBinding.edtcreatedDate.setError("Field created date can't empty");
+        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCreatedDate.getText()).toString().trim().isEmpty()) {
+            updateBottomSheetLayoutBinding.edtCreatedDate.setError("Field created date can't empty");
             check = false;
         }
-        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-            updateBottomSheetLayoutBinding.edtcompletedDate.setError("Field completed date can't empty");
+        if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCompletedDate.getText()).toString().trim().isEmpty()) {
+            updateBottomSheetLayoutBinding.edtCompletedDate.setError("Field completed date can't empty");
             check = false;
         }
-        if (updateBottomSheetLayoutBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
-            updateBottomSheetLayoutBinding.dropdownstatus.setError("Please choice a status");
+        if (updateBottomSheetLayoutBinding.dropDownStatus.getText().toString().trim().isEmpty()) {
+            updateBottomSheetLayoutBinding.dropDownStatus.setError("Please choice a status");
             check = false;
         }
         if (!check) {
             return false;
         }
 
-        Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtcompletedDate.getText().toString().trim());
+        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                .parse(updateBottomSheetLayoutBinding.edtCreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                .parse(updateBottomSheetLayoutBinding.edtCompletedDate.getText().toString().trim());
         assert credate != null;
         if (credate.compareTo(comdate) > 0) {
-            updateBottomSheetLayoutBinding.tilcompletedDate.setError("Completed date must be after created date");
+            updateBottomSheetLayoutBinding.tilCompletedDate.setError("Completed date must be after created date");
             check = false;
         }
         return check;
     }
 
     private void clearText() {
-        updateBottomSheetLayoutBinding.edttitle.setText("");
-        updateBottomSheetLayoutBinding.edttitle.setError(null);
-        updateBottomSheetLayoutBinding.edtdescription.setText("");
-        updateBottomSheetLayoutBinding.edtdescription.setError(null);
-        updateBottomSheetLayoutBinding.edtcreatedDate.setText("");
-        updateBottomSheetLayoutBinding.edtcreatedDate.setError(null);
-        updateBottomSheetLayoutBinding.edtcompletedDate.setText("");
-        updateBottomSheetLayoutBinding.edtcompletedDate.setError(null);
-        updateBottomSheetLayoutBinding.dropdownstatus.setText("", false);
-        updateBottomSheetLayoutBinding.dropdownstatus.setError(null);
+        updateBottomSheetLayoutBinding.edtTitle.setText("");
+        updateBottomSheetLayoutBinding.edtTitle.setError(null);
+        updateBottomSheetLayoutBinding.edtDescription.setText("");
+        updateBottomSheetLayoutBinding.edtDescription.setError(null);
+        updateBottomSheetLayoutBinding.edtCreatedDate.setText("");
+        updateBottomSheetLayoutBinding.edtCreatedDate.setError(null);
+        updateBottomSheetLayoutBinding.edtCompletedDate.setText("");
+        updateBottomSheetLayoutBinding.edtCompletedDate.setError(null);
+        updateBottomSheetLayoutBinding.dropDownStatus.setText("", false);
+        updateBottomSheetLayoutBinding.dropDownStatus.setError(null);
     }
 }

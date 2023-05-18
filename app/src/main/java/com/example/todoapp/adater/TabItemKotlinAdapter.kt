@@ -1,4 +1,4 @@
-package com.example.todoapp.Adapter
+package com.example.todoapp.adater
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -8,10 +8,9 @@ import com.example.todoapp.kotlin.CompletedKotlinFragment
 import com.example.todoapp.kotlin.PendingKotlinFragment
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
-//Class adapter kotlen
+//Class adapter set tab in kotlin
 class TabItemKotlinAdapter(
-    fragmentActivity: FragmentActivity,
-    todoItemViewModel: TodoItemViewModel
+    fragmentActivity: FragmentActivity, todoItemViewModel: TodoItemViewModel
 ) : FragmentStateAdapter(fragmentActivity) {
 
     private var todoItemViewModel: TodoItemViewModel? = todoItemViewModel

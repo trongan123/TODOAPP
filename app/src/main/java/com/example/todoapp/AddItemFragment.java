@@ -22,7 +22,7 @@ import com.example.todoapp.databinding.FragmentAddItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,253 +35,10 @@ import java.util.TimeZone;
 
 public class AddItemFragment extends Fragment {
 
-
+    private static final String STRING_DATE_FORMAT = "yyyy-MM-dd";
     private final TodoItem todoItem = new TodoItem();
     private FragmentAddItemBinding fragmentAddItemBinding;
     private TodoItemViewModel todoItemViewModel;
-    private MaterialDatePicker<Long> datePickerCompleted;
-    private MaterialDatePicker<Long> datePickerCreated;
-
-    public AddItemFragment() {
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        String[] type = new String[]{"pending", "completed"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type);
-        fragmentAddItemBinding.dropdownstatus.setAdapter(adapter);
-        if (datePickerCreated.isAdded()) {
-            return;
-        }
-        fragmentAddItemBinding.btnAdd.setEnabled(false);
-        fragmentAddItemBinding.btnAdd.setOnClickListener(view1 -> {
-            try {
-                addItem();
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        fragmentAddItemBinding.btnclear.setOnClickListener(view2 -> clearText());
-
-        fragmentAddItemBinding.edtcreatedDate.setOnClickListener(view13 -> {
-            if (datePickerCreated.isAdded()) {
-                return;
-            }
-            datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
-            datePickerCreated.addOnPositiveButtonClickListener(selection -> {
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis(selection);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String formattedDate = format.format(calendar.getTime());
-                fragmentAddItemBinding.edtcreatedDate.setText(formattedDate);
-            });
-        });
-
-        //create datePicker
-        fragmentAddItemBinding.edtcompletedDate.setOnClickListener(view14 -> {
-            if (datePickerCompleted.isAdded()) {
-                return;
-            }
-            datePickerCompleted.show(getParentFragmentManager(), "Material_Date_Picker");
-            datePickerCompleted.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                @Override
-                public void onPositiveButtonClick(Object selection) {
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    calendar.setTimeInMillis((Long) selection);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    String formattedDate = format.format(calendar.getTime());
-                    fragmentAddItemBinding.edtcompletedDate.setText(formattedDate);
-                }
-            });
-        });
-        fragmentAddItemBinding.edttitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.edttitle.setError("Field title can't empty");
-                } else {
-                    fragmentAddItemBinding.edttitle.setError(null);
-                }
-                boolean check = checkvalidate();
-                fragmentAddItemBinding.btnAdd.setEnabled(check);
-            }
-        });
-        fragmentAddItemBinding.edtdescription.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.edtdescription.setError("Field description can't empty");
-                } else {
-                    fragmentAddItemBinding.edtdescription.setError(null);
-                }
-                boolean check = checkvalidate();
-                fragmentAddItemBinding.btnAdd.setEnabled(check);
-            }
-        });
-        fragmentAddItemBinding.edtcreatedDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.edtcreatedDate.setError("Field created date can't empty");
-                } else {
-                    fragmentAddItemBinding.edtcreatedDate.setError(null);
-                }
-                boolean check = checkvalidate();
-                fragmentAddItemBinding.btnAdd.setEnabled(check);
-            }
-        });
-        fragmentAddItemBinding.edtcompletedDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.edtcompletedDate.setError("Field completed date can't empty");
-                } else {
-                    fragmentAddItemBinding.edtcompletedDate.setError(null);
-                }
-                boolean check = checkvalidate();
-                fragmentAddItemBinding.btnAdd.setEnabled(check);
-            }
-        });
-        fragmentAddItemBinding.dropdownstatus.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
-                    fragmentAddItemBinding.dropdownstatus.setError("Please choice a status");
-                } else {
-                    fragmentAddItemBinding.dropdownstatus.setError(null);
-                }
-                boolean check = checkvalidate();
-                fragmentAddItemBinding.btnAdd.setEnabled(check);
-            }
-        });
-    }
-
-    private void addItem() throws ParseException {
-        if (validation()) {
-            String strtitle = Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim();
-            String strDes = Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim();
-            Date credate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim());
-            Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim());
-            String strStt = fragmentAddItemBinding.dropdownstatus.getText().toString().trim();
-
-            //update database
-            todoItem.setTitle(strtitle);
-            todoItem.setDescription(strDes);
-            todoItem.setCreatedDate(credate);
-            todoItem.setCompletedDate(comdate);
-            todoItem.setStatus(strStt);
-
-            todoItemViewModel.addItem(todoItem);
-            Toast.makeText(getActivity(), "Add success", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
-        }
-    }
-
-    private boolean checkvalidate() {
-        boolean check = !Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty();
-
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.dropdownstatus.getText()).toString().trim().isEmpty()) {
-            check = false;
-        }
-        return check;
-    }
-
-    private boolean validation() throws ParseException {
-        boolean check = true;
-
-        if (Objects.requireNonNull(fragmentAddItemBinding.edttitle.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.edttitle.setError("Field title can't empty");
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtdescription.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.edtdescription.setError("Field description can't empty");
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcreatedDate.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.edtcreatedDate.setError("Field created date can't empty");
-            check = false;
-        }
-        if (Objects.requireNonNull(fragmentAddItemBinding.edtcompletedDate.getText()).toString().trim().isEmpty()) {
-            fragmentAddItemBinding.edtcompletedDate.setError("Field completed date can't empty");
-            check = false;
-        }
-        if (fragmentAddItemBinding.dropdownstatus.getText().toString().trim().isEmpty()) {
-            fragmentAddItemBinding.dropdownstatus.setError("Please choice a status");
-            check = false;
-        }
-        if (!check) {
-            return false;
-        }
-        Date credate = new SimpleDateFormat("yyyy-M M-dd", Locale.getDefault()).parse(fragmentAddItemBinding.edtcreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fragmentAddItemBinding.edtcompletedDate.getText().toString().trim());
-        assert credate != null;
-        if (credate.compareTo(comdate) > 0) {
-            fragmentAddItemBinding.edtcompletedDate.setError("Completed date must be after created date");
-            check = false;
-        }
-        return check;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -292,26 +49,237 @@ public class AddItemFragment extends Fragment {
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
         fragmentAddItemBinding.setTodoItemViewModel(todoItemViewModel);
 
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-
-        fragmentAddItemBinding.edtcompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
-        fragmentAddItemBinding.edtcreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+        fragmentAddItemBinding.edtCompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+        fragmentAddItemBinding.edtCreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
 
         // Inflate the layout for this fragment
         return mView;
     }
 
-    private void clearText() {
-        fragmentAddItemBinding.edttitle.setText("");
-        fragmentAddItemBinding.edttitle.setError(null);
-        fragmentAddItemBinding.edtdescription.setText("");
-        fragmentAddItemBinding.edtdescription.setError(null);
-        fragmentAddItemBinding.edtcreatedDate.setText("");
-        fragmentAddItemBinding.edtcreatedDate.setError(null);
-        fragmentAddItemBinding.edtcompletedDate.setText("");
-        fragmentAddItemBinding.edtcompletedDate.setError(null);
-        fragmentAddItemBinding.dropdownstatus.setText("", false);
-        fragmentAddItemBinding.dropdownstatus.setError(null);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        String[] type = new String[]{"pending", "completed"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
+        fragmentAddItemBinding.dropDownStatus.setAdapter(adapter);
+
+        fragmentAddItemBinding.btnAdd.setEnabled(false);
+        fragmentAddItemBinding.btnAdd.setOnClickListener(view1 -> {
+            try {
+                addItem();
+            } catch (ParseException ignored) {
+                //empty
+            }
+        });
+        fragmentAddItemBinding.btnClear.setOnClickListener(view2 -> clearText());
+
+        fragmentAddItemBinding.edtCreatedDate.setOnClickListener(view3 -> addDatePicker(fragmentAddItemBinding.edtCreatedDate));
+
+        fragmentAddItemBinding.edtCompletedDate.setOnClickListener(view4 -> addDatePicker(fragmentAddItemBinding.edtCompletedDate));
+        fragmentAddItemBinding.edtTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setErrorEditText(fragmentAddItemBinding.edtTitle, "Field title can't empty");
+            }
+        });
+        fragmentAddItemBinding.edtDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setErrorEditText(fragmentAddItemBinding.edtDescription, "Field description can't empty");
+            }
+        });
+        fragmentAddItemBinding.edtCreatedDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setErrorEditText(fragmentAddItemBinding.edtCreatedDate, "Field created date can't empty");
+            }
+        });
+        fragmentAddItemBinding.edtCompletedDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setErrorEditText(fragmentAddItemBinding.edtCompletedDate, "Field completed date can't empty");
+            }
+        });
+        fragmentAddItemBinding.dropDownStatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //Method is empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Objects.requireNonNull(fragmentAddItemBinding.dropDownStatus.getText()).toString().trim().isEmpty()) {
+                    fragmentAddItemBinding.dropDownStatus.setError("Please choice a status");
+                } else {
+                    fragmentAddItemBinding.dropDownStatus.setError(null);
+                }
+                boolean check = checkValidate();
+                fragmentAddItemBinding.btnAdd.setEnabled(check);
+            }
+        });
     }
+
+    private void addItem() throws ParseException {
+        if (validation()) {
+            String stringTitle = Objects.requireNonNull(fragmentAddItemBinding.edtTitle.getText()).toString().trim();
+            String strDescription = Objects.requireNonNull(fragmentAddItemBinding.edtDescription.getText()).toString().trim();
+            Date createDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtCreatedDate.getText()).toString().trim());
+            Date completeDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtCompletedDate.getText()).toString().trim());
+            String strStatus = fragmentAddItemBinding.dropDownStatus.getText().toString().trim();
+
+            //update database
+            todoItem.setTitle(stringTitle);
+            todoItem.setDescription(strDescription);
+            todoItem.setCreatedDate(createDate);
+            todoItem.setCompletedDate(completeDate);
+            todoItem.setStatus(strStatus);
+
+            todoItemViewModel.addItem(todoItem);
+            Toast.makeText(getActivity(), "Add success", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
+        }
+    }
+
+    //create date picker
+    private void addDatePicker(TextInputEditText textDate) {
+        MaterialDatePicker<Long> datePickerCreated;
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        if (datePickerCreated.isAdded()) {
+            return;
+        }
+        datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
+        datePickerCreated.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis(selection);
+            SimpleDateFormat format = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
+            String formattedDate = format.format(calendar.getTime());
+            textDate.setText(formattedDate);
+        });
+    }
+
+    private void clearText() {
+        fragmentAddItemBinding.edtTitle.setText("");
+        fragmentAddItemBinding.edtTitle.setError(null);
+        fragmentAddItemBinding.edtDescription.setText("");
+        fragmentAddItemBinding.edtDescription.setError(null);
+        fragmentAddItemBinding.edtCreatedDate.setText("");
+        fragmentAddItemBinding.edtCreatedDate.setError(null);
+        fragmentAddItemBinding.edtCompletedDate.setText("");
+        fragmentAddItemBinding.edtCompletedDate.setError(null);
+        fragmentAddItemBinding.dropDownStatus.setText("", false);
+        fragmentAddItemBinding.dropDownStatus.setError(null);
+    }
+
+    private void setErrorEditText(TextInputEditText textEdit, String errorMessage) {
+        if (Objects.requireNonNull(textEdit.getText()).toString().trim().isEmpty()) {
+            textEdit.setError(errorMessage);
+        } else {
+            textEdit.setError(null);
+        }
+        boolean check = checkValidate();
+        fragmentAddItemBinding.btnAdd.setEnabled(check);
+    }
+
+    private boolean checkValidate() {
+        boolean check = !Objects.requireNonNull(fragmentAddItemBinding.edtTitle.getText()).toString().trim().isEmpty();
+
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtDescription.getText()).toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtCreatedDate.getText()).toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtCompletedDate.getText()).toString().trim().isEmpty()) {
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.dropDownStatus.getText()).toString().trim().isEmpty()) {
+            check = false;
+        }
+        return check;
+    }
+
+    private boolean validation() throws ParseException {
+        boolean check = true;
+
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtTitle.getText()).toString().trim().isEmpty()) {
+            fragmentAddItemBinding.edtTitle.setError("Field title can't empty");
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtDescription.getText()).toString().trim().isEmpty()) {
+            fragmentAddItemBinding.edtDescription.setError("Field description can't empty");
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtCreatedDate.getText()).toString().trim().isEmpty()) {
+            fragmentAddItemBinding.edtCreatedDate.setError("Field created date can't empty");
+            check = false;
+        }
+        if (Objects.requireNonNull(fragmentAddItemBinding.edtCompletedDate.getText()).toString().trim().isEmpty()) {
+            fragmentAddItemBinding.edtCompletedDate.setError("Field completed date can't empty");
+            check = false;
+        }
+        if (fragmentAddItemBinding.dropDownStatus.getText().toString().trim().isEmpty()) {
+            fragmentAddItemBinding.dropDownStatus.setError("Please choice a status");
+            check = false;
+        }
+        if (!check) {
+            return false;
+        }
+        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                .parse(fragmentAddItemBinding.edtCreatedDate.getText().toString().trim());
+        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+                .parse(fragmentAddItemBinding.edtCompletedDate.getText().toString().trim());
+        assert credate != null;
+        if (credate.compareTo(comdate) > 0) {
+            fragmentAddItemBinding.edtCompletedDate.setError("Completed date must be after created date");
+            check = false;
+        }
+        return check;
+    }
+
 }

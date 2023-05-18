@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.Adapter.TodoItemAdapterKotlin
 import com.example.todoapp.R
+import com.example.todoapp.adater.TodoItemAdapterKotlin
 import com.example.todoapp.databinding.FragmentAllKotlinBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
@@ -39,15 +39,15 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
     }
 
     private fun displayListTodo() {
-        val rcvItem = fragmentAllItemBinding!!.rcvTodoitem
+        val rcvItem = fragmentAllItemBinding!!.rcvTodoItem
         val linearLayoutManager = LinearLayoutManager(context)
         rcvItem.layoutManager = linearLayoutManager
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         rcvItem.addItemDecoration(dividerItemDecoration)
         todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it, requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
-        todoItemViewModel!!.getStringMutableLiveData().observe(requireActivity()) {
-            todoItemViewModel!!.getAllList(todoItemViewModel!!.getStringMutableLiveData().value)
+        todoItemViewModel!!.stringMutableLiveData.observe(requireActivity()) {
+            todoItemViewModel!!.getAllList(todoItemViewModel!!.stringMutableLiveData.value)
                 .observe(
                     requireActivity()
                 ) { items ->
@@ -74,7 +74,7 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?) : Fragment() {
 
     private fun clickDetailItem(todoItem: TodoItem) {
         val bundle = Bundle()
-        bundle.putSerializable("object_TodoItem", todoItem)
+        bundle.putSerializable("objectTodoItem", todoItem)
         findNavController(requireView()).navigate(R.id.updateItemKotlinFragment, bundle)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.todoapp.Adapter;
+package com.example.todoapp.adater;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

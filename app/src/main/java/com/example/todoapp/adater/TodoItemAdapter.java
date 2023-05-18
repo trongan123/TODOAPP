@@ -1,4 +1,4 @@
-package com.example.todoapp.Adapter;
+package com.example.todoapp.adater;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -22,6 +22,7 @@ import java.util.Locale;
 
 public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHolder> {
 
+    private static final String STRING_DATE_FORMAT = "yyyy-MM-dd";
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOADING = 2;
     private final TodoItemViewModel todoItemViewModel;
@@ -33,7 +34,7 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         this.todoItemViewModel = todoItemViewModel;
     }
 
-    public void setClickListenner(IClickItemToDo iClickItem) {
+    public void setClickListener(IClickItemToDo iClickItem) {
         this.iClickItem = iClickItem;
     }
 
@@ -46,11 +47,12 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (TYPE_ITEM == viewType) {
-            ItemTodoBinding itemTodoBinding = ItemTodoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new TodoItemViewHoldel(itemTodoBinding);
+            ItemTodoBinding itemTodoBinding = ItemTodoBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new TodoItemViewHolder(itemTodoBinding);
         } else {
-            ItemLoadingBinding itemLoadingBinding = ItemLoadingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-
+            ItemLoadingBinding itemLoadingBinding = ItemLoadingBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new LoadingViewHolder(itemLoadingBinding);
         }
     }
@@ -58,45 +60,44 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == TYPE_ITEM) {
-
             TodoItem todoItem = getItem(position);
-            TodoItemViewHoldel todoItemViewHolder = (TodoItemViewHoldel) holder;
+            TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
             long id = getItemId(position);
 
             List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
             if (checkItem != null) {
                 if (checkItem.contains(id)) {
-                    todoItemViewHolder.itemTodoBinding.txttitle.setChecked(true);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(true);
+                    todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                            .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
-                    todoItemViewHolder.itemTodoBinding.txttitle.setChecked(false);
-                    todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                    todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(false);
+                    todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                            .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
 
             // set date to item
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
-
-
             todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
-            todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.DetaiItem(todoItem, todoItemViewHolder.itemTodoBinding.cardItem));
-
-
+            todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view ->
+                    iClickItem.detailItem(todoItem, todoItemViewHolder.itemTodoBinding.cardItem));
             todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
-
-            todoItemViewHolder.itemTodoBinding.txttitle.setOnClickListener(view -> setcheckbox(todoItemViewHolder, todoItem, id));
+            todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view ->
+                    setCheckBox(todoItemViewHolder, todoItem, id));
         }
     }
 
     //method set status for check box
-    private void setcheckbox(TodoItemViewHoldel todoItemViewHolder, TodoItem todoItem, long id) {
-        if (todoItemViewHolder.itemTodoBinding.txttitle.isChecked()) {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+    private void setCheckBox(TodoItemViewHolder todoItemViewHolder, TodoItem todoItem, long id) {
+        if (todoItemViewHolder.itemTodoBinding.txtTitle.isChecked()) {
+            todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                    .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, true);
-
         } else {
-            todoItemViewHolder.itemTodoBinding.txttitle.setPaintFlags(todoItemViewHolder.itemTodoBinding.txttitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                    .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             iClickItem.clearItem(todoItem, id, false);
         }
     }
@@ -116,11 +117,10 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
     public void removeFooterLoading() {
         isLoadingAdd = false;
-
     }
 
     public interface IClickItemToDo {
-        void DetaiItem(TodoItem todoItem, CardView cardView);
+        void detailItem(TodoItem todoItem, CardView cardView);
 
         void clearItem(TodoItem todoItem, long id, boolean check);
     }
@@ -137,22 +137,19 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
         }
     }
 
-    public static class TodoItemViewHoldel extends RecyclerView.ViewHolder {
+    public static class TodoItemViewHolder extends RecyclerView.ViewHolder {
         private final ItemTodoBinding itemTodoBinding;
 
-        public TodoItemViewHoldel(@NonNull ItemTodoBinding itemTodoBinding) {
+        public TodoItemViewHolder(@NonNull ItemTodoBinding itemTodoBinding) {
             super(itemTodoBinding.getRoot());
             this.itemTodoBinding = itemTodoBinding;
         }
     }
 
     public static class LoadingViewHolder extends RecyclerView.ViewHolder {
-
         public LoadingViewHolder(@NonNull ItemLoadingBinding itemLoadingBinding) {
             super(itemLoadingBinding.getRoot());
         }
-
     }
-
 }
 

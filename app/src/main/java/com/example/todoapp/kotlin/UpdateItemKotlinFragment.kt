@@ -24,6 +24,8 @@ import java.util.*
 
 
 class UpdateItemKotlinFragment : Fragment() {
+    
+    private val stringDateFormat: String = "yyyy-MM-dd"
     private var fragmentUpdateItemBinding: FragmentUpdateItemKotlinBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
     private var datePickerCompleted: MaterialDatePicker<*>? = null
@@ -35,18 +37,18 @@ class UpdateItemKotlinFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val type = arrayOf("pending", "completed")
         val adapter = ArrayAdapter(
-            requireActivity(), R.layout.dropdown_menu_popup_item, R.id.txtstyle, type
+            requireActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type
         )
-        fragmentUpdateItemBinding!!.dropdownstatus.setAdapter(adapter)
+        fragmentUpdateItemBinding!!.dropDownStatus.setAdapter(adapter)
         initUi()
-        fragmentUpdateItemBinding!!.btnupdate.setOnClickListener {
+        fragmentUpdateItemBinding!!.btnUpdate.setOnClickListener {
             try {
                 updateItem()
             } catch (e: ParseException) {
                 throw RuntimeException(e)
             }
         }
-        fragmentUpdateItemBinding!!.btndelete.setOnClickListener {
+        fragmentUpdateItemBinding!!.btnDelete.setOnClickListener {
             try {
                 deleteItem()
             } catch (e: ParseException) {
@@ -80,15 +82,15 @@ class UpdateItemKotlinFragment : Fragment() {
     @Throws(ParseException::class)
     private fun updateItem() {
         if (validation()) {
-            val strtitle: String = fragmentUpdateItemBinding!!.edttitle.text.toString().trim()
-            val strDes: String = fragmentUpdateItemBinding!!.edtdescription.text.toString().trim()
-            val credate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
-                fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim()
+            val strtitle: String = fragmentUpdateItemBinding!!.edtTitle.text.toString().trim()
+            val strDes: String = fragmentUpdateItemBinding!!.edtDescription.text.toString().trim()
+            val credate = SimpleDateFormat(stringDateFormat, Locale.getDefault()).parse(
+                fragmentUpdateItemBinding!!.edtCreatedDate.text.toString().trim()
             )
-            val comdate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
-                fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim()
+            val comdate = SimpleDateFormat(stringDateFormat, Locale.getDefault()).parse(
+                fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim()
             )
-            val strStt: String = fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim()
+            val strStt: String = fragmentUpdateItemBinding!!.dropDownStatus.text.toString().trim()
 
             //update database
             todoItem!!.title = strtitle
@@ -104,15 +106,15 @@ class UpdateItemKotlinFragment : Fragment() {
 
     @Throws(ParseException::class)
     private fun deleteItem() {
-        val strtitle: String = fragmentUpdateItemBinding!!.edttitle.text.toString().trim()
-        val strDes: String = fragmentUpdateItemBinding!!.edtdescription.text.toString().trim()
-        val credate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
-            fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim()
+        val strtitle: String = fragmentUpdateItemBinding!!.edtTitle.text.toString().trim()
+        val strDes: String = fragmentUpdateItemBinding!!.edtDescription.text.toString().trim()
+        val credate = SimpleDateFormat(stringDateFormat, Locale.getDefault()).parse(
+            fragmentUpdateItemBinding!!.edtCreatedDate.text.toString().trim()
         )
-        val comdate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
-            fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim()
+        val comdate = SimpleDateFormat(stringDateFormat, Locale.getDefault()).parse(
+            fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim()
         )
-        val strStt: String = fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim()
+        val strStt: String = fragmentUpdateItemBinding!!.dropDownStatus.text.toString().trim()
 
         //update database
         todoItem!!.title = strtitle
@@ -130,39 +132,39 @@ class UpdateItemKotlinFragment : Fragment() {
     }
 
     private fun initUi() {
-        todoItem = requireArguments().getSerializable("object_TodoItem") as TodoItem?
+        todoItem = requireArguments().getSerializable("objectTodoItem") as TodoItem?
 
         val transition = requireArguments().getString("transition")
-        fragmentUpdateItemBinding!!.constraint.transitionName = transition
+        fragmentUpdateItemBinding!!.constraintLayout.transitionName = transition
 
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat: DateFormat = SimpleDateFormat(stringDateFormat, Locale.getDefault())
         if (todoItem != null) {
-            fragmentUpdateItemBinding!!.edttitle.setText(todoItem!!.title)
-            fragmentUpdateItemBinding!!.edtdescription.setText(todoItem!!.description)
-            fragmentUpdateItemBinding!!.edtcreatedDate.setText(dateFormat.format(todoItem!!.createdDate))
-            fragmentUpdateItemBinding!!.edtcompletedDate.setText(dateFormat.format(todoItem!!.completedDate))
-            fragmentUpdateItemBinding!!.dropdownstatus.setText(todoItem!!.status, false)
+            fragmentUpdateItemBinding!!.edtTitle.setText(todoItem!!.title)
+            fragmentUpdateItemBinding!!.edtDescription.setText(todoItem!!.description)
+            fragmentUpdateItemBinding!!.edtCreatedDate.setText(dateFormat.format(todoItem!!.createdDate))
+            fragmentUpdateItemBinding!!.edtCompletedDate.setText(dateFormat.format(todoItem!!.completedDate))
+            fragmentUpdateItemBinding!!.dropDownStatus.setText(todoItem!!.status, false)
         }
-        fragmentUpdateItemBinding!!.edtcreatedDate.setOnClickListener {
+        fragmentUpdateItemBinding!!.edtCreatedDate.setOnClickListener {
             datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCreated!!.addOnPositiveButtonClickListener { selection ->
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
-                fragmentUpdateItemBinding!!.edtcreatedDate.setText(formattedDate)
+                fragmentUpdateItemBinding!!.edtCreatedDate.setText(formattedDate)
             }
         }
 
         //create datePicker
-        fragmentUpdateItemBinding!!.edtcompletedDate.setOnClickListener {
+        fragmentUpdateItemBinding!!.edtCompletedDate.setOnClickListener {
             datePickerCompleted!!.show(parentFragmentManager, "Material_Date_Picker")
             datePickerCompleted!!.addOnPositiveButtonClickListener { selection ->
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())
                 val formattedDate = format.format(calendar.time)
-                fragmentUpdateItemBinding!!.edtcompletedDate.setText(formattedDate)
+                fragmentUpdateItemBinding!!.edtCompletedDate.setText(formattedDate)
             }
         }
     }
@@ -170,43 +172,39 @@ class UpdateItemKotlinFragment : Fragment() {
     @Throws(ParseException::class)
     private fun validation(): Boolean {
         var check = true
-        if (fragmentUpdateItemBinding!!.edttitle.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.edttitle.error = "Field title can't empty"
+        if (fragmentUpdateItemBinding!!.edtTitle.text.toString().trim().isEmpty()) {
+            fragmentUpdateItemBinding!!.edtTitle.error = "Field title can't empty"
             check = false
         }
-        if (fragmentUpdateItemBinding!!.edtdescription.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.edtdescription.error = "Field description can't empty"
+        if (fragmentUpdateItemBinding!!.edtDescription.text.toString().trim().isEmpty()) {
+            fragmentUpdateItemBinding!!.edtDescription.error = "Field description can't empty"
             check = false
         }
-        if (fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.edtcreatedDate.error = "Field created date can't empty"
+        if (fragmentUpdateItemBinding!!.edtCreatedDate.text.toString().trim().isEmpty()) {
+            fragmentUpdateItemBinding!!.edtCreatedDate.error = "Field created date can't empty"
             check = false
         }
-        if (fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.edtcompletedDate.error = "Field completed date can't empty"
+        if (fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim().isEmpty()) {
+            fragmentUpdateItemBinding!!.edtCompletedDate.error = "Field completed date can't empty"
             check = false
         }
-        if (fragmentUpdateItemBinding!!.dropdownstatus.text.toString().trim().isEmpty()) {
-            fragmentUpdateItemBinding!!.dropdownstatus.error = "Please choice a status"
+        if (fragmentUpdateItemBinding!!.dropDownStatus.text.toString().trim().isEmpty()) {
+            fragmentUpdateItemBinding!!.dropDownStatus.error = "Please choice a status"
             check = false
         }
         if (!check) {
             return false
         }
         val credate = SimpleDateFormat(
-            "yyyy-MM-dd",
-            Locale.getDefault()
-        ).parse(fragmentUpdateItemBinding!!.edtcreatedDate.text.toString().trim())
+            stringDateFormat, Locale.getDefault()
+        ).parse(fragmentUpdateItemBinding!!.edtCreatedDate.text.toString().trim())
         val comdate = SimpleDateFormat(
-            "yyyy-MM-dd",
-            Locale.getDefault()
-        ).parse(fragmentUpdateItemBinding!!.edtcompletedDate.text.toString().trim())
-        if (credate != null) {
-            if (credate > comdate) {
-                fragmentUpdateItemBinding!!.edtcompletedDate.error =
-                    "Completed date must be after created date"
-                check = false
-            }
+            stringDateFormat, Locale.getDefault()
+        ).parse(fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim())
+        if (credate != null && credate > comdate) {
+            fragmentUpdateItemBinding!!.edtCompletedDate.error =
+                "Completed date must be after created date"
+            check = false
         }
         return check
     }
