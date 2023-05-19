@@ -89,7 +89,6 @@ fun TabScreen(
     }
 }
 
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Tabs(
@@ -130,9 +129,7 @@ fun Tabs(
                     },
                 )
             }
-
         }
-
         if (dialogOpen) {
             Dialog(onDismissRequest = {
                 dialogOpen = false
@@ -203,7 +200,6 @@ fun Tabs(
                 }
             }
         }
-
         Button(
             onClick = {
                 dialogOpen = true
@@ -228,13 +224,10 @@ fun AllItemScreen(
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel
 ) {
-
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier.fillMaxSize()
-
     ) {
-
         LazyColumn {
             viewModel.stringMutableLiveData.observe(owner) {
                 viewModel.getAllList(viewModel.stringMutableLiveData.value)
@@ -253,7 +246,6 @@ fun AllItemScreen(
                 )
             })
         }
-
     }
 }
 
@@ -264,7 +256,6 @@ fun PendingItemScreen(
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     Column(
         modifier = Modifier.fillMaxSize()
-
     ) {
 
         LazyColumn {
@@ -284,7 +275,6 @@ fun PendingItemScreen(
                 )
             })
         }
-
     }
 }
 
@@ -297,7 +287,6 @@ fun CompletedItemScreen(
     //   items = localListTodo.current.todolist as ArrayList<TodoItem>
     Column(
         modifier = Modifier.fillMaxSize()
-
     ) {
 
         LazyColumn {
@@ -316,8 +305,6 @@ fun CompletedItemScreen(
                     }, viewModel
                 )
             })
-
-
         }
     }
 }
@@ -380,7 +367,6 @@ fun ItemList(
                         .clickable {
                             todoItem = i
                             openUpdateItemScreen()
-
                         }
                         .size(50.dp))
                 Spacer(modifier = Modifier.size(10.dp))
@@ -388,7 +374,6 @@ fun ItemList(
             androidx.compose.material3.Text(
                 i.description, modifier = Modifier.padding(start = 16.dp)
             )
-
             androidx.compose.material3.Text(
                 "Created Date:    " + SimpleDateFormat(
                     stringDateFormat, Locale.getDefault()
@@ -426,7 +411,6 @@ fun ItemListRecycle(
                     .Builder()
                     .addSharedElement(myitem, myitem.transitionName)
                     .build()
-
                 findNavController(view!!).navigate(
                     R.id.updateItemKotlinFragment, bundle, null, extras
                 )

@@ -43,7 +43,8 @@ fun MainApp(
 ) {
     MaterialTheme {
         AnimatedNavHost(navController = navController, startDestination = "home") {
-            composable("home", enterTransition = {
+            composable("home",
+                enterTransition = {
                 when (initialState.destination.route) {
                     "addItem", "updateItem" -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700)
