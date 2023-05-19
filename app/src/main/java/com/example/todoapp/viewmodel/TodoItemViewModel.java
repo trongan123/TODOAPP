@@ -28,8 +28,8 @@ public class TodoItemViewModel extends AndroidViewModel {
         listMutableLiveDataCheck.postValue(new ArrayList<>());
     }
 
-    public LiveData<List<TodoItem>> getAllList(String key) {
-        todoItems = mRepository.getAllList(key);
+    public LiveData<List<TodoItem>> getAllList() {
+        todoItems = mRepository.getAllList(stringMutableLiveData.getValue());
         return todoItems;
     }
 

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentUpdateItemKotlinBinding
+import com.example.todoapp.databinding.FragmentUpdateItemBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -26,7 +26,7 @@ import java.util.*
 class UpdateItemKotlinFragment : Fragment() {
 
     private val stringDateFormat: String = "yyyy-MM-dd"
-    private var fragmentUpdateItemBinding: FragmentUpdateItemKotlinBinding? = null
+    private var fragmentUpdateItemBinding: FragmentUpdateItemBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
     private var datePickerCompleted: MaterialDatePicker<*>? = null
     private var datePickerCreated: MaterialDatePicker<*>? = null
@@ -68,7 +68,7 @@ class UpdateItemKotlinFragment : Fragment() {
     ): View? {
         sharedElementEnterTransition = ChangeBounds()
         fragmentUpdateItemBinding =
-            inflater.let { FragmentUpdateItemKotlinBinding.inflate(it, container, false) }
+            inflater.let { FragmentUpdateItemBinding.inflate(it, container, false) }
         mView = fragmentUpdateItemBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         fragmentUpdateItemBinding!!.todoItemViewModel = todoItemViewModel

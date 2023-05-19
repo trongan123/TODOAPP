@@ -1,6 +1,5 @@
 package com.example.todoapp
 
-//import androidx.navigation.compose.composable
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,12 +14,10 @@ import androidx.navigation.NavHostController
 import com.example.todoapp.ui.theme.screem.AddItemScreen
 import com.example.todoapp.ui.theme.screem.HomeScreen
 import com.example.todoapp.ui.theme.screem.UpdateItemScreen
-import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-
 
 class MainJetpackActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)

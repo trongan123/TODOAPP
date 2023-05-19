@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.adater.TodoItemAdapter;
-import com.example.todoapp.databinding.FragmentCompletedItemBinding;
+import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 
@@ -29,15 +29,15 @@ import java.util.List;
 public class CompletedItemFragment extends Fragment {
 
     private final TodoItemViewModel todoItemViewModel;
-    private FragmentCompletedItemBinding fragmentCompletedItemBinding;
+    private FragmentAllItemBinding fragmentCompletedItemBinding;
     private TodoItemAdapter todoItemAdapter;
     private List<TodoItem> todoItems;
     private List<TodoItem> todoItemLoads;
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
-    private int startitem;
-    private int enditem;
+    private int startItem;
+    private int endItem;
     private int currentPage = 1;
 
     public CompletedItemFragment(TodoItemViewModel todoItemViewModel) {
@@ -47,7 +47,7 @@ public class CompletedItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        fragmentCompletedItemBinding = FragmentCompletedItemBinding.inflate(inflater, container, false);
+        fragmentCompletedItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
         View mView = fragmentCompletedItemBinding.getRoot();
         fragmentCompletedItemBinding.setAllItemViewModel(todoItemViewModel);
         // Inflate the layout for this fragment
@@ -130,18 +130,17 @@ public class CompletedItemFragment extends Fragment {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
-                list = todoItems.subList(startitem, enditem);
-
-                startitem = enditem;
-                if ((enditem + 20) < todoItems.size()) {
-                    enditem += 20;
+                list = todoItems.subList(startItem, endItem);
+                startItem = endItem;
+                if ((endItem + 20) < todoItems.size()) {
+                    endItem += 20;
                 } else {
-                    enditem = todoItems.size();
+                    endItem = todoItems.size();
                 }
             }
             todoItemAdapter.removeFooterLoading();
             todoItemLoads.addAll(list);
-            todoItemAdapter.notifyItemRangeChanged(startitem - 20, todoItemLoads.size());
+            todoItemAdapter.notifyItemRangeChanged(startItem - 20, todoItemLoads.size());
             isLoading = false;
             if (currentPage < totalPage) {
                 todoItemAdapter.addFooterLoading();
@@ -162,13 +161,13 @@ public class CompletedItemFragment extends Fragment {
     }
 
     private void setFirstData() {
-        startitem = 0;
-        enditem = 20;
+        startItem = 0;
+        endItem = 20;
         if (todoItems.size() > 20) {
-            todoItemLoads = todoItems.subList(startitem, enditem);
-            startitem = enditem;
-            if ((enditem + 20) < todoItems.size()) {
-                enditem += 20;
+            todoItemLoads = todoItems.subList(startItem, endItem);
+            startItem = endItem;
+            if ((endItem + 20) < todoItems.size()) {
+                endItem += 20;
             }
         } else {
             todoItemLoads = todoItems;

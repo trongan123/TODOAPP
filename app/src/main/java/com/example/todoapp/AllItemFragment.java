@@ -35,8 +35,8 @@ public class AllItemFragment extends Fragment {
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
-    private int startitem;
-    private int enditem;
+    private int startItem;
+    private int endItem;
     private int currentPage = 1;
 
     public AllItemFragment(TodoItemViewModel todoItemViewModel) {
@@ -72,19 +72,18 @@ public class AllItemFragment extends Fragment {
 
         //set data to recyclerview
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue())
-                        .observe(requireActivity(), items -> {
-                            // Update item to fragment
-                            todoItems = items;
-                            currentPage = 0;
-                            isLastPage = false;
-                            if (items.size() % 20 == 0) {
-                                totalPage = (items.size() / 20);
-                            } else {
-                                totalPage = (items.size() / 20) + 1;
-                            }
-                            setFirstData();
-                        }));
+                todoItemViewModel.getAllList().observe(requireActivity(), items -> {
+                    // Update item to fragment
+                    todoItems = items;
+                    currentPage = 0;
+                    isLastPage = false;
+                    if (items.size() % 20 == 0) {
+                        totalPage = (items.size() / 20);
+                    } else {
+                        totalPage = (items.size() / 20) + 1;
+                    }
+                    setFirstData();
+                }));
 
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -105,8 +104,7 @@ public class AllItemFragment extends Fragment {
             public void loadMoreItems() {
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData()
-                        .getValue()).observe(requireActivity(), items -> {
+                todoItemViewModel.getAllList().observe(requireActivity(), items -> {
                     // Update item to fragment
                     todoItems = items;
                     if (items.size() % 20 == 0) {
@@ -144,18 +142,18 @@ public class AllItemFragment extends Fragment {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
-                list = todoItems.subList(startitem, enditem);
+                list = todoItems.subList(startItem, endItem);
 
-                startitem = enditem;
-                if ((enditem + 20) < todoItems.size()) {
-                    enditem += 20;
+                startItem = endItem;
+                if ((endItem + 20) < todoItems.size()) {
+                    endItem += 20;
                 } else {
-                    enditem = todoItems.size();
+                    endItem = todoItems.size();
                 }
             }
             todoItemAdapter.removeFooterLoading();
             todoItemLoads.addAll(list);
-            todoItemAdapter.notifyItemRangeChanged(startitem - 20, todoItemLoads.size());
+            todoItemAdapter.notifyItemRangeChanged(startItem - 20, todoItemLoads.size());
             isLoading = false;
             if (currentPage < totalPage) {
                 todoItemAdapter.addFooterLoading();
@@ -166,13 +164,13 @@ public class AllItemFragment extends Fragment {
     }
 
     private void setFirstData() {
-        startitem = 0;
-        enditem = 20;
+        startItem = 0;
+        endItem = 20;
         if (todoItems.size() > 20) {
-            todoItemLoads = todoItems.subList(startitem, enditem);
-            startitem = enditem;
-            if ((enditem + 20) < todoItems.size()) {
-                enditem += 20;
+            todoItemLoads = todoItems.subList(startItem, endItem);
+            startItem = endItem;
+            if ((endItem + 20) < todoItems.size()) {
+                endItem += 20;
             }
         } else {
             todoItemLoads = todoItems;

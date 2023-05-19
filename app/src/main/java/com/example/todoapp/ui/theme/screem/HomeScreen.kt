@@ -15,7 +15,7 @@ fun HomeScreen(
 ) {
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
     viewModel.stringMutableLiveData.observe(owner) {
-        viewModel.getAllList(viewModel.stringMutableLiveData.value)
+        viewModel.allList
             .observe(owner) { item: List<TodoItem> ->
                 items = item as ArrayList<TodoItem>
             }

@@ -9,7 +9,7 @@
         android:id="@+id/addItemKotlinFragment"
         android:name="com.example.todoapp.kotlin.AddItemKotlinFragment"
         android:label="Add New To Do Item"
-        tools:layout="@layout/fragment_add_item_kotlin">
+        tools:layout="@layout/fragment_add_item">
         <action
             android:id="@+id/action_addItemKotlinFragment_to_mainKotlinFragment"
             app:destination="@id/mainKotlinFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/updateItemKotlinFragment"
         android:name="com.example.todoapp.kotlin.UpdateItemKotlinFragment"
         android:label="Update To Do Item"
-        tools:layout="@layout/fragment_update_item_kotlin">
+        tools:layout="@layout/fragment_update_item">
         <action
             android:id="@+id/action_updateItemKotlinFragment_to_mainKotlinFragment"
             app:destination="@id/mainKotlinFragment" />

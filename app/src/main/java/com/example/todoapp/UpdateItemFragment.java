@@ -81,7 +81,6 @@ public class UpdateItemFragment extends Fragment {
         setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
     }
 
-
     private void updateItem() throws ParseException {
         if (validation()) {
             String stringTitle = Objects.requireNonNull(fragmentUpdateItemBinding.edtTitle.getText()).toString().trim();

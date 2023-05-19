@@ -14,7 +14,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todoapp.R
 import com.example.todoapp.adater.TabItemKotlinAdapter
-import com.example.todoapp.databinding.FragmentMainKotlinBinding
+import com.example.todoapp.databinding.FragmentMainBinding
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
@@ -23,9 +23,19 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MainKotlinFragment : Fragment() {
 
-    private var fragmentMainBinding: FragmentMainKotlinBinding? = null
+    private var fragmentMainBinding: FragmentMainBinding? = null
     private var mView: View? = null
     private var todoItemViewModel: TodoItemViewModel? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false)
+        mView = fragmentMainBinding!!.root
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
+        return mView
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -90,13 +100,5 @@ class MainKotlinFragment : Fragment() {
             }.setNegativeButton("No", null).show()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        fragmentMainBinding = FragmentMainKotlinBinding.inflate(inflater, container, false)
-        mView = fragmentMainBinding!!.root
-        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-        return mView
-    }
+
 }

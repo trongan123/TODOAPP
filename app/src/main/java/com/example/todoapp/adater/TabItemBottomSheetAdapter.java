@@ -9,6 +9,7 @@ import com.example.todoapp.bottomsheet.AllItemBottomSheetFragment;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 public class TabItemBottomSheetAdapter extends FragmentStateAdapter {
+
     private final TodoItemViewModel todoItemViewModel;
 
     public TabItemBottomSheetAdapter(@NonNull FragmentActivity fragmentActivity, TodoItemViewModel todoItemViewModel) {

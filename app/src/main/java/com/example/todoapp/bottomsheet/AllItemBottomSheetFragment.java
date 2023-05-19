@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.adater.TodoItemBottomSheetAdapter;
-import com.example.todoapp.databinding.FragmentAllItemBottomSheetBinding;
+import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -41,7 +41,7 @@ public class AllItemBottomSheetFragment extends Fragment {
     private final int tabNumber;
     private final TodoItemViewModel todoItemViewModel;
     MaterialAlertDialogBuilder materialAlertDialogBuilder;
-    private FragmentAllItemBottomSheetBinding fragmentAllItemBinding;
+    private FragmentAllItemBinding fragmentAllItemBinding;
     private BottomSheetDialog bottomSheetDialog;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
 
@@ -52,7 +52,7 @@ public class AllItemBottomSheetFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentAllItemBinding = FragmentAllItemBottomSheetBinding.inflate(inflater, container, false);
+        fragmentAllItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
         updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
         View mView = fragmentAllItemBinding.getRoot();
         fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
@@ -82,7 +82,7 @@ public class AllItemBottomSheetFragment extends Fragment {
             switch (tabNumber) {
                 case 1:
                     //set data for tab all item
-                    todoItemViewModel.getAllList(todoItemViewModel.getStringMutableLiveData().getValue()).observe(requireActivity(), todoItemAdapter::submitList);
+                    todoItemViewModel.getAllList().observe(requireActivity(), todoItemAdapter::submitList);
                     break;
                 case 2:
                     //set data for tab pending item

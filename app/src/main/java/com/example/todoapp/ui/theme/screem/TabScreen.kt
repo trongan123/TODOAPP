@@ -230,7 +230,7 @@ fun AllItemScreen(
     ) {
         LazyColumn {
             viewModel.stringMutableLiveData.observe(owner) {
-                viewModel.getAllList(viewModel.stringMutableLiveData.value)
+                viewModel.allList
                     .observe(owner) { item: List<TodoItem> ->
                         items = item as ArrayList<TodoItem>
                     }

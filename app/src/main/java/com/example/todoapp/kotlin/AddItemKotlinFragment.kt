@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentAddItemKotlinBinding
+import com.example.todoapp.databinding.FragmentAddItemBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -26,7 +26,7 @@ import java.util.*
 class AddItemKotlinFragment : Fragment() {
 
     private val stringDateFormat: String = "yyyy-MM-dd"
-    private var fragmentAddItemBinding: FragmentAddItemKotlinBinding? = null
+    private var fragmentAddItemBinding: FragmentAddItemBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
     private val todoItem = TodoItem()
 
@@ -34,7 +34,7 @@ class AddItemKotlinFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         sharedElementEnterTransition = ChangeBounds()
-        fragmentAddItemBinding = FragmentAddItemKotlinBinding.inflate(inflater, container, false)
+        fragmentAddItemBinding = FragmentAddItemBinding.inflate(inflater, container, false)
         val mView: View = fragmentAddItemBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         fragmentAddItemBinding!!.todoItemViewModel = todoItemViewModel
@@ -81,7 +81,7 @@ class AddItemKotlinFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {
                 setErrorEditText(
-                    fragmentAddItemBinding!!.edtCreatedDate, "Field title can't empty"
+                    fragmentAddItemBinding!!.edtTitle, "Field title can't empty"
                 )
             }
         })
@@ -96,7 +96,7 @@ class AddItemKotlinFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {
                 setErrorEditText(
-                    fragmentAddItemBinding!!.edtCreatedDate, "Field description can't empty"
+                    fragmentAddItemBinding!!.edtDescription, "Field description can't empty"
                 )
 
             }

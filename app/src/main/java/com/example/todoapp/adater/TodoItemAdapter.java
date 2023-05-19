@@ -1,6 +1,7 @@
 package com.example.todoapp.adater;
 
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,6 +18,7 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,6 +61,9 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        long a1;
+        long a2;
+        a1 = Calendar.getInstance().getTimeInMillis();
         if (holder.getItemViewType() == TYPE_ITEM) {
             TodoItem todoItem = getItem(position);
             TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
@@ -76,7 +81,6 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
                             .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
-
             // set date to item
             DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
@@ -87,6 +91,11 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view ->
                     setCheckBox(todoItemViewHolder, todoItem, id));
         }
+        a2 = Calendar.getInstance().getTimeInMillis();
+        Log.e("TAG", "Start :" + a1);
+        Log.e("TAG", "End :" + a2);
+        Log.e("TAG", "run time :" + (a2 - a1));
+
     }
 
     //method set status for check box

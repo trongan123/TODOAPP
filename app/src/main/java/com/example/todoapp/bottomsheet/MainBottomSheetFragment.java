@@ -17,7 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.todoapp.R;
 import com.example.todoapp.adater.TabItemBottomSheetAdapter;
-import com.example.todoapp.databinding.FragmentMainBottomSheetBinding;
+import com.example.todoapp.databinding.FragmentMainBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -42,14 +42,14 @@ public class MainBottomSheetFragment extends Fragment {
     private static final String STRING_DATE_FORMAT = "yyyy-MM-dd";
     private final TodoItem todoItem = new TodoItem();
     private BottomSheetDialog bottomSheetDialog;
-    private FragmentMainBottomSheetBinding fragmentMainBinding;
+    private FragmentMainBinding fragmentMainBinding;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
     private TodoItemViewModel todoItemViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        fragmentMainBinding = FragmentMainBottomSheetBinding.inflate(inflater, container, false);
+        fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
 
         View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
