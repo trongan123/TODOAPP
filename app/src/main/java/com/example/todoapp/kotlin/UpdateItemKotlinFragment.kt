@@ -24,7 +24,7 @@ import java.util.*
 
 
 class UpdateItemKotlinFragment : Fragment() {
-    
+
     private val stringDateFormat: String = "yyyy-MM-dd"
     private var fragmentUpdateItemBinding: FragmentUpdateItemKotlinBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
@@ -172,7 +172,7 @@ class UpdateItemKotlinFragment : Fragment() {
     @Throws(ParseException::class)
     private fun validation(): Boolean {
         var check = true
-        if (fragmentUpdateItemBinding!!.edtTitle.text.toString().trim().isEmpty()) {
+        if (this.fragmentUpdateItemBinding!!.edtTitle.text.toString().trim().isEmpty()) {
             fragmentUpdateItemBinding!!.edtTitle.error = "Field title can't empty"
             check = false
         }
@@ -195,13 +195,13 @@ class UpdateItemKotlinFragment : Fragment() {
         if (!check) {
             return false
         }
-        val credate = SimpleDateFormat(
+        val createdDate = SimpleDateFormat(
             stringDateFormat, Locale.getDefault()
         ).parse(fragmentUpdateItemBinding!!.edtCreatedDate.text.toString().trim())
-        val comdate = SimpleDateFormat(
+        val completedDate = SimpleDateFormat(
             stringDateFormat, Locale.getDefault()
         ).parse(fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim())
-        if (credate != null && credate > comdate) {
+        if (createdDate != null && createdDate > completedDate) {
             fragmentUpdateItemBinding!!.edtCompletedDate.error =
                 "Completed date must be after created date"
             check = false

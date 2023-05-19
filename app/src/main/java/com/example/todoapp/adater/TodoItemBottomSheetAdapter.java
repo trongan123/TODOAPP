@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todoapp.databinding.ItemLoadingBinding;
 import com.example.todoapp.databinding.ItemTodoBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -43,46 +42,38 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (TYPE_ITEM == viewType) {
-            ItemTodoBinding itemTodoBinding = ItemTodoBinding
-                    .inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new TodoItemViewHolder(itemTodoBinding);
-        } else {
-            ItemLoadingBinding itemLoadingBinding = ItemLoadingBinding
-                    .inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new LoadingViewHolder(itemLoadingBinding);
-        }
+        ItemTodoBinding itemTodoBinding = ItemTodoBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new TodoItemViewHolder(itemTodoBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_ITEM) {
 
-            TodoItem todoItem = getItem(position);
-            TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
-            long id = getItemId(position);
+        TodoItem todoItem = getItem(position);
+        TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
+        long id = getItemId(position);
 
-            List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
-            if (checkItem != null) {
-                if (checkItem.contains(id)) {
-                    todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(true);
-                    todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
-                            .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(false);
-                    todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
-                            .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                }
+        List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
+        if (checkItem != null) {
+            if (checkItem.contains(id)) {
+                todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(true);
+                todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                        .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(false);
+                todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
+                        .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
-
-            // set date to item
-            DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
-            todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
-            todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
-            todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.detailItem(todoItem));
-            todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
-            todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, id));
         }
+
+        // set date to item
+        DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
+        todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
+        todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
+        todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.detailItem(todoItem));
+        todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
+        todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, id));
     }
 
     private void setCheckBox(TodoItemViewHolder todoItemViewHolder, TodoItem todoItem, long id) {
@@ -126,12 +117,6 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
         public TodoItemViewHolder(@NonNull ItemTodoBinding itemTodoBinding) {
             super(itemTodoBinding.getRoot());
             this.itemTodoBinding = itemTodoBinding;
-        }
-    }
-
-    public static class LoadingViewHolder extends RecyclerView.ViewHolder {
-        public LoadingViewHolder(@NonNull ItemLoadingBinding itemLoadingBinding) {
-            super(itemLoadingBinding.getRoot());
         }
     }
 }

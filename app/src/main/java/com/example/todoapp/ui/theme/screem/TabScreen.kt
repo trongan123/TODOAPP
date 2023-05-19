@@ -34,7 +34,6 @@ import androidx.navigation.fragment.FragmentNavigator
 import com.example.todoapp.*
 import com.example.todoapp.R
 import com.example.todoapp.model.TodoItem
-import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
@@ -48,7 +47,6 @@ fun TabScreen(
     openAddItemScreen: () -> Unit,
     openUpdateItemScreen: () -> Unit,
     viewModel: TodoItemViewModel,
-    viewModelLoad: MainViewModel
 ) {
 
     val tabs: MutableList<TabItem> = ArrayList<TabItem>().toMutableList()
@@ -56,7 +54,7 @@ fun TabScreen(
         AllItemScreen(
             owner, openUpdateItemScreen = {
                 openUpdateItemScreen()
-            }, viewModel = viewModel, viewModelLoad = viewModelLoad
+            }, viewModel = viewModel
         )
     }
     tabs += TabItem("Pending") {
@@ -228,8 +226,7 @@ fun TabsContent(tabs: List<TabItem>, pagerState: PagerState) {
 fun AllItemScreen(
     owner: LifecycleOwner,
     openUpdateItemScreen: () -> Unit,
-    viewModel: TodoItemViewModel,
-    viewModelLoad: MainViewModel
+    viewModel: TodoItemViewModel
 ) {
 
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
@@ -394,14 +391,14 @@ fun ItemList(
 
             androidx.compose.material3.Text(
                 "Created Date:    " + SimpleDateFormat(
-                    "yyyy-MM-dd", Locale.getDefault()
+                    stringDateFormat, Locale.getDefault()
                 ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
             )
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat(
-                    "yyyy-MM-dd", Locale.getDefault()
+                    stringDateFormat, Locale.getDefault()
                 ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
@@ -469,7 +466,7 @@ fun ItemListRecycle(
             )
             androidx.compose.material3.Text(
                 "Created Date    :" + SimpleDateFormat(
-                    "yyyy-MM-dd", Locale.getDefault()
+                    stringDateFormat, Locale.getDefault()
                 ).format(i.createdDate),
                 modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline
@@ -477,7 +474,7 @@ fun ItemListRecycle(
 
             androidx.compose.material3.Text(
                 "Completed Date:" + SimpleDateFormat(
-                    "yyyy-MM-dd", Locale.getDefault()
+                    stringDateFormat, Locale.getDefault()
                 ).format(i.completedDate),
                 modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 16.dp),
                 style = MaterialTheme.typography.overline

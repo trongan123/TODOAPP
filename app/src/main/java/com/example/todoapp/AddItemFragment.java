@@ -60,6 +60,9 @@ public class AddItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MaterialDatePicker<Long> datePickerCreated;
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
         fragmentAddItemBinding.dropDownStatus.setAdapter(adapter);
@@ -74,9 +77,11 @@ public class AddItemFragment extends Fragment {
         });
         fragmentAddItemBinding.btnClear.setOnClickListener(view2 -> clearText());
 
-        fragmentAddItemBinding.edtCreatedDate.setOnClickListener(view3 -> addDatePicker(fragmentAddItemBinding.edtCreatedDate));
+        fragmentAddItemBinding.edtCreatedDate.setOnClickListener(view3 ->
+                addDatePicker(fragmentAddItemBinding.edtCreatedDate, datePickerCreated));
 
-        fragmentAddItemBinding.edtCompletedDate.setOnClickListener(view4 -> addDatePicker(fragmentAddItemBinding.edtCompletedDate));
+        fragmentAddItemBinding.edtCompletedDate.setOnClickListener(view4 ->
+                addDatePicker(fragmentAddItemBinding.edtCompletedDate, datePickerCreated));
         fragmentAddItemBinding.edtTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -187,9 +192,7 @@ public class AddItemFragment extends Fragment {
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate) {
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
         if (datePickerCreated.isAdded()) {
             return;
         }
@@ -245,8 +248,8 @@ public class AddItemFragment extends Fragment {
     }
 
     private boolean validation() throws ParseException {
-        boolean check = true;
 
+        boolean check = true;
         if (Objects.requireNonNull(fragmentAddItemBinding.edtTitle.getText()).toString().trim().isEmpty()) {
             fragmentAddItemBinding.edtTitle.setError("Field title can't empty");
             check = false;
@@ -270,16 +273,15 @@ public class AddItemFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtCreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
                 .parse(fragmentAddItemBinding.edtCompletedDate.getText().toString().trim());
-        assert credate != null;
-        if (credate.compareTo(comdate) > 0) {
+        assert createdDate != null;
+        if (createdDate.compareTo(completedDate) > 0) {
             fragmentAddItemBinding.edtCompletedDate.setError("Completed date must be after created date");
             check = false;
         }
         return check;
     }
-
 }

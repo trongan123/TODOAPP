@@ -27,10 +27,9 @@ class MainJetpackActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewModel: TodoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-        val viewModelLoad: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
             val navController = rememberAnimatedNavController()
-            MainApp(navController, this, viewModel, viewModelLoad)
+            MainApp(navController, this, viewModel)
         }
     }
 }
@@ -40,8 +39,7 @@ class MainJetpackActivity : ComponentActivity() {
 fun MainApp(
     navController: NavHostController,
     owner: LifecycleOwner,
-    viewModel: TodoItemViewModel,
-    viewModelLoad: MainViewModel
+    viewModel: TodoItemViewModel
 ) {
     MaterialTheme {
         AnimatedNavHost(navController = navController, startDestination = "home") {
@@ -78,7 +76,7 @@ fun MainApp(
                     navController.navigate("addItem")
                 }, openUpdateItemScreen = {
                     navController.navigate("updateItem")
-                }, viewModel = viewModel, owner = owner, viewModelLoad = viewModelLoad
+                }, viewModel = viewModel, owner = owner
                 )
             }
             composable("addItem", enterTransition = {

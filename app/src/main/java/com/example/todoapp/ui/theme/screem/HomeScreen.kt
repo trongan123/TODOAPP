@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
 import androidx.lifecycle.LifecycleOwner
 import com.example.todoapp.model.TodoItem
-import com.example.todoapp.viewmodel.MainViewModel
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
 @Composable
@@ -13,12 +12,10 @@ fun HomeScreen(
     owner: LifecycleOwner,
     openAddItemScreen: () -> Unit,
     openUpdateItemScreen: () -> Unit,
-    viewModel: TodoItemViewModel,
-    viewModelLoad: MainViewModel
+    viewModel: TodoItemViewModel
 ) {
-
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
-    viewModel.getStringMutableLiveData().observe(owner) {
+    viewModel.stringMutableLiveData.observe(owner) {
         viewModel.getAllList(viewModel.stringMutableLiveData.value)
             .observe(owner) { item: List<TodoItem> ->
                 items = item as ArrayList<TodoItem>
@@ -30,7 +27,7 @@ fun HomeScreen(
                 openAddItemScreen()
             }, openUpdateItemScreen = {
                 openUpdateItemScreen()
-            }, viewModel = viewModel, owner = owner, viewModelLoad = viewModelLoad
+            }, viewModel = viewModel, owner = owner
             )
         }
     }

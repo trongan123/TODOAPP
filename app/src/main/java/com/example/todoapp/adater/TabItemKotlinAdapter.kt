@@ -10,7 +10,8 @@ import com.example.todoapp.viewmodel.TodoItemViewModel
 
 //Class adapter set tab in kotlin
 class TabItemKotlinAdapter(
-    fragmentActivity: FragmentActivity, todoItemViewModel: TodoItemViewModel
+    fragmentActivity: FragmentActivity,
+    todoItemViewModel: TodoItemViewModel
 ) : FragmentStateAdapter(fragmentActivity) {
 
     private var todoItemViewModel: TodoItemViewModel? = todoItemViewModel

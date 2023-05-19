@@ -29,7 +29,7 @@
             tools:context=".UpdateActivity">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilIitle"
+                android:id="@+id/tilTitle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/title"
                     android:inputType="text"
-                    android:transitionName="update_edttitle" />
+                    android:transitionName="update_title" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/createddate"
+                    android:hint="@string/createdDate"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -92,15 +92,14 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="30dp"
-                android:layout_toStartOf="@+id/btndetail">
+                android:layout_marginRight="30dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtCompletedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/completeddate"
+                    android:hint="@string/completedDate"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>

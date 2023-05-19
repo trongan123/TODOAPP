@@ -26,7 +26,6 @@ public class TodoItemViewModel extends AndroidViewModel {
         mRepository = new TodoRepository(application);
         stringMutableLiveData.postValue("");
         listMutableLiveDataCheck.postValue(new ArrayList<>());
-
     }
 
     public LiveData<List<TodoItem>> getAllList(String key) {
@@ -44,7 +43,6 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public LiveData<List<TodoItem>> getPendingList() {
         todoItems = mRepository.getlistTodoItemByStatus("pending", stringMutableLiveData.getValue());
-
         return todoItems;
     }
 

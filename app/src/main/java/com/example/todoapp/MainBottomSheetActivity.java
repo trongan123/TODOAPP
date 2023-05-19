@@ -12,7 +12,7 @@ public class MainBottomSheetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bottom_sheet);
-
+        setTitle("List To Do Item");
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment, new MainBottomSheetFragment())

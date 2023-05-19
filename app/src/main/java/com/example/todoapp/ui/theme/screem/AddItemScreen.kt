@@ -32,6 +32,5 @@ fun AddItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
         AddButton(viewModel, backHome = {
             backHome()
         })
-
     }
 }

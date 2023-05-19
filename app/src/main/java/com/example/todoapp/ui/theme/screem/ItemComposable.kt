@@ -44,6 +44,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import java.text.SimpleDateFormat
 import java.util.*
 
+val stringDateFormat: String = "yyyy-MM-dd"
 
 var titleItem: String = ""
 var descriptionItem: String = ""
@@ -189,7 +190,6 @@ fun TextCompletedDate() {
             disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
             disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium)
         )
-
     )
     Text(text = error, color = Color.Red)
 }
@@ -197,13 +197,12 @@ fun TextCompletedDate() {
 
 @Composable
 fun AddButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
-
     Button(
         onClick = {
             checkValidate()
             if (checkValidate) {
                 todoItem = TodoItem()
-                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val formatter = SimpleDateFormat(stringDateFormat, Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -259,20 +258,16 @@ fun DeleteButton(
                             ), horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(height = 36.dp))
-
                         Text(
                             text = "Delete?", fontSize = 24.sp
                         )
-
                         Spacer(modifier = Modifier.height(height = spaceBetweenElements))
                         Text(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             text = "Are you sure, you want to delete the item?",
                             fontSize = 18.sp
                         )
-
                         Spacer(modifier = Modifier.height(height = spaceBetweenElements))
-
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceAround
@@ -285,7 +280,7 @@ fun DeleteButton(
                             ) {
                                 dialogOpen = false
                                 Toast.makeText(
-                                    context, "Delete item successfull", Toast.LENGTH_SHORT
+                                    context, "Delete item successfully", Toast.LENGTH_SHORT
                                 ).show()
                                 viewModel.deleteItem(todoItem)
                                 backHome()
@@ -338,14 +333,13 @@ fun checkValidate() {
     }
 }
 
-
 @Composable
 fun UpdateButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     Button(
         onClick = {
             checkValidate()
             if (checkValidate) {
-                val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val formatter = SimpleDateFormat(stringDateFormat, Locale.getDefault())
                 //update database
                 todoItem.title = titleItem
                 todoItem.description = descriptionItem
@@ -362,10 +356,8 @@ fun UpdateButton(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     }
 }
 
-
 @Composable
 fun ClearButton() {
-
     Button(
         onClick = {
             titleItem = ""
@@ -389,11 +381,10 @@ fun DropDownMenuStatus() {
     val error by remember {
         mutableStateOf(errorStatusItem)
     }
-    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded) Icons.Filled.KeyboardArrowUp
     else Icons.Filled.KeyboardArrowDown
-
 
     Column {
         OutlinedTextField(value = selectedText,
@@ -405,7 +396,7 @@ fun DropDownMenuStatus() {
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     //This value is used to assign to the DropDown the same width
-                    textfieldSize = coordinates.size.toSize()
+                    textFieldSize = coordinates.size.toSize()
                 },
             label = { Text("Status") },
             interactionSource = remember { MutableInteractionSource() }.also { interactionSource ->
@@ -423,7 +414,7 @@ fun DropDownMenuStatus() {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+            modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {

@@ -141,21 +141,23 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.edtCompletedDate.setText(dateFormat.format(todoItem.getCompletedDate()));
             fragmentUpdateItemBinding.dropDownStatus.setText(todoItem.getStatus(), false);
         }
+
+        MaterialDatePicker<Long> datePickerCreated;
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
         fragmentUpdateItemBinding.dropDownStatus.setAdapter(adapter);
 
         fragmentUpdateItemBinding.edtCreatedDate.setOnClickListener(view ->
-                addDatePicker(fragmentUpdateItemBinding.edtCreatedDate));
+                addDatePicker(fragmentUpdateItemBinding.edtCreatedDate, datePickerCreated));
 
         fragmentUpdateItemBinding.edtCompletedDate.setOnClickListener(view ->
-                addDatePicker(fragmentUpdateItemBinding.edtCompletedDate));
+                addDatePicker(fragmentUpdateItemBinding.edtCompletedDate, datePickerCreated));
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate) {
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
         if (datePickerCreated.isAdded()) {
             return;
         }
@@ -195,10 +197,10 @@ public class UpdateItemFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(fragmentUpdateItemBinding.edtCreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(fragmentUpdateItemBinding.edtCompletedDate.getText().toString().trim());
-        assert credate != null;
-        if (credate.compareTo(comdate) > 0) {
+        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(fragmentUpdateItemBinding.edtCreatedDate.getText().toString().trim());
+        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(fragmentUpdateItemBinding.edtCompletedDate.getText().toString().trim());
+        assert createdDate != null;
+        if (createdDate.compareTo(completedDate) > 0) {
             fragmentUpdateItemBinding.edtCompletedDate.setError("Completed date must be after created date");
             check = false;
         }

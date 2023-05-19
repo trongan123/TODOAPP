@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">ToDoApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main_jetpack">MainJetpackActivity</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -8,19 +7,18 @@
     <string name="add">Add</string>
     <string name="clear">Clear</string>
     <string name="status">Status</string>
-    <string name="completeddate">Enter CompletedDate</string>
-    <string name="createddate">Enter createdDate</string>
+    <string name="completedDate">Enter CompletedDate</string>
+    <string name="createdDate">Enter createdDate</string>
     <string name="description">Enter Description</string>
     <string name="title">Enter Title</string>
     <string name="delete">Delete</string>
     <string name="update">Update</string>
     <string name="search">Add a new task</string>
     <string name="clear_all">Clear ALL</string>
-    <string name="errortitle">Field title can\'t empty</string>
-    <string name="errordescription">Field description can\'t empty</string>
-    <string name="errorcreateddate">Field created date can\'t empty</string>
-    <string name="errorcompleteddate">Field completed date can\'t empty</string>
-    <string name="errorstatus">Please choice a status</string>
+    <string name="errorTitle">Field title can\'t empty</string>
+    <string name="errorDescription">Field description can\'t empty</string>
+    <string name="errorCreatedDate">Field created date can\'t empty</string>
+    <string name="errorCompletedDate">Field completed date can\'t empty</string>
+    <string name="errorStatus">Please choice a status</string>
     <string name="tab">tab</string>
-
 </resources>

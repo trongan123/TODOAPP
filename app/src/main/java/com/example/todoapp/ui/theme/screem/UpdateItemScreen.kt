@@ -12,7 +12,7 @@ import java.util.*
 
 @Composable
 fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormat: DateFormat = SimpleDateFormat(stringDateFormat, Locale.getDefault())
     titleItem = todoItem.title
     descriptionItem = todoItem.description
     statusItem = todoItem.status
@@ -20,13 +20,9 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
     completedDateItem = dateFormat.format(todoItem.completedDate)
     Column(modifier = Modifier.padding(30.dp)) {
         Texttitle()
-
         TextDescription()
-
         TextCreatedDate()
-
         TextCompletedDate()
-
         DropDownMenuStatus()
     }
     Row(
@@ -46,6 +42,5 @@ fun UpdateItemScreen(viewModel: TodoItemViewModel, backHome: () -> Unit) {
                 backHome()
             }
         )
-
     }
 }

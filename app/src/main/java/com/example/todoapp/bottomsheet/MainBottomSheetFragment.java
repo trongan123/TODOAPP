@@ -62,7 +62,7 @@ public class MainBottomSheetFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        //set shared element back for recylerview
+        //set shared element back for recyclerview
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
         parentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -74,10 +74,8 @@ public class MainBottomSheetFragment extends Fragment {
             }
         });
         super.onViewCreated(view, savedInstanceState);
-
-        fragmentMainBinding.btnAdd.setOnClickListener(view1 ->
-                //click button add to show bottom sheet add new item
-                addItemBottomSheet(parentView));
+        //click button add to show bottom sheet add new item
+        fragmentMainBinding.btnAdd.setOnClickListener(view1 -> addItemBottomSheet(parentView));
 
         ViewPager2 viewPager2 = requireView().findViewById(R.id.vpg);
         fragmentMainBinding.vpg.setAdapter(new TabItemBottomSheetAdapter(requireActivity(), todoItemViewModel));
@@ -101,8 +99,8 @@ public class MainBottomSheetFragment extends Fragment {
         fragmentMainBinding.svSearch.getEditText().setOnEditorActionListener((v, actionId, event) -> {
             fragmentMainBinding.sbSearchBar.setText(fragmentMainBinding.svSearch.getText());
             fragmentMainBinding.svSearch.hide();
-            todoItemViewModel.getStringMutableLiveData()
-                    .postValue(Objects.requireNonNull(fragmentMainBinding.svSearch.getText()).toString());
+            todoItemViewModel.getStringMutableLiveData().postValue(Objects.requireNonNull(
+                    fragmentMainBinding.svSearch.getText()).toString());
             return false;
         });
 
@@ -117,6 +115,10 @@ public class MainBottomSheetFragment extends Fragment {
                     .from(parentView.getContext()), parentView, false);
             bottomSheetDialog = new BottomSheetDialog(requireContext());
             bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
+
+            MaterialDatePicker<Long> datePickerCreated;
+            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
             updateBottomSheetLayoutBinding.edtCompletedDate.setInputType(
                     InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
@@ -139,11 +141,11 @@ public class MainBottomSheetFragment extends Fragment {
             updateBottomSheetLayoutBinding.btnClear.setOnClickListener(view12 -> clearText());
 
             updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view13 ->
-                    addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate));
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate, datePickerCreated));
 
             //create datePicker
             updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view14 ->
-                    addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate));
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate, datePickerCreated));
         }
         // Opt in to perform swipe to dismiss animation when dismissing bottom sheet dialog.
         bottomSheetDialog.setDismissWithAnimation(true);
@@ -151,10 +153,7 @@ public class MainBottomSheetFragment extends Fragment {
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate) {
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
         if (datePickerCreated.isAdded()) {
             return;
         }
@@ -170,8 +169,8 @@ public class MainBottomSheetFragment extends Fragment {
 
     //show dialog to confirm clear all item choice
     private void clearItem() {
-        new MaterialAlertDialogBuilder(requireContext(),
-                R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm Clear All")
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+                .setTitle("Confirm Clear All")
                 .setMessage("Are you sure?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     todoItemViewModel.clearAllItem();
@@ -182,8 +181,8 @@ public class MainBottomSheetFragment extends Fragment {
     private void addItem() throws ParseException {
         if (validation()) {
             String stringTitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim();
-            String stringDescription = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtDescription
-                    .getText()).toString().trim();
+            String stringDescription = Objects.requireNonNull(updateBottomSheetLayoutBinding
+                    .edtDescription.getText()).toString().trim();
             Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
                     .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCreatedDate.getText()).toString().trim());
             Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
@@ -201,13 +200,11 @@ public class MainBottomSheetFragment extends Fragment {
             clearText();
             Toast.makeText(getActivity(), "Add success", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.cancel();
-
         }
     }
 
     private boolean validation() throws ParseException {
         boolean check = true;
-
         if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim().isEmpty()) {
             updateBottomSheetLayoutBinding.edtTitle.setError("Field title can't empty");
             check = false;
@@ -231,13 +228,12 @@ public class MainBottomSheetFragment extends Fragment {
         if (!check) {
             return false;
         }
-
-        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
                 .parse(updateBottomSheetLayoutBinding.edtCreatedDate.getText().toString().trim());
-        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
+        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
                 .parse(updateBottomSheetLayoutBinding.edtCompletedDate.getText().toString().trim());
-        assert credate != null;
-        if (credate.compareTo(comdate) > 0) {
+        assert createdDate != null;
+        if (createdDate.compareTo(completedDate) > 0) {
             updateBottomSheetLayoutBinding.tilCompletedDate.setError("Completed date must be after created date");
             check = false;
         }

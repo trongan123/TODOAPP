@@ -32,17 +32,16 @@ class MainKotlinFragment : Fragment() {
         //set shared element back for recyclerview
         postponeEnterTransition()
         val parentView = view.parent as ViewGroup
-        parentView.viewTreeObserver.addOnPreDrawListener(object :
-            ViewTreeObserver.OnPreDrawListener {
+        val preDrawListener = object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 parentView.viewTreeObserver.removeOnPreDrawListener(this)
                 startPostponedEnterTransition()
                 return true
             }
-        })
+        }
+        parentView.viewTreeObserver.addOnPreDrawListener(preDrawListener)
         super.onViewCreated(view, savedInstanceState)
 
-        super.onViewCreated(view, savedInstanceState)
         fragmentMainBinding!!.btnAdd.setOnClickListener {
             val extras: FragmentNavigator.Extras = FragmentNavigator.Extras.Builder()
                 .addSharedElement(fragmentMainBinding!!.btnAdd, "add_fragment").build()
@@ -65,7 +64,6 @@ class MainKotlinFragment : Fragment() {
             }
         }
         tabLayoutMediator.attach()
-
 
         fragmentMainBinding!!.svSearch.editText.setOnEditorActionListener { _, _, _ ->
             fragmentMainBinding!!.sbSearchBar.text = fragmentMainBinding!!.svSearch.text
@@ -101,6 +99,4 @@ class MainKotlinFragment : Fragment() {
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
         return mView
     }
-
-
 }

@@ -27,7 +27,7 @@
                     android:id="@+id/sbSearchBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Add a new task" />
+                    android:hint="@string/search" />
             </com.google.android.material.appbar.AppBarLayout>
         </RelativeLayout>
 
@@ -35,7 +35,7 @@
             android:id="@+id/svSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Add a new task"
+            android:hint="@string/search"
             app:layout_anchor="@id/sbSearchBar">
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
         </com.google.android.material.search.SearchView>
@@ -48,9 +48,9 @@
                 android:id="@+id/tloMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="100dp"
-                android:layout_marginRight="140dp"
+                android:layout_marginEnd="140dp"
                 android:contentDescription="tab" />
 
             <androidx.viewpager2.widget.ViewPager2

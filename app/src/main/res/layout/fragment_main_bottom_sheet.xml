@@ -26,7 +26,7 @@
                     android:id="@+id/sbSearchBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Add a new task" />
+                    android:hint="@string/search" />
             </com.google.android.material.appbar.AppBarLayout>
         </RelativeLayout>
 

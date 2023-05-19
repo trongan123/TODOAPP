@@ -42,13 +42,22 @@ public class AllItemBottomSheetFragment extends Fragment {
     private final TodoItemViewModel todoItemViewModel;
     MaterialAlertDialogBuilder materialAlertDialogBuilder;
     private FragmentAllItemBottomSheetBinding fragmentAllItemBinding;
-
     private BottomSheetDialog bottomSheetDialog;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
 
     public AllItemBottomSheetFragment(TodoItemViewModel todoItemViewModel, int tabNumber) {
         this.todoItemViewModel = todoItemViewModel;
         this.tabNumber = tabNumber;
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentAllItemBinding = FragmentAllItemBottomSheetBinding.inflate(inflater, container, false);
+        updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
+        View mView = fragmentAllItemBinding.getRoot();
+        fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
+        // Inflate the layout for this fragment
+        return mView;
     }
 
     @Override
@@ -103,18 +112,36 @@ public class AllItemBottomSheetFragment extends Fragment {
 
     //method create new bottom sheet
     private void setBottomSheetDialog() {
-
         bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
         updateBottomSheetLayoutBinding.dropDownStatus.setAdapter(adapter);
 
+        MaterialDatePicker<Long> datePickerCreated;
+        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+
         updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view ->
-                addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate));
+                addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate, datePickerCreated));
 
         updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view ->
-                addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate));
+                addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate, datePickerCreated));
+    }
+
+    //create date picker
+    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
+        if (datePickerCreated.isAdded()) {
+            return;
+        }
+        datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
+        datePickerCreated.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis(selection);
+            SimpleDateFormat format = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
+            String formattedDate = format.format(calendar.getTime());
+            textDate.setText(formattedDate);
+        });
     }
 
     private void clickDetailItem(TodoItem todoItem) {
@@ -143,17 +170,6 @@ public class AllItemBottomSheetFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentAllItemBinding = FragmentAllItemBottomSheetBinding.inflate(inflater, container, false);
-
-        updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
-        View mView = fragmentAllItemBinding.getRoot();
-        fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
-        // Inflate the layout for this fragment
-        return mView;
-    }
-
     private void initUi(TodoItem item) {
         DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
         if (item != null) {
@@ -163,24 +179,6 @@ public class AllItemBottomSheetFragment extends Fragment {
             updateBottomSheetLayoutBinding.edtCompletedDate.setText(dateFormat.format(item.getCompletedDate()));
             updateBottomSheetLayoutBinding.dropDownStatus.setText(item.getStatus(), false);
         }
-    }
-
-    //create date picker
-    private void addDatePicker(TextInputEditText textDate) {
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-        if (datePickerCreated.isAdded()) {
-            return;
-        }
-        datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
-        datePickerCreated.addOnPositiveButtonClickListener(selection -> {
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-            calendar.setTimeInMillis(selection);
-            SimpleDateFormat format = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
-            String formattedDate = format.format(calendar.getTime());
-            textDate.setText(formattedDate);
-        });
     }
 
     private void deleteItemTodo(TodoItem todoItem) throws ParseException {
@@ -239,7 +237,6 @@ public class AllItemBottomSheetFragment extends Fragment {
 
     private boolean validation() throws ParseException {
         boolean check = true;
-
         if (Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim().isEmpty()) {
             updateBottomSheetLayoutBinding.edtTitle.setError("Field title can't empty");
             check = false;

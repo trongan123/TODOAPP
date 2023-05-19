@@ -2,6 +2,7 @@ package com.example.todoapp;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,8 @@ public class AllItemFragment extends Fragment {
         RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoItem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(),
+                DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
@@ -139,7 +141,7 @@ public class AllItemFragment extends Fragment {
     }
 
     private void loadNextPage() {
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
                 list = todoItems.subList(startitem, enditem);

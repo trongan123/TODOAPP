@@ -2,13 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my_navkotlin"
+    android:id="@+id/my_nav_kotlin"
     app:startDestination="@id/mainKotlinFragment">
 
     <fragment
         android:id="@+id/addItemKotlinFragment"
         android:name="com.example.todoapp.kotlin.AddItemKotlinFragment"
-        android:label="fragment_add_item_kotlin"
+        android:label="Add New To Do Item"
         tools:layout="@layout/fragment_add_item_kotlin">
         <action
             android:id="@+id/action_addItemKotlinFragment_to_mainKotlinFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/updateItemKotlinFragment"
         android:name="com.example.todoapp.kotlin.UpdateItemKotlinFragment"
-        android:label="fragment_update_item_kotlin"
+        android:label="Update To Do Item"
         tools:layout="@layout/fragment_update_item_kotlin">
         <action
             android:id="@+id/action_updateItemKotlinFragment_to_mainKotlinFragment"
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/mainKotlinFragment"
         android:name="com.example.todoapp.kotlin.MainKotlinFragment"
-        android:label="MainKotlinFragment">
+        android:label="List To Do Item">
         <action
             android:id="@+id/action_mainKotlinFragment_to_addItemKotlinFragment"
             app:destination="@id/addItemKotlinFragment" />

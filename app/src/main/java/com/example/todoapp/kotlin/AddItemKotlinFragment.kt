@@ -24,6 +24,7 @@ import java.util.*
 
 
 class AddItemKotlinFragment : Fragment() {
+
     private val stringDateFormat: String = "yyyy-MM-dd"
     private var fragmentAddItemBinding: FragmentAddItemKotlinBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
@@ -213,13 +214,13 @@ class AddItemKotlinFragment : Fragment() {
         if (!check) {
             return false
         }
-        val credate = SimpleDateFormat(
+        val createdDate = SimpleDateFormat(
             stringDateFormat, Locale.getDefault()
         ).parse(fragmentAddItemBinding!!.edtCreatedDate.text.toString().trim())
-        val comdate = SimpleDateFormat(
+        val completedDate = SimpleDateFormat(
             stringDateFormat, Locale.getDefault()
         ).parse(fragmentAddItemBinding!!.edtCompletedDate.text.toString().trim())
-        if (credate != null && credate > comdate) {
+        if (createdDate != null && createdDate > completedDate) {
             fragmentAddItemBinding!!.tilCompletedDate.error =
                 "Completed date must be after created date"
             check = false
