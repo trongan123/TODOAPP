@@ -46,10 +46,7 @@ public class AllItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentAllItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
-        View mView = fragmentAllItemBinding.getRoot();
-        fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
-        // Inflate the layout for this fragment
-        return mView;
+        return fragmentAllItemBinding.getRoot();
     }
 
     @Override
@@ -63,27 +60,16 @@ public class AllItemFragment extends Fragment {
         RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoItem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(),
-                DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
 
         //set data to recyclerview
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getAllList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                }));
+        todoItemViewModel.getAllList().observe(requireActivity(), this::setLoading);
+
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> setLoading(todoItemViewModel.getSearchList()));
 
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -102,17 +88,10 @@ public class AllItemFragment extends Fragment {
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             public void loadMoreItems() {
+                // Update item to fragment
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getAllList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                });
+                todoItems = todoItemViewModel.getSearchList();
                 loadNextPage();
             }
 
@@ -128,13 +107,24 @@ public class AllItemFragment extends Fragment {
         });
     }
 
+    private void setLoading(List<TodoItem> items) {
+        todoItems = items;
+        currentPage = 0;
+        isLastPage = false;
+        if (items.size() % 20 == 0) {
+            totalPage = (items.size() / 20);
+        } else {
+            totalPage = (items.size() / 20) + 1;
+        }
+        setFirstData();
+    }
+
     private void clickDetailItem(TodoItem todoItem, CardView cardView) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("objectTodoItem", todoItem);
         bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView, cardView.getTransitionName()).build();
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
         Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
     }
 

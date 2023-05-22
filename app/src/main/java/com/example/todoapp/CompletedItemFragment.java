@@ -48,10 +48,9 @@ public class CompletedItemFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         fragmentCompletedItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
-        View mView = fragmentCompletedItemBinding.getRoot();
-        fragmentCompletedItemBinding.setAllItemViewModel(todoItemViewModel);
+
         // Inflate the layout for this fragment
-        return mView;
+        return fragmentCompletedItemBinding.getRoot();
     }
 
     @Override
@@ -69,19 +68,11 @@ public class CompletedItemFragment extends Fragment {
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+
+        todoItemViewModel.getCompletedList().observe(requireActivity(), this::setLoading);
+
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                }));
+                setLoading(todoItemViewModel.getSearchCompletedList()));
 
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -100,17 +91,10 @@ public class CompletedItemFragment extends Fragment {
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             public void loadMoreItems() {
+                // Update item to fragment
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getCompletedList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                });
+                todoItems = todoItemViewModel.getSearchCompletedList();
                 loadNextPage();
             }
 
@@ -124,6 +108,18 @@ public class CompletedItemFragment extends Fragment {
                 return isLastPage;
             }
         });
+    }
+
+    private void setLoading(List<TodoItem> items) {
+        todoItems = items;
+        currentPage = 0;
+        isLastPage = false;
+        if (items.size() % 20 == 0) {
+            totalPage = (items.size() / 20);
+        } else {
+            totalPage = (items.size() / 20) + 1;
+        }
+        setFirstData();
     }
 
     private void loadNextPage() {
@@ -155,8 +151,7 @@ public class CompletedItemFragment extends Fragment {
         bundle.putSerializable("objectTodoItem", todoItem);
         bundle.putString("transition", cardView.getTransitionName());
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(cardView, cardView.getTransitionName()).build();
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(cardView, cardView.getTransitionName()).build();
         Navigation.findNavController(requireView()).navigate(R.id.updateItemFragment, bundle, null, extras);
     }
 

@@ -51,7 +51,7 @@ public class UpdateItemFragment extends Fragment {
         fragmentUpdateItemBinding = FragmentUpdateItemBinding.inflate(inflater, container, false);
         View mView = fragmentUpdateItemBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-        fragmentUpdateItemBinding.setTodoItemViewModel(todoItemViewModel);
+
         return mView;
     }
 
@@ -103,19 +103,18 @@ public class UpdateItemFragment extends Fragment {
     }
 
     private void deleteItem() throws ParseException {
-        String strtitle = Objects.requireNonNull(fragmentUpdateItemBinding.edtTitle.getText()).toString().trim();
-        String strDes = Objects.requireNonNull(fragmentUpdateItemBinding.edtDescription.getText()).toString().trim();
-        Date credate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtCreatedDate.getText()).toString().trim());
-        Date comdate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtCompletedDate.getText()).toString().trim());
-        String strStt;
-        strStt = fragmentUpdateItemBinding.dropDownStatus.getText().toString().trim();
+        String stringTitle = Objects.requireNonNull(fragmentUpdateItemBinding.edtTitle.getText()).toString().trim();
+        String stringDescription = Objects.requireNonNull(fragmentUpdateItemBinding.edtDescription.getText()).toString().trim();
+        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtCreatedDate.getText()).toString().trim());
+        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentUpdateItemBinding.edtCompletedDate.getText()).toString().trim());
+        String stringStatus = fragmentUpdateItemBinding.dropDownStatus.getText().toString().trim();
 
         //update database
-        todoItem.setTitle(strtitle);
-        todoItem.setDescription(strDes);
-        todoItem.setCreatedDate(credate);
-        todoItem.setCompletedDate(comdate);
-        todoItem.setStatus(strStt);
+        todoItem.setTitle(stringTitle);
+        todoItem.setDescription(stringDescription);
+        todoItem.setCreatedDate(createdDate);
+        todoItem.setCompletedDate(completedDate);
+        todoItem.setStatus(stringStatus);
 
         new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Confirm delete").setMessage("Are you sure?").setPositiveButton("Yes", (dialogInterface, i) -> {
             todoItemViewModel.deleteItem(todoItem);
@@ -131,7 +130,7 @@ public class UpdateItemFragment extends Fragment {
 
         String transition = getArguments().getString("transition");
         DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
-        fragmentUpdateItemBinding.constraintLayout.setTransitionName(transition);
+        fragmentUpdateItemBinding.root.setTransitionName(transition);
 
         if (todoItem != null) {
             fragmentUpdateItemBinding.edtTitle.setText(todoItem.getTitle());

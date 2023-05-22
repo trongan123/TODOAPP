@@ -25,6 +25,12 @@ public interface TodoItemDAO {
     @Query("SELECT * FROM todoItem WHERE status=:status AND title LIKE '%' || :key || '%'")
     LiveData<List<TodoItem>> getListTodoItemByStatus(String status, String key);
 
+    @Query("SELECT * FROM todoItem WHERE title LIKE '%' || :key || '%'")
+    List<TodoItem> getSearchTodoItem(String key);
+
+    @Query("SELECT * FROM todoItem WHERE status=:status AND title LIKE '%' || :key || '%'")
+    List<TodoItem> getSearchTodoItemByStatus(String status, String key);
+
     @Update
     void updateTodoItem(TodoItem item);
 

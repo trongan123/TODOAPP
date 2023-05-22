@@ -1,4 +1,4 @@
-package com.example.todoapp.adapter;
+package com.example.todoapp.adater;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;

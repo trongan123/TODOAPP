@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragmentAllItem">
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AllItemFragment">
 
-    <data>
-
-        <variable
-            name="AllItemViewModel"
-            type="com.example.todoapp.viewmodel.TodoItemViewModel" />
-    </data>
-
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvTodoItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".AllItemFragment">
+        android:layout_marginTop="20dp"
+        android:transitionGroup="true" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvTodoItem"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:transitionGroup="true" />
-
-        <ProgressBar
-            android:id="@+id/idPBLoading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
-    </LinearLayout>
-</layout>
+    <ProgressBar
+        android:id="@+id/idPBLoading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+</LinearLayout>

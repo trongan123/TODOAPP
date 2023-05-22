@@ -55,7 +55,7 @@ public class AllItemBottomSheetFragment extends Fragment {
         fragmentAllItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
         updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
         View mView = fragmentAllItemBinding.getRoot();
-        fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
+        //      fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
         // Inflate the layout for this fragment
         return mView;
     }

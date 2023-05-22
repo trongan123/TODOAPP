@@ -47,7 +47,6 @@ public class AddItemFragment extends Fragment {
         View mView = fragmentAddItemBinding.getRoot();
 
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-        fragmentAddItemBinding.setTodoItemViewModel(todoItemViewModel);
 
         fragmentAddItemBinding.edtCompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
         fragmentAddItemBinding.edtCreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);

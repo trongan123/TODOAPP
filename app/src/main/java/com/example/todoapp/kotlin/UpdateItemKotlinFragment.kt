@@ -71,7 +71,7 @@ class UpdateItemKotlinFragment : Fragment() {
             inflater.let { FragmentUpdateItemBinding.inflate(it, container, false) }
         mView = fragmentUpdateItemBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-        fragmentUpdateItemBinding!!.todoItemViewModel = todoItemViewModel
+        //   fragmentUpdateItemBinding!!.todoItemViewModel = todoItemViewModel
         datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
         datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
@@ -135,7 +135,7 @@ class UpdateItemKotlinFragment : Fragment() {
         todoItem = requireArguments().getSerializable("objectTodoItem") as TodoItem?
 
         val transition = requireArguments().getString("transition")
-        fragmentUpdateItemBinding!!.constraintLayout.transitionName = transition
+        fragmentUpdateItemBinding!!.root.transitionName = transition
 
         val dateFormat: DateFormat = SimpleDateFormat(stringDateFormat, Locale.getDefault())
         if (todoItem != null) {

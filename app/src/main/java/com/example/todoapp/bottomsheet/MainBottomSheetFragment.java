@@ -54,14 +54,12 @@ public class MainBottomSheetFragment extends Fragment {
         View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
 
-        fragmentMainBinding.setMainFragViewModel(todoItemViewModel);
         // Inflate the layout for this fragment
         return mView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         //set shared element back for recyclerview
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
@@ -136,13 +134,11 @@ public class MainBottomSheetFragment extends Fragment {
                 } catch (ParseException e) {
                     //Method empty
                 }
-
             });
             updateBottomSheetLayoutBinding.btnClear.setOnClickListener(view12 -> clearText());
 
             updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view13 ->
                     addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate, datePickerCreated));
-
             //create datePicker
             updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view14 ->
                     addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate, datePickerCreated));

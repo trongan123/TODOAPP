@@ -46,9 +46,7 @@ public class PendingItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPendingItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
-        View mView = fragmentPendingItemBinding.getRoot();
-        fragmentPendingItemBinding.setAllItemViewModel(todoItemViewModel);
-        return mView;
+        return fragmentPendingItemBinding.getRoot();
     }
 
     @Override
@@ -66,19 +64,11 @@ public class PendingItemFragment extends Fragment {
         rcvItem.addItemDecoration(dividerItemDecoration);
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+
+        todoItemViewModel.getPendingList().observe(requireActivity(), this::setLoading);
+
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
-                todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    currentPage = 0;
-                    isLastPage = false;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                    setFirstData();
-                }));
+                setLoading(todoItemViewModel.getSearchPendingList()));
 
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -96,17 +86,10 @@ public class PendingItemFragment extends Fragment {
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             public void loadMoreItems() {
+                // Update item to fragment
                 isLoading = true;
                 currentPage += 1;
-                todoItemViewModel.getPendingList().observe(requireActivity(), items -> {
-                    // Update item to fragment
-                    todoItems = items;
-                    if (items.size() % 20 == 0) {
-                        totalPage = (items.size() / 20);
-                    } else {
-                        totalPage = (items.size() / 20) + 1;
-                    }
-                });
+                todoItems = todoItemViewModel.getSearchPendingList();
                 loadNextPage();
             }
 
@@ -120,6 +103,18 @@ public class PendingItemFragment extends Fragment {
                 return isLastPage;
             }
         });
+    }
+
+    private void setLoading(List<TodoItem> items) {
+        todoItems = items;
+        currentPage = 0;
+        isLastPage = false;
+        if (items.size() % 20 == 0) {
+            totalPage = (items.size() / 20);
+        } else {
+            totalPage = (items.size() / 20) + 1;
+        }
+        setFirstData();
     }
 
     private void loadNextPage() {

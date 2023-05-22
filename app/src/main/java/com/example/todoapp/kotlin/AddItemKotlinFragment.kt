@@ -37,8 +37,6 @@ class AddItemKotlinFragment : Fragment() {
         fragmentAddItemBinding = FragmentAddItemBinding.inflate(inflater, container, false)
         val mView: View = fragmentAddItemBinding!!.root
         todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-        fragmentAddItemBinding!!.todoItemViewModel = todoItemViewModel
-
         // Inflate the layout for this fragment
         return mView
     }
@@ -98,7 +96,6 @@ class AddItemKotlinFragment : Fragment() {
                 setErrorEditText(
                     fragmentAddItemBinding!!.edtDescription, "Field description can't empty"
                 )
-
             }
         })
         fragmentAddItemBinding!!.edtCreatedDate.addTextChangedListener(object : TextWatcher {
@@ -150,7 +147,6 @@ class AddItemKotlinFragment : Fragment() {
                 }
                 val check = checkValidate()
                 fragmentAddItemBinding!!.btnAdd.isEnabled = check
-
             }
         })
     }
@@ -159,7 +155,7 @@ class AddItemKotlinFragment : Fragment() {
     private fun addItem() {
         if (validation()) {
             val strtitle: String =
-                Objects.requireNonNull(/* obj = */ fragmentAddItemBinding?.edtTitle?.text)
+                Objects.requireNonNull(fragmentAddItemBinding?.edtTitle?.text)
                     .toString().trim { it <= ' ' }
             val strDes: String =
                 Objects.requireNonNull(fragmentAddItemBinding!!.edtDescription.text).toString()

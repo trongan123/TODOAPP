@@ -394,7 +394,7 @@ fun ItemList(
 
 @Composable
 fun ItemListRecycle(
-    i: TodoItem, view: View?, viewModel: TodoItemViewModel, myitem: MyComposeView
+    i: TodoItem, view: View?, viewModel: TodoItemViewModel, myItem: MyComposeView
 ) {
     val isChecked = remember { mutableStateOf(false) }
     Card(
@@ -405,11 +405,11 @@ fun ItemListRecycle(
                 todoItem = i
                 val bundle = Bundle()
                 bundle.putSerializable("objectTodoItem", todoItem)
-                bundle.putString("transition", myitem.transitionName)
+                bundle.putString("transition", myItem.transitionName)
 
                 val extras: FragmentNavigator.Extras = FragmentNavigator.Extras
                     .Builder()
-                    .addSharedElement(myitem, myitem.transitionName)
+                    .addSharedElement(myItem, myItem.transitionName)
                     .build()
                 findNavController(view!!).navigate(
                     R.id.updateItemKotlinFragment, bundle, null, extras

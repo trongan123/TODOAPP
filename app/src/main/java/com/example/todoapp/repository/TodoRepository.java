@@ -25,10 +25,19 @@ public class TodoRepository {
         return mTodoItems;
     }
 
-    public LiveData<List<TodoItem>> getlistTodoItemByStatus(String status, String key) {
+    public LiveData<List<TodoItem>> getListTodoItemByStatus(String status, String key) {
         mTodoItems = mTodoItemDAO.getListTodoItemByStatus(status, key);
         return mTodoItems;
     }
+
+    public List<TodoItem> getSearchTodoItem(String key) {
+        return mTodoItemDAO.getSearchTodoItem(key);
+    }
+
+    public List<TodoItem> getSearchTodoItemByStatus(String status, String key) {
+        return mTodoItemDAO.getSearchTodoItemByStatus(status, key);
+    }
+
 
     public void insert(TodoItem todoItem) {
         mTodoItemDAO.insertTodoItem(todoItem);
