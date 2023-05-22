@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
-import com.example.todoapp.adater.TodoItemBottomSheetAdapter;
+import com.example.todoapp.adapter.TodoItemBottomSheetAdapter;
 import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
 import com.example.todoapp.model.TodoItem;

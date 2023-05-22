@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todoapp.adater.TodoItemAdapter;
+import com.example.todoapp.adapter.TodoItemAdapter;
 import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -65,11 +65,11 @@ public class AllItemFragment extends Fragment {
 
         todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
-
         //set data to recyclerview
         todoItemViewModel.getAllList().observe(requireActivity(), this::setLoading);
 
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> setLoading(todoItemViewModel.getSearchList()));
+        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                setLoading(todoItemViewModel.getSearchList()));
 
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
@@ -133,7 +133,6 @@ public class AllItemFragment extends Fragment {
             List<TodoItem> list = new ArrayList<>();
             if (todoItems.size() > 20) {
                 list = todoItems.subList(startItem, endItem);
-
                 startItem = endItem;
                 if ((endItem + 20) < todoItems.size()) {
                     endItem += 20;

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todoapp.adater.TodoItemAdapter;
+import com.example.todoapp.adapter.TodoItemAdapter;
 import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;

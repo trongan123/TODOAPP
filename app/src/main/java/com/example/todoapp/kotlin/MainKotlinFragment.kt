@@ -13,7 +13,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todoapp.R
-import com.example.todoapp.adater.TabItemKotlinAdapter
+import com.example.todoapp.adapter.TabItemKotlinAdapter
 import com.example.todoapp.databinding.FragmentMainBinding
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

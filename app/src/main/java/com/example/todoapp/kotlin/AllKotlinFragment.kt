@@ -9,7 +9,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todoapp.R
-import com.example.todoapp.adater.TodoItemAdapterKotlin
+import com.example.todoapp.adapter.TodoItemAdapterKotlin
 import com.example.todoapp.databinding.FragmentAllItemBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel

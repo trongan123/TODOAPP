@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.todoapp.R;
-import com.example.todoapp.adater.TabItemBottomSheetAdapter;
+import com.example.todoapp.adapter.TabItemBottomSheetAdapter;
 import com.example.todoapp.databinding.FragmentMainBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
 import com.example.todoapp.model.TodoItem;

@@ -5,8 +5,6 @@ i
 9app/src/main/java/com/example/todoapp/model/TodoItem.java,7\2\72fce7e21133c9514b39591b3aded853b01a4164
 s
 Capp/src/main/java/com/example/todoapp/ui/theme/screem/HomeScreen.kt,8\b\8bdcb1415e991d7f131ab6be5d2b6bdec534f187
-w
-Gapp/src/main/java/com/example/todoapp/ui/theme/screem/ItemComposable.kt,d\1\d1b5ce8e28f786c3e6d8add35d0b4b7a59c13573
 g
 7app/src/main/java/com/example/todoapp/ui/theme/Color.kt,6\1\612e342a90d89c73e01f150d553a041f2701adc4
 f

@@ -284,7 +284,7 @@ fun CompletedItemScreen(
     owner: LifecycleOwner, openUpdateItemScreen: () -> Unit, viewModel: TodoItemViewModel
 ) {
     var items by remember { mutableStateOf(ArrayList<TodoItem>()) }
-    //   items = localListTodo.current.todolist as ArrayList<TodoItem>
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -362,7 +362,6 @@ fun ItemList(
                 )
                 Image(painter = painterResource(id = R.drawable.ellipsis),
                     contentDescription = null,
-
                     modifier = Modifier
                         .clickable {
                             todoItem = i
