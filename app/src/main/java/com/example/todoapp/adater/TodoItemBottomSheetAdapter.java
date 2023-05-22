@@ -1,4 +1,4 @@
-package com.example.todoapp.adater;
+package com.example.todoapp.adapter;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -49,11 +49,9 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
         TodoItem todoItem = getItem(position);
         TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
         long id = getItemId(position);
-
         List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
         if (checkItem != null) {
             if (checkItem.contains(id)) {
@@ -66,13 +64,13 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
                         .itemTodoBinding.txtTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
         }
-
         // set date to item
         DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
         todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
+        todoItemViewHolder.itemTodoBinding.txtTitle.setText(todoItem.getTitle());
+        todoItemViewHolder.itemTodoBinding.txtDescription.setText(todoItem.getDescription());
         todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
         todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.detailItem(todoItem));
-        todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
         todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, id));
     }
 

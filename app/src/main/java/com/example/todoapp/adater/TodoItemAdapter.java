@@ -1,4 +1,4 @@
-package com.example.todoapp.adater;
+package com.example.todoapp.adapter;
 
 import android.graphics.Paint;
 import android.util.Log;
@@ -84,18 +84,16 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             // set date to item
             DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
             todoItemViewHolder.itemTodoBinding.txtDate.setText(dateFormat.format(todoItem.getCompletedDate()));
+            todoItemViewHolder.itemTodoBinding.txtTitle.setText(todoItem.getTitle());
+            todoItemViewHolder.itemTodoBinding.txtDescription.setText(todoItem.getDescription());
             todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
             todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view ->
                     iClickItem.detailItem(todoItem, todoItemViewHolder.itemTodoBinding.cardItem));
-            todoItemViewHolder.itemTodoBinding.setTodoItem(todoItem);
             todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view ->
                     setCheckBox(todoItemViewHolder, todoItem, id));
         }
         a2 = Calendar.getInstance().getTimeInMillis();
-        Log.e("TAG", "Start :" + a1);
-        Log.e("TAG", "End :" + a2);
         Log.e("TAG", "run time :" + (a2 - a1));
-
     }
 
     //method set status for check box
