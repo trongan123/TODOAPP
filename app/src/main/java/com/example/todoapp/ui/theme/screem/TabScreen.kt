@@ -288,7 +288,6 @@ fun CompletedItemScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-
         LazyColumn {
             viewModel.stringMutableLiveData.observe(owner) {
                 viewModel.completedList.observe(owner) { item: List<TodoItem> ->

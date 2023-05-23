@@ -39,6 +39,7 @@ public class AddItemFragment extends Fragment {
     private final TodoItem todoItem = new TodoItem();
     private FragmentAddItemBinding fragmentAddItemBinding;
     private TodoItemViewModel todoItemViewModel;
+    private MaterialDatePicker<Long> datePickerCreated = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,10 +48,8 @@ public class AddItemFragment extends Fragment {
         View mView = fragmentAddItemBinding.getRoot();
 
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-
         fragmentAddItemBinding.edtCompletedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
         fragmentAddItemBinding.edtCreatedDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
-
         // Inflate the layout for this fragment
         return mView;
     }
@@ -58,9 +57,6 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
@@ -77,10 +73,10 @@ public class AddItemFragment extends Fragment {
         fragmentAddItemBinding.btnClear.setOnClickListener(view2 -> clearText());
 
         fragmentAddItemBinding.edtCreatedDate.setOnClickListener(view3 ->
-                addDatePicker(fragmentAddItemBinding.edtCreatedDate, datePickerCreated));
+                addDatePicker(fragmentAddItemBinding.edtCreatedDate));
 
         fragmentAddItemBinding.edtCompletedDate.setOnClickListener(view4 ->
-                addDatePicker(fragmentAddItemBinding.edtCompletedDate, datePickerCreated));
+                addDatePicker(fragmentAddItemBinding.edtCompletedDate));
         fragmentAddItemBinding.edtTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -176,7 +172,6 @@ public class AddItemFragment extends Fragment {
             Date createDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtCreatedDate.getText()).toString().trim());
             Date completeDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(fragmentAddItemBinding.edtCompletedDate.getText()).toString().trim());
             String strStatus = fragmentAddItemBinding.dropDownStatus.getText().toString().trim();
-
             //update database
             todoItem.setTitle(stringTitle);
             todoItem.setDescription(strDescription);
@@ -191,9 +186,9 @@ public class AddItemFragment extends Fragment {
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
-        if (datePickerCreated.isAdded()) {
-            return;
+    private void addDatePicker(TextInputEditText textDate) {
+        if (datePickerCreated == null) {
+            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         }
         datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
         datePickerCreated.addOnPositiveButtonClickListener(selection -> {

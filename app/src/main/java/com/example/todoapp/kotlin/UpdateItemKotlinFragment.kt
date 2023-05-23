@@ -17,6 +17,7 @@ import com.example.todoapp.databinding.FragmentUpdateItemBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -28,10 +29,20 @@ class UpdateItemKotlinFragment : Fragment() {
     private val stringDateFormat: String = "yyyy-MM-dd"
     private var fragmentUpdateItemBinding: FragmentUpdateItemBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
-    private var datePickerCompleted: MaterialDatePicker<*>? = null
-    private var datePickerCreated: MaterialDatePicker<*>? = null
+    private var datePickerCreated: MaterialDatePicker<Long>? = null
     private var todoItem: TodoItem? = TodoItem()
     private var mView: View? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        sharedElementEnterTransition = ChangeBounds()
+        fragmentUpdateItemBinding =
+            inflater.let { FragmentUpdateItemBinding.inflate(it, container, false) }
+        mView = fragmentUpdateItemBinding!!.root
+        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
+        return mView
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,22 +72,6 @@ class UpdateItemKotlinFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        sharedElementEnterTransition = ChangeBounds()
-        fragmentUpdateItemBinding =
-            inflater.let { FragmentUpdateItemBinding.inflate(it, container, false) }
-        mView = fragmentUpdateItemBinding!!.root
-        todoItemViewModel = ViewModelProvider(this)[TodoItemViewModel::class.java]
-        //   fragmentUpdateItemBinding!!.todoItemViewModel = todoItemViewModel
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
-        datePickerCompleted = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
-        return mView
     }
 
     @Throws(ParseException::class)
@@ -131,6 +126,23 @@ class UpdateItemKotlinFragment : Fragment() {
         Toast.makeText(activity, "Delete success", Toast.LENGTH_SHORT).show()
     }
 
+    //create date picker
+    private fun addDatePicker(textDate: TextInputEditText) {
+        if (datePickerCreated == null) {
+            MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+                .also { datePickerCreated = it }
+        }
+        datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
+        datePickerCreated!!.addOnPositiveButtonClickListener { selection: Long? ->
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            calendar.timeInMillis = selection!!
+            val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())
+            val formattedDate = format.format(calendar.time)
+            textDate.setText(formattedDate)
+        }
+    }
+
     private fun initUi() {
         todoItem = requireArguments().getSerializable("objectTodoItem") as TodoItem?
 
@@ -146,26 +158,12 @@ class UpdateItemKotlinFragment : Fragment() {
             fragmentUpdateItemBinding!!.dropDownStatus.setText(todoItem!!.status, false)
         }
         fragmentUpdateItemBinding!!.edtCreatedDate.setOnClickListener {
-            datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
-            datePickerCreated!!.addOnPositiveButtonClickListener { selection ->
-                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-                calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())
-                val formattedDate = format.format(calendar.time)
-                fragmentUpdateItemBinding!!.edtCreatedDate.setText(formattedDate)
-            }
+            addDatePicker(fragmentUpdateItemBinding!!.edtCreatedDate)
         }
 
         //create datePicker
         fragmentUpdateItemBinding!!.edtCompletedDate.setOnClickListener {
-            datePickerCompleted!!.show(parentFragmentManager, "Material_Date_Picker")
-            datePickerCompleted!!.addOnPositiveButtonClickListener { selection ->
-                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-                calendar.timeInMillis = (selection as Long)
-                val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())
-                val formattedDate = format.format(calendar.time)
-                fragmentUpdateItemBinding!!.edtCompletedDate.setText(formattedDate)
-            }
+            addDatePicker(fragmentUpdateItemBinding!!.edtCompletedDate)
         }
     }
 
@@ -208,5 +206,4 @@ class UpdateItemKotlinFragment : Fragment() {
         }
         return check
     }
-
 }

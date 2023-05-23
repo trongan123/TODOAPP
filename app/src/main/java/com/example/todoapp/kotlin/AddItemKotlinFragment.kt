@@ -29,6 +29,7 @@ class AddItemKotlinFragment : Fragment() {
     private var fragmentAddItemBinding: FragmentAddItemBinding? = null
     private var todoItemViewModel: TodoItemViewModel? = null
     private val todoItem = TodoItem()
+    private var datePickerCreated: MaterialDatePicker<Long>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -239,15 +240,13 @@ class AddItemKotlinFragment : Fragment() {
 
     //create date picker
     private fun addDatePicker(textDate: TextInputEditText) {
-        val datePickerCreated: MaterialDatePicker<Long>
-        MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
-            .also { datePickerCreated = it }
-        if (datePickerCreated.isAdded) {
-            return
+        if (datePickerCreated == null) {
+            MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+                .also { datePickerCreated = it }
         }
-        datePickerCreated.show(parentFragmentManager, "Material_Date_Picker")
-        datePickerCreated.addOnPositiveButtonClickListener { selection: Long? ->
+        datePickerCreated!!.show(parentFragmentManager, "Material_Date_Picker")
+        datePickerCreated!!.addOnPositiveButtonClickListener { selection: Long? ->
             val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             calendar.timeInMillis = selection!!
             val format = SimpleDateFormat(stringDateFormat, Locale.getDefault())

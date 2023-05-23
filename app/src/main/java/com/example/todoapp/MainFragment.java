@@ -90,6 +90,7 @@ public class MainFragment extends Fragment {
         todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), longs ->
                 fragmentMainBinding.btnClearAll.setEnabled(!longs.isEmpty()));
         fragmentMainBinding.btnClearAll.setOnClickListener(view12 -> clearItem());
+
     }
 
     private void clearItem() {

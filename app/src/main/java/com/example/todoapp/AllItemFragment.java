@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,9 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class AllItemFragment extends Fragment {
 
@@ -60,6 +64,7 @@ public class AllItemFragment extends Fragment {
         RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoItem;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rcvItem.setLayoutManager(linearLayoutManager);
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
@@ -70,7 +75,6 @@ public class AllItemFragment extends Fragment {
 
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 setLoading(todoItemViewModel.getSearchList()));
-
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void detailItem(TodoItem todoItem, CardView cardView) {
@@ -83,8 +87,11 @@ public class AllItemFragment extends Fragment {
                 todoItemViewModel.setCheckItem(id, check);
             }
         });
-        rcvItem.setAdapter(todoItemAdapter);
+        AlphaInAnimationAdapter alphaInAnimationAdapter = new AlphaInAnimationAdapter(todoItemAdapter);
+        alphaInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        alphaInAnimationAdapter.setFirstOnly(false);
 
+        rcvItem.setAdapter(new ScaleInAnimationAdapter(alphaInAnimationAdapter));
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             public void loadMoreItems() {

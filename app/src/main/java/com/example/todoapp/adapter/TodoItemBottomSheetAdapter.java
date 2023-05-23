@@ -3,12 +3,14 @@ package com.example.todoapp.adapter;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todoapp.R;
 import com.example.todoapp.databinding.ItemTodoBinding;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.viewmodel.TodoItemViewModel;
@@ -72,6 +74,8 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
         todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
         todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.detailItem(todoItem));
         todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, id));
+        
+        todoItemViewHolder.itemTodoBinding.getRoot().setAnimation(AnimationUtils.loadAnimation(todoItemViewHolder.itemTodoBinding.getRoot().getContext(), R.anim.recycler_item_arrive));
     }
 
     private void setCheckBox(TodoItemViewHolder todoItemViewHolder, TodoItem todoItem, long id) {

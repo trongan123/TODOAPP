@@ -40,6 +40,7 @@ public class UpdateItemFragment extends Fragment {
     private FragmentUpdateItemBinding fragmentUpdateItemBinding;
     private TodoItemViewModel todoItemViewModel;
     private TodoItem todoItem = new TodoItem();
+    private MaterialDatePicker<Long> datePickerCreated = null;
 
     public UpdateItemFragment() {
         // Required empty public constructor
@@ -140,24 +141,22 @@ public class UpdateItemFragment extends Fragment {
             fragmentUpdateItemBinding.dropDownStatus.setText(todoItem.getStatus(), false);
         }
 
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
         String[] type = new String[]{"pending", "completed"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
         fragmentUpdateItemBinding.dropDownStatus.setAdapter(adapter);
 
         fragmentUpdateItemBinding.edtCreatedDate.setOnClickListener(view ->
-                addDatePicker(fragmentUpdateItemBinding.edtCreatedDate, datePickerCreated));
+                addDatePicker(fragmentUpdateItemBinding.edtCreatedDate));
 
         fragmentUpdateItemBinding.edtCompletedDate.setOnClickListener(view ->
-                addDatePicker(fragmentUpdateItemBinding.edtCompletedDate, datePickerCreated));
+                addDatePicker(fragmentUpdateItemBinding.edtCompletedDate));
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
-        if (datePickerCreated.isAdded()) {
-            return;
+    private void addDatePicker(TextInputEditText textDate) {
+        if (datePickerCreated == null) {
+            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         }
         datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
         datePickerCreated.addOnPositiveButtonClickListener(selection -> {

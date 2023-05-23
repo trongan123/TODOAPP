@@ -45,15 +45,13 @@ public class MainBottomSheetFragment extends Fragment {
     private FragmentMainBinding fragmentMainBinding;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
     private TodoItemViewModel todoItemViewModel;
+    private MaterialDatePicker<Long> datePickerCreated = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
-
         View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-
         // Inflate the layout for this fragment
         return mView;
     }
@@ -114,10 +112,6 @@ public class MainBottomSheetFragment extends Fragment {
             bottomSheetDialog = new BottomSheetDialog(requireContext());
             bottomSheetDialog.setContentView(updateBottomSheetLayoutBinding.getRoot());
 
-            MaterialDatePicker<Long> datePickerCreated;
-            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-
             updateBottomSheetLayoutBinding.edtCompletedDate.setInputType(
                     InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
             updateBottomSheetLayoutBinding.edtCreatedDate.setInputType(
@@ -138,10 +132,10 @@ public class MainBottomSheetFragment extends Fragment {
             updateBottomSheetLayoutBinding.btnClear.setOnClickListener(view12 -> clearText());
 
             updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view13 ->
-                    addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate, datePickerCreated));
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate));
             //create datePicker
             updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view14 ->
-                    addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate, datePickerCreated));
+                    addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate));
         }
         // Opt in to perform swipe to dismiss animation when dismissing bottom sheet dialog.
         bottomSheetDialog.setDismissWithAnimation(true);
@@ -149,9 +143,10 @@ public class MainBottomSheetFragment extends Fragment {
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
-        if (datePickerCreated.isAdded()) {
-            return;
+    private void addDatePicker(TextInputEditText textDate) {
+        if (datePickerCreated == null) {
+            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         }
         datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
         datePickerCreated.addOnPositiveButtonClickListener(selection -> {

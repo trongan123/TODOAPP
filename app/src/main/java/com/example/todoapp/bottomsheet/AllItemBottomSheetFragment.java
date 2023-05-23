@@ -1,20 +1,24 @@
 package com.example.todoapp.bottomsheet;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
+import com.example.todoapp.RecyclerViewLayoutManager;
 import com.example.todoapp.adapter.TodoItemBottomSheetAdapter;
 import com.example.todoapp.databinding.FragmentAllItemBinding;
 import com.example.todoapp.databinding.UpdateBottomSheetLayoutBinding;
@@ -44,20 +48,27 @@ public class AllItemBottomSheetFragment extends Fragment {
     private FragmentAllItemBinding fragmentAllItemBinding;
     private BottomSheetDialog bottomSheetDialog;
     private UpdateBottomSheetLayoutBinding updateBottomSheetLayoutBinding;
+    private MaterialDatePicker<Long> datePickerCreated = null;
 
     public AllItemBottomSheetFragment(TodoItemViewModel todoItemViewModel, int tabNumber) {
         this.todoItemViewModel = todoItemViewModel;
         this.tabNumber = tabNumber;
     }
 
+    public static int getScreenHeight(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.y;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentAllItemBinding = FragmentAllItemBinding.inflate(inflater, container, false);
         updateBottomSheetLayoutBinding = UpdateBottomSheetLayoutBinding.inflate(inflater, container, false);
-        View mView = fragmentAllItemBinding.getRoot();
-        //      fragmentAllItemBinding.setAllItemViewModel(todoItemViewModel);
         // Inflate the layout for this fragment
-        return mView;
+        return fragmentAllItemBinding.getRoot();
     }
 
     @Override
@@ -70,30 +81,36 @@ public class AllItemBottomSheetFragment extends Fragment {
     public void displayListTodo() {
         TodoItemBottomSheetAdapter todoItemAdapter;
         RecyclerView rcvItem = fragmentAllItemBinding.rcvTodoItem;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rcvItem.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
-        rcvItem.addItemDecoration(dividerItemDecoration);
+
+        RecyclerViewLayoutManager layoutManager = new RecyclerViewLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setExtraLayoutSpace(getLayoutSpace(getScreenHeight(requireContext()), getScreenHeight(requireContext())));
+        rcvItem.setLayoutManager(layoutManager);
+
         todoItemAdapter = new TodoItemBottomSheetAdapter(new TodoItemBottomSheetAdapter.TodoItemDiff(), todoItemViewModel);
         todoItemAdapter.setHasStableIds(true);
 
         //set data to recyclerview
-        todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s -> {
-            switch (tabNumber) {
-                case 1:
-                    //set data for tab all item
-                    todoItemViewModel.getAllList().observe(requireActivity(), todoItemAdapter::submitList);
-                    break;
-                case 2:
-                    //set data for tab pending item
-                    todoItemViewModel.getPendingList().observe(requireActivity(), todoItemAdapter::submitList);
-                    break;
-                default:
-                    //set data for tab completed item
-                    todoItemViewModel.getCompletedList().observe(requireActivity(), todoItemAdapter::submitList);
-                    break;
-            }
-        });
+        switch (tabNumber) {
+            case 1:
+                //set data for tab all item
+                todoItemViewModel.getAllList().observe(requireActivity(), todoItemAdapter::submitList);
+                todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                        todoItemAdapter.submitList(todoItemViewModel.getSearchList()));
+                break;
+            case 2:
+                //set data for tab pending item
+                todoItemViewModel.getPendingList().observe(requireActivity(), todoItemAdapter::submitList);
+                todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                        todoItemAdapter.submitList(todoItemViewModel.getSearchPendingList()));
+                break;
+            default:
+                //set data for tab completed item
+                todoItemViewModel.getCompletedList().observe(requireActivity(), todoItemAdapter::submitList);
+                todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
+                        todoItemAdapter.submitList(todoItemViewModel.getSearchCompletedList()));
+                break;
+        }
 
         todoItemAdapter.setClickListener(new TodoItemBottomSheetAdapter.IClickItemToDo() {
             @Override
@@ -110,6 +127,13 @@ public class AllItemBottomSheetFragment extends Fragment {
         rcvItem.setAdapter(todoItemAdapter);
     }
 
+    private int[] getLayoutSpace(int top, int bottom) {
+        int[] extraLayoutSpace = new int[2];
+        extraLayoutSpace[0] = top;
+        extraLayoutSpace[1] = bottom;
+        return extraLayoutSpace;
+    }
+
     //method create new bottom sheet
     private void setBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(requireContext());
@@ -118,21 +142,18 @@ public class AllItemBottomSheetFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_menu_popup_item, R.id.txtStyle, type);
         updateBottomSheetLayoutBinding.dropDownStatus.setAdapter(adapter);
 
-        MaterialDatePicker<Long> datePickerCreated;
-        datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
-
         updateBottomSheetLayoutBinding.edtCreatedDate.setOnClickListener(view ->
-                addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate, datePickerCreated));
+                addDatePicker(updateBottomSheetLayoutBinding.edtCreatedDate));
 
         updateBottomSheetLayoutBinding.edtCompletedDate.setOnClickListener(view ->
-                addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate, datePickerCreated));
+                addDatePicker(updateBottomSheetLayoutBinding.edtCompletedDate));
     }
 
     //create date picker
-    private void addDatePicker(TextInputEditText textDate, MaterialDatePicker<Long> datePickerCreated) {
-        if (datePickerCreated.isAdded()) {
-            return;
+    private void addDatePicker(TextInputEditText textDate) {
+        if (datePickerCreated == null) {
+            datePickerCreated = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         }
         datePickerCreated.show(getParentFragmentManager(), "Material_Date_Picker");
         datePickerCreated.addOnPositiveButtonClickListener(selection -> {
@@ -198,9 +219,9 @@ public class AllItemBottomSheetFragment extends Fragment {
         todoItem.setStatus(stringStatus);
 
         if (materialAlertDialogBuilder == null) {
-            materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext(),
-                    R.style.ThemeOverlay_App_MaterialAlertDialog)
-                    .setTitle("Confirm delete").setMessage("Are you sure?")
+            materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+                    .setTitle("Confirm delete")
+                    .setMessage("Are you sure?")
                     .setNegativeButton("No", null);
         }
 
@@ -214,12 +235,9 @@ public class AllItemBottomSheetFragment extends Fragment {
     private void updateItemTodo(TodoItem todoItem) throws ParseException {
         if (validation()) {
             String stringTitle = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtTitle.getText()).toString().trim();
-            String stringDescription = Objects.requireNonNull(updateBottomSheetLayoutBinding
-                    .edtDescription.getText()).toString().trim();
-            Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
-                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCreatedDate.getText()).toString().trim());
-            Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
-                    .parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCompletedDate.getText()).toString().trim());
+            String stringDescription = Objects.requireNonNull(updateBottomSheetLayoutBinding.edtDescription.getText()).toString().trim();
+            Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCreatedDate.getText()).toString().trim());
+            Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(Objects.requireNonNull(updateBottomSheetLayoutBinding.edtCompletedDate.getText()).toString().trim());
             String stringStatus = updateBottomSheetLayoutBinding.dropDownStatus.getText().toString().trim();
 
             //update database
@@ -260,10 +278,8 @@ public class AllItemBottomSheetFragment extends Fragment {
         if (!check) {
             return false;
         }
-        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtCreatedDate.getText().toString().trim());
-        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault())
-                .parse(updateBottomSheetLayoutBinding.edtCompletedDate.getText().toString().trim());
+        Date createdDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtCreatedDate.getText().toString().trim());
+        Date completedDate = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault()).parse(updateBottomSheetLayoutBinding.edtCompletedDate.getText().toString().trim());
         assert createdDate != null;
         if (createdDate.compareTo(completedDate) > 0) {
             updateBottomSheetLayoutBinding.edtCompletedDate.setError("Completed date must be after created date");
