@@ -20,7 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-
 class MainKotlinFragment : Fragment() {
 
     private var fragmentMainBinding: FragmentMainBinding? = null
@@ -38,7 +37,6 @@ class MainKotlinFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         //set shared element back for recyclerview
         postponeEnterTransition()
         val parentView = view.parent as ViewGroup
@@ -58,10 +56,8 @@ class MainKotlinFragment : Fragment() {
             findNavController(it).navigate(R.id.addItemKotlinFragment, null, null, extras)
         }
         val viewPager2 = requireView().findViewById<ViewPager2>(R.id.vpg)
-
         fragmentMainBinding!!.vpg.adapter =
             todoItemViewModel?.let { TabItemKotlinAdapter(requireActivity(), it) }
-
         val tabLayout = requireView().findViewById<TabLayout>(R.id.tloMenu)
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         val tabLayoutMediator = TabLayoutMediator(
@@ -74,7 +70,6 @@ class MainKotlinFragment : Fragment() {
             }
         }
         tabLayoutMediator.attach()
-
         fragmentMainBinding!!.svSearch.editText.setOnEditorActionListener { _, _, _ ->
             fragmentMainBinding!!.sbSearchBar.text = fragmentMainBinding!!.svSearch.text
             fragmentMainBinding!!.svSearch.hide()
@@ -91,14 +86,11 @@ class MainKotlinFragment : Fragment() {
 
     private fun clearItem() {
         MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.ThemeOverlay_App_MaterialAlertDialog
+            requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog
         ).setTitle("Confirm Clear All").setMessage("Are you sure?")
             .setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
                 todoItemViewModel!!.clearAllItem()
                 Toast.makeText(activity, "Clear successfully", Toast.LENGTH_SHORT).show()
             }.setNegativeButton("No", null).show()
     }
-
-
 }

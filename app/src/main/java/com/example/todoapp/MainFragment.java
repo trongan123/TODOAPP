@@ -34,7 +34,6 @@ public class MainFragment extends Fragment {
         fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
         View mView = fragmentMainBinding.getRoot();
         todoItemViewModel = new ViewModelProvider(this).get(TodoItemViewModel.class);
-
         // Inflate the layout for this fragment
         return mView;
     }

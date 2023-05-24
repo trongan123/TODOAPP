@@ -38,7 +38,6 @@ public class TodoRepository {
         return mTodoItemDAO.getSearchTodoItemByStatus(status, key);
     }
 
-
     public void insert(TodoItem todoItem) {
         mTodoItemDAO.insertTodoItem(todoItem);
     }

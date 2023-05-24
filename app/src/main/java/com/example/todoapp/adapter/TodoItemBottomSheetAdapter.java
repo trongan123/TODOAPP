@@ -53,10 +53,9 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TodoItem todoItem = getItem(position);
         TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
-        long id = getItemId(position);
-        List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
+        List<Integer> checkItem = todoItemViewModel.getClearItem();
         if (checkItem != null) {
-            if (checkItem.contains(id)) {
+            if (checkItem.contains(todoItem.getId())) {
                 todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(true);
                 todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
                         .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -73,8 +72,8 @@ public class TodoItemBottomSheetAdapter extends ListAdapter<TodoItem, RecyclerVi
         todoItemViewHolder.itemTodoBinding.txtDescription.setText(todoItem.getDescription());
         todoItemViewHolder.itemTodoBinding.cardItem.setTransitionName("update_" + position);
         todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view -> iClickItem.detailItem(todoItem));
-        todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, id));
-        
+        todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view -> setCheckBox(todoItemViewHolder, todoItem, position));
+
         todoItemViewHolder.itemTodoBinding.getRoot().setAnimation(AnimationUtils.loadAnimation(todoItemViewHolder.itemTodoBinding.getRoot().getContext(), R.anim.recycler_item_arrive));
     }
 

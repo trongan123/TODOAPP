@@ -16,7 +16,7 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public static final MutableLiveData<String> stringMutableLiveData = new MutableLiveData<>();
     public static final MutableLiveData<List<Long>> listMutableLiveDataCheck = new MutableLiveData<>();
-    protected static final List<Integer> clearItem = new ArrayList<>();
+    protected static List<Integer> clearItem = new ArrayList<>();
     private final TodoRepository mRepository;
     private LiveData<List<TodoItem>> todoItems;
     private TodoItem todoItem;
@@ -25,6 +25,7 @@ public class TodoItemViewModel extends AndroidViewModel {
         super(application);
         mRepository = new TodoRepository(application);
         stringMutableLiveData.setValue("");
+        clearItem = new ArrayList<>();
         listMutableLiveDataCheck.postValue(new ArrayList<>());
     }
 
@@ -65,6 +66,10 @@ public class TodoItemViewModel extends AndroidViewModel {
 
     public void addItem(TodoItem todoItem) {
         mRepository.insert(todoItem);
+    }
+
+    public List<Integer> getClearItem() {
+        return clearItem;
     }
 
     public TodoItem getTodoItem() {

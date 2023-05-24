@@ -1,6 +1,5 @@
 package com.example.todoapp;
 
-
 import static androidx.navigation.ui.NavigationUI.setupActionBarWithNavController;
 
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-
 
 public class MainActivity extends AppCompatActivity {
     @Override

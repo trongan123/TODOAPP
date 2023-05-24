@@ -1,12 +1,12 @@
 package com.example.todoapp.adapter;
 
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +18,6 @@ import com.example.todoapp.viewmodel.TodoItemViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,12 +27,14 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOADING = 2;
     private final TodoItemViewModel todoItemViewModel;
+    private final FragmentActivity activity;
     private IClickItemToDo iClickItem;
     private boolean isLoadingAdd;
 
-    public TodoItemAdapter(@NonNull DiffUtil.ItemCallback<TodoItem> diffCallback, TodoItemViewModel todoItemViewModel) {
+    public TodoItemAdapter(@NonNull DiffUtil.ItemCallback<TodoItem> diffCallback, TodoItemViewModel todoItemViewModel, FragmentActivity activity) {
         super(diffCallback);
         this.todoItemViewModel = todoItemViewModel;
+        this.activity = activity;
     }
 
     public void setClickListener(IClickItemToDo iClickItem) {
@@ -61,17 +62,12 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        long a1;
-        long a2;
-        a1 = Calendar.getInstance().getTimeInMillis();
         if (holder.getItemViewType() == TYPE_ITEM) {
             TodoItem todoItem = getItem(position);
             TodoItemViewHolder todoItemViewHolder = (TodoItemViewHolder) holder;
-            long id = getItemId(position);
-
-            List<Long> checkItem = todoItemViewModel.getListMutableLiveDataCheck().getValue();
+            List<Integer> checkItem = todoItemViewModel.getClearItem();
             if (checkItem != null) {
-                if (checkItem.contains(id)) {
+                if (checkItem.contains(todoItem.getId())) {
                     todoItemViewHolder.itemTodoBinding.txtTitle.setChecked(true);
                     todoItemViewHolder.itemTodoBinding.txtTitle.setPaintFlags(todoItemViewHolder
                             .itemTodoBinding.txtTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -90,10 +86,8 @@ public class TodoItemAdapter extends ListAdapter<TodoItem, RecyclerView.ViewHold
             todoItemViewHolder.itemTodoBinding.cardItem.setOnClickListener(view ->
                     iClickItem.detailItem(todoItem, todoItemViewHolder.itemTodoBinding.cardItem));
             todoItemViewHolder.itemTodoBinding.txtTitle.setOnClickListener(view ->
-                    setCheckBox(todoItemViewHolder, todoItem, id));
+                    setCheckBox(todoItemViewHolder, todoItem, position));
         }
-        a2 = Calendar.getInstance().getTimeInMillis();
-        Log.e("TAG", "run time :" + (a2 - a1));
     }
 
     //method set status for check box

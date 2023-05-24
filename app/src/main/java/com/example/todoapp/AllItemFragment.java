@@ -68,11 +68,10 @@ public class AllItemFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
-        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel, requireActivity());
         todoItemAdapter.setHasStableIds(true);
         //set data to recyclerview
         todoItemViewModel.getAllList().observe(requireActivity(), this::setLoading);
-
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 setLoading(todoItemViewModel.getSearchList()));
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
@@ -90,7 +89,6 @@ public class AllItemFragment extends Fragment {
         AlphaInAnimationAdapter alphaInAnimationAdapter = new AlphaInAnimationAdapter(todoItemAdapter);
         alphaInAnimationAdapter.setInterpolator(new OvershootInterpolator());
         alphaInAnimationAdapter.setFirstOnly(false);
-
         rcvItem.setAdapter(new ScaleInAnimationAdapter(alphaInAnimationAdapter));
         rcvItem.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
@@ -111,6 +109,10 @@ public class AllItemFragment extends Fragment {
             public boolean isLastPage() {
                 return isLastPage;
             }
+        });
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), s -> {
+            for (Long i : s)
+                todoItemAdapter.notifyItemChanged(Math.toIntExact(i));
         });
     }
 

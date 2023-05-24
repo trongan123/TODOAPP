@@ -110,7 +110,6 @@ class UpdateItemKotlinFragment : Fragment() {
             fragmentUpdateItemBinding!!.edtCompletedDate.text.toString().trim()
         )
         val strStt: String = fragmentUpdateItemBinding!!.dropDownStatus.text.toString().trim()
-
         //update database
         todoItem!!.title = strtitle
         todoItem!!.description = strDes
@@ -145,10 +144,8 @@ class UpdateItemKotlinFragment : Fragment() {
 
     private fun initUi() {
         todoItem = requireArguments().getSerializable("objectTodoItem") as TodoItem?
-
         val transition = requireArguments().getString("transition")
         fragmentUpdateItemBinding!!.root.transitionName = transition
-
         val dateFormat: DateFormat = SimpleDateFormat(stringDateFormat, Locale.getDefault())
         if (todoItem != null) {
             fragmentUpdateItemBinding!!.edtTitle.setText(todoItem!!.title)

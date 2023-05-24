@@ -22,7 +22,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AddItemKotlinFragment : Fragment() {
 
     private val stringDateFormat: String = "yyyy-MM-dd"
@@ -156,8 +155,8 @@ class AddItemKotlinFragment : Fragment() {
     private fun addItem() {
         if (validation()) {
             val strtitle: String =
-                Objects.requireNonNull(fragmentAddItemBinding?.edtTitle?.text)
-                    .toString().trim { it <= ' ' }
+                Objects.requireNonNull(fragmentAddItemBinding?.edtTitle?.text).toString()
+                    .trim { it <= ' ' }
             val strDes: String =
                 Objects.requireNonNull(fragmentAddItemBinding!!.edtDescription.text).toString()
                     .trim { it <= ' ' }

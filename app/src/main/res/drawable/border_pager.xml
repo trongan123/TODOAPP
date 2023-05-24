@@ -9,7 +9,6 @@
 
         </shape>
     </item>
-
     <item
         android:bottom="1dp"
         android:top="1dp">
@@ -20,5 +19,4 @@
             <solid android:color="#fff" />
         </shape>
     </item>
-
 </layer-list>

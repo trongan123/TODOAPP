@@ -125,6 +125,10 @@ public class AllItemBottomSheetFragment extends Fragment {
             }
         });
         rcvItem.setAdapter(todoItemAdapter);
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), s -> {
+            for (Long i : s)
+                todoItemAdapter.notifyItemChanged(Math.toIntExact(i));
+        });
     }
 
     private int[] getLayoutSpace(int top, int bottom) {

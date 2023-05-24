@@ -122,13 +122,11 @@ public class UpdateItemFragment extends Fragment {
             Toast.makeText(getActivity(), "Delete successfully", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(requireView()).navigate(R.id.mainFragment);
         }).setNegativeButton("No", null).show();
-
     }
 
     private void initUi() {
         assert getArguments() != null;
         todoItem = (TodoItem) getArguments().getSerializable("objectTodoItem");
-
         String transition = getArguments().getString("transition");
         DateFormat dateFormat = new SimpleDateFormat(STRING_DATE_FORMAT, Locale.getDefault());
         fragmentUpdateItemBinding.root.setTransitionName(transition);

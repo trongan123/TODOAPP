@@ -1,10 +1,4 @@
 
-p
-@app/src/main/java/com/example/todoapp/viewmodel/MainViewModel.kt,1\1\117dfa4cac613c4b8c5fa1e9c92a0ce67f1d6807
-i
-9app/src/main/java/com/example/todoapp/model/TodoItem.java,7\2\72fce7e21133c9514b39591b3aded853b01a4164
-s
-Capp/src/main/java/com/example/todoapp/ui/theme/screem/HomeScreen.kt,8\b\8bdcb1415e991d7f131ab6be5d2b6bdec534f187
 g
 7app/src/main/java/com/example/todoapp/ui/theme/Color.kt,6\1\612e342a90d89c73e01f150d553a041f2701adc4
 f
@@ -13,35 +7,19 @@ g
 7app/src/main/java/com/example/todoapp/ui/theme/Theme.kt,e\2\e230ec58cf34bffb15aee2ac0c5af0899af2d7b5
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-n
->app/src/main/java/com/example/todoapp/repository/Repository.kt,c\a\ca41e4099bf7366b96ac4f87135da7dfc07d0449
-r
-Bapp/src/main/java/com/example/todoapp/MainBottomSheetActivity.java,1\2\12f85971cd12d9fc04fa76e2f28a8fb4f4562f30
-y
-Iapp/src/main/java/com/example/todoapp/ui/theme/screem/DeteleComposable.kt,c\1\c1e1bd9d7073dfbbf9970a88bc1ebf3371af8738
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 A
 gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
-p
-@app/src/main/java/com/example/todoapp/ui/theme/screem/TabItem.kt,4\f\4f7b9fb02d78e061a19338ecd623ea9cfb66569d
 o
 ?app/src/main/java/com/example/todoapp/database/TodoItemDAO.java,d\6\d6c1ef6b086a395eaa82dc9c4ae90d6d34ab73e3
-r
-Bapp/src/main/java/com/example/todoapp/kotlin/MainKotlinFragment.kt,3\3\3346d89c88aa8064d8e34d7ddeac07e33295f6fd
-q
-Aapp/src/main/java/com/example/todoapp/kotlin/AllKotlinFragment.kt,f\d\fd906f6a5e06b9ebbab8bafda46c0c7fb936c736
-k
-;app/src/main/java/com/example/todoapp/MainKotlinActivity.kt,2\1\21342cb452fc63167d987cfbf06e30926c201345
-i
-9app/src/main/java/com/example/todoapp/DefaultPaginator.kt,a\8\a8c63ddd16abb00d4bed74e01fa0d864b849d6cb
-e
-5app/src/main/java/com/example/todoapp/HomeActivity.kt,1\1\115d1e5bfa395d0aeda98dd8cc51319b931c9dff
-s
-Capp/src/main/java/com/example/todoapp/PaginationScrollListener.java,9\a\9a17ee5f2b08e2cfa5c8f7ef5ae23d5d76d43eaa
 b
 2app/src/main/java/com/example/todoapp/Paginator.kt,5\b\5ba0aa69838a1d6a9c83f7da68228dab3ecd8071
-w
-Gapp/src/main/java/com/example/todoapp/ui/theme/screem/ItemComposable.kt,d\1\d1b5ce8e28f786c3e6d8add35d0b4b7a59c13573
-l
-<app/src/main/java/com/example/todoapp/MainJetpackActivity.kt,9\e\9e4c40e6869567423b1aa601ca7452785411b816
+t
+Dapp/src/main/java/com/example/todoapp/database/TodoItemDatabase.java,8\d\8d516faa88e9a82b74cf85e4f57ae3c7c9d48278
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+|
+Lapp/src/main/java/com/example/todoapp/adapter/TabItemBottomSheetAdapter.java,8\4\84ce3e4a540c3692f5dfc8ccdea1bc047596ff75
+u
+Eapp/src/main/java/com/example/todoapp/adapter/TabItemKotlinAdapter.kt,a\d\ad21a42ce7cc55988b173afa565d66d05f6987d2

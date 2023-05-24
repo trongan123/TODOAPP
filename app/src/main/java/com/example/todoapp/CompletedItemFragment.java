@@ -66,14 +66,11 @@ public class CompletedItemFragment extends Fragment {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
-
-        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel, requireActivity());
 
         todoItemViewModel.getCompletedList().observe(requireActivity(), this::setLoading);
-
         todoItemViewModel.getStringMutableLiveData().observe(requireActivity(), s ->
                 setLoading(todoItemViewModel.getSearchCompletedList()));
-
         todoItemAdapter.setClickListener(new TodoItemAdapter.IClickItemToDo() {
             @Override
             public void detailItem(TodoItem todoItem, CardView cardView) {
@@ -107,6 +104,10 @@ public class CompletedItemFragment extends Fragment {
             public boolean isLastPage() {
                 return isLastPage;
             }
+        });
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), s -> {
+            for (Long i : s)
+                todoItemAdapter.notifyItemChanged(Math.toIntExact(i));
         });
     }
 

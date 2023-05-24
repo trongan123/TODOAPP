@@ -14,7 +14,6 @@ import com.example.todoapp.databinding.FragmentAllItemBinding
 import com.example.todoapp.model.TodoItem
 import com.example.todoapp.viewmodel.TodoItemViewModel
 
-
 class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?, tabNumber: Int) : Fragment() {
 
     private var fragmentAllItemBinding: FragmentAllItemBinding? = null
@@ -48,28 +47,40 @@ class AllKotlinFragment(todoItemViewModel: TodoItemViewModel?, tabNumber: Int) :
         rcvItem.addItemDecoration(dividerItemDecoration)
         todoItemAdapter = todoItemViewModel?.let { TodoItemAdapterKotlin(it, requireView()) }
         todoItemAdapter!!.setHasStableIds(true)
-        todoItemViewModel!!.stringMutableLiveData.observe(requireActivity()) {
-            when (tabNumber) {
-                0 -> todoItemViewModel!!.allList.observe(
+        when (tabNumber) {
+            0 -> {
+                todoItemViewModel!!.allList.observe(
                     requireActivity()
                 ) { items ->
                     // Update item to fragment
                     todoItemAdapter!!.submitList(items)
                 }
-                1 -> todoItemViewModel!!.pendingList.observe(
-                    requireActivity()
-                ) { items ->
-                    // Update item to fragment
-                    todoItemAdapter!!.submitList(items)
-                }
-                2 -> todoItemViewModel!!.completedList.observe(
-                    requireActivity()
-                ) { items ->
-                    // Update item to fragment
-                    todoItemAdapter!!.submitList(items)
+                todoItemViewModel!!.stringMutableLiveData.observe(requireActivity()) {
+                    todoItemAdapter!!.submitList(todoItemViewModel!!.searchList)
                 }
             }
-
+            1 -> {
+                todoItemViewModel!!.pendingList.observe(
+                    requireActivity()
+                ) { items ->
+                    // Update item to fragment
+                    todoItemAdapter!!.submitList(items)
+                }
+                todoItemViewModel!!.stringMutableLiveData.observe(requireActivity()) {
+                    todoItemAdapter!!.submitList(todoItemViewModel!!.searchPendingList)
+                }
+            }
+            2 -> {
+                todoItemViewModel!!.completedList.observe(
+                    requireActivity()
+                ) { items ->
+                    // Update item to fragment
+                    todoItemAdapter!!.submitList(items)
+                }
+                todoItemViewModel!!.stringMutableLiveData.observe(requireActivity()) {
+                    todoItemAdapter!!.submitList(todoItemViewModel!!.searchCompletedList)
+                }
+            }
         }
         todoItemAdapter!!.setClickListenner(object : TodoItemAdapterKotlin.IClickItemToDo {
             override fun detaiItem(todoItem: TodoItem?) {

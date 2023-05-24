@@ -63,7 +63,7 @@ public class PendingItemFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvItem.addItemDecoration(dividerItemDecoration);
 
-        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel);
+        todoItemAdapter = new TodoItemAdapter(new TodoItemAdapter.TodoItemDiff(), todoItemViewModel, requireActivity());
 
         todoItemViewModel.getPendingList().observe(requireActivity(), this::setLoading);
 
@@ -102,6 +102,10 @@ public class PendingItemFragment extends Fragment {
             public boolean isLastPage() {
                 return isLastPage;
             }
+        });
+        todoItemViewModel.getListMutableLiveDataCheck().observe(requireActivity(), s -> {
+            for (Long i : s)
+                todoItemAdapter.notifyItemChanged(Math.toIntExact(i));
         });
     }
 
